@@ -1,6 +1,21 @@
 import DecisionCard from "./DecisionCard";
 
-export default function Dashboard() {
+type DashboardProps = {
+  analysis: {
+    symbol: string;
+    decision: string;
+    confidence: number;
+    risk: string;
+    target: number;
+    stopLoss: number;
+    reason: string[];
+    invalidIf: string;
+  };
+};
+
+export default function Dashboard({
+  analysis,
+}: DashboardProps) {
   const cards = [
     {
       title: "NIFTY 50",
@@ -19,17 +34,18 @@ export default function Dashboard() {
     },
     {
       title: "AI SIGNAL",
-      value: "BUY",
-      color: "#ef4444",
+      value: analysis.decision,
+      color:
+        analysis.decision === "BUY"
+          ? "#22c55e"
+          : analysis.decision === "SELL"
+          ? "#ef4444"
+          : "#f59e0b",
     },
   ];
 
   return (
-    <main
-      style={{
-        color: "white",
-      }}
-    >
+    <main style={{ color: "white" }}>
       <h1 style={{ marginTop: 0 }}>
         📊 ITDP Decision Workspace
       </h1>
@@ -37,41 +53,6 @@ export default function Dashboard() {
       <p style={{ color: "#94a3b8" }}>
         India's Trading Decision Platform
       </p>
-
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          marginTop: "25px",
-        }}
-      >
-        <input
-          type="text"
-          placeholder="Enter Stock Symbol (Example: RELIANCE)"
-          style={{
-            flex: 1,
-            padding: "14px",
-            borderRadius: "10px",
-            border: "1px solid #334155",
-            background: "#1e293b",
-            color: "white",
-            fontSize: "16px",
-          }}
-        />
-
-        <button
-          style={{
-            background: "#2563eb",
-            color: "white",
-            border: "none",
-            padding: "14px 25px",
-            borderRadius: "10px",
-            cursor: "pointer",
-          }}
-        >
-          Analyze
-        </button>
-      </div>
 
       <div
         style={{
@@ -91,11 +72,7 @@ export default function Dashboard() {
               padding: "20px",
             }}
           >
-            <div
-              style={{
-                color: "#94a3b8",
-              }}
-            >
+            <div style={{ color: "#94a3b8" }}>
               {card.title}
             </div>
 
@@ -111,7 +88,16 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <DecisionCard />
+      <DecisionCard
+        symbol={analysis.symbol}
+        decision={analysis.decision}
+        confidence={analysis.confidence}
+        risk={analysis.risk}
+        target={analysis.target}
+        stopLoss={analysis.stopLoss}
+        reason={analysis.reason}
+        invalidIf={analysis.invalidIf}
+      />
     </main>
   );
 }

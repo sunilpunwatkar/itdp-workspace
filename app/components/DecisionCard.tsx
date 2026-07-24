@@ -1,4 +1,24 @@
-export default function DecisionCard() {
+type DecisionCardProps = {
+  symbol: string;
+  decision: string;
+  confidence: number;
+  risk: string;
+  target: number;
+  stopLoss: number;
+  reason: string[];
+  invalidIf: string;
+};
+
+export default function DecisionCard({
+  symbol,
+  decision,
+  confidence,
+  risk,
+  target,
+  stopLoss,
+  reason,
+  invalidIf,
+}: DecisionCardProps) {
   return (
     <div
       style={{
@@ -20,28 +40,44 @@ export default function DecisionCard() {
       >
         <tbody>
           <tr>
+            <td><strong>Stock</strong></td>
+            <td>{symbol}</td>
+          </tr>
+
+          <tr>
             <td><strong>Decision</strong></td>
-            <td style={{ color: "#22c55e" }}>BUY ✅</td>
+            <td
+              style={{
+                color:
+                  decision === "BUY"
+                    ? "#22c55e"
+                    : decision === "SELL"
+                    ? "#ef4444"
+                    : "#f59e0b",
+              }}
+            >
+              {decision}
+            </td>
           </tr>
 
           <tr>
             <td><strong>Confidence</strong></td>
-            <td>91%</td>
+            <td>{confidence}%</td>
           </tr>
 
           <tr>
             <td><strong>Risk</strong></td>
-            <td style={{ color: "#f59e0b" }}>LOW</td>
+            <td>{risk}</td>
           </tr>
 
           <tr>
             <td><strong>Target</strong></td>
-            <td>₹3250</td>
+            <td>₹{target}</td>
           </tr>
 
           <tr>
             <td><strong>Stop Loss</strong></td>
-            <td>₹2980</td>
+            <td>₹{stopLoss}</td>
           </tr>
         </tbody>
       </table>
@@ -56,15 +92,15 @@ export default function DecisionCard() {
       <h3>AI Explanation</h3>
 
       <ul>
-        <li>✅ Breakout Confirmed</li>
-        <li>✅ RSI above 60</li>
-        <li>✅ Strong Volume</li>
+        {reason.map((item) => (
+          <li key={item}>✅ {item}</li>
+        ))}
       </ul>
 
       <h3>Invalid If</h3>
 
       <ul>
-        <li>❌ Price closes below ₹2980</li>
+        <li>❌ {invalidIf}</li>
       </ul>
     </div>
   );

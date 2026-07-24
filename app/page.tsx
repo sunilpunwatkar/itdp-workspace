@@ -4,13 +4,25 @@ import { useState } from "react";
 
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
-
 import Dashboard from "./components/Dashboard";
 import MarketNews from "./components/MarketNews";
 import StockAnalysis from "./components/StockAnalysis";
+import SearchBar from "./components/SearchBar";
+
+import { analyzeStock } from "./utils/analyzeStock";
 
 export default function Home() {
   const [activePage, setActivePage] = useState("dashboard");
+
+  const [symbol, setSymbol] = useState("RELIANCE");
+
+  const [analysis, setAnalysis] = useState(
+    analyzeStock("RELIANCE")
+  );
+
+  function handleAnalyze() {
+    setAnalysis(analyzeStock(symbol));
+  }
 
   return (
     <>
@@ -31,7 +43,17 @@ export default function Home() {
             padding: "25px",
           }}
         >
-          {activePage === "dashboard" && <Dashboard />}
+          {activePage === "dashboard" && (
+            <>
+              <SearchBar
+                symbol={symbol}
+                onSymbolChange={setSymbol}
+                onAnalyze={handleAnalyze}
+              />
+
+              <Dashboard analysis={analysis} />
+            </>
+          )}
 
           {activePage === "marketnews" && <MarketNews />}
 
