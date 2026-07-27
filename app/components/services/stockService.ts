@@ -1,26 +1,27 @@
 import { YahooProvider } from "../../providers/yahooProvider";
-
-export type StockQuote = {
-  symbol: string;
-  companyName: string;
-  price: number;
-  change: number;
-  changePercent: number;
-};
+import { analyzeStock } from "../../engine/decisionEngine";
+import { AnalysisResult } from "../../types/analysis";
 
 const provider = new YahooProvider();
 
-export async function getStockQuote(
+export async function getStockAnalysis(
   symbol: string
-): Promise<StockQuote> {
+): Promise<AnalysisResult> {
 
+  // Live Quote
   const quote = await provider.getQuote(symbol);
 
+  // AI Decision
+  const analysis = analyzeStock(symbol);
+
+  // Merge Quote + Decision
   return {
-    symbol: quote.symbol,
-    companyName: "Demo Company",
-    price: quote.price,
-    change: quote.change,
-    changePercent: quote.changePercent,
+    ...analysis,
+
+    entry: quote.price,
+
+    target: quote.price * 1.05,
+
+    stopLoss: quote.price * 0.97,
   };
 }

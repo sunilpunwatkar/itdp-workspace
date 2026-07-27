@@ -1,23 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { getStockQuote } from "./services/stockService";
+import { getStockAnalysis } from "./services/stockService";
+import AnalysisCard from "./AnalysisCard";
 
 export default function StockAnalysis() {
   const [symbol, setSymbol] = useState("");
-  const [quote, setQuote] = useState<any>(null);
+  const [analysis, setAnalysis] = useState<any>(null);
 
   async function handleAnalyze() {
-    const data = await getStockQuote(symbol || "RELIANCE");
-    setQuote(data);
+    const data = await getStockAnalysis(symbol.toUpperCase());
+    setAnalysis(data);
   }
 
   return (
-    <div
-      style={{
-        color: "white",
-      }}
-    >
+    <div style={{ color: "white" }}>
       <h2>📈 Stock Analysis</h2>
 
       <p>Analyze any stock using the ITDP Decision Engine.</p>
@@ -33,7 +30,7 @@ export default function StockAnalysis() {
         <input
           type="text"
           value={symbol}
-          onChange={(e) => setSymbol(e.target.value)}
+          onChange={(e) => setSymbol(e.target.value.toUpperCase())}
           placeholder="Enter Stock Symbol (Example: RELIANCE)"
           style={{
             width: "100%",
@@ -60,35 +57,7 @@ export default function StockAnalysis() {
           Analyze
         </button>
 
-        {quote && (
-          <div
-            style={{
-              marginTop: "25px",
-              padding: "20px",
-              background: "#0f172a",
-              borderRadius: "10px",
-              border: "1px solid #334155",
-            }}
-          >
-            <h3>{quote.companyName}</h3>
-
-            <p>
-              <strong>Symbol :</strong> {quote.symbol}
-            </p>
-
-            <p>
-              <strong>Price :</strong> ₹ {quote.price}
-            </p>
-
-            <p>
-              <strong>Change :</strong> {quote.change}
-            </p>
-
-            <p>
-              <strong>Change % :</strong> {quote.changePercent}%
-            </p>
-          </div>
-        )}
+{analysis && <AnalysisCard analysis={analysis} />}
       </div>
     </div>
   );
