@@ -1,3 +1,4 @@
+import Link from "next/link";
 type SidebarProps = {
   onMenuClick: (page: string) => void;
 };
@@ -6,7 +7,7 @@ export default function Sidebar({ onMenuClick }: SidebarProps) {
   const menuItems = [
     { name: "📈 Stock Analysis", page: "stock" },
     { name: "📰 Market News", page: "marketnews" },
-    { name: "🤖 AI Decision Engine", page: "ai" },
+    { name: "🤖 AI Decision Engine", page: "ai-engine" },
     { name: "💼 Portfolio", page: "portfolio" },
     { name: "📊 Analytics", page: "analytics" },
     { name: "⚙️ Settings", page: "settings" },

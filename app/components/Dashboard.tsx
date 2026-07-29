@@ -8,7 +8,7 @@ type DashboardProps = {
     risk: string;
     target: number;
     stopLoss: number;
-    reason: string[];
+    reasons: string[];
     invalidIf: string;
   };
 };
@@ -95,7 +95,7 @@ export default function Dashboard({
         risk={analysis.risk}
         target={analysis.target}
         stopLoss={analysis.stopLoss}
-        reason={analysis.reason}
+        reasons={analysis.reasons}
         invalidIf={analysis.invalidIf}
       />
     </main>

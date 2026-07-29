@@ -9,9 +9,10 @@ export function analyzeStock(symbol: string) {
       decision: "NO DATA",
       confidence: 0,
       risk: "-",
+      entry: 0,
       target: 0,
       stopLoss: 0,
-      reason: ["Stock not found in demo database."],
+      reasons: ["Stock not found in demo database."],
       invalidIf: "-",
     }
   );

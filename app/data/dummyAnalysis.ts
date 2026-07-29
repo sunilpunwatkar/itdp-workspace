@@ -6,7 +6,7 @@ export const dummyAnalysis = {
     risk: "LOW",
     target: 3250,
     stopLoss: 2980,
-    reason: [
+    reasons: [
       "Breakout Confirmed",
       "RSI Above 60",
       "Strong Volume",
@@ -21,7 +21,7 @@ export const dummyAnalysis = {
     risk: "MEDIUM",
     target: 4120,
     stopLoss: 3890,
-    reason: [
+    reasons: [
       "Sideways Trend",
       "Mixed Momentum",
       "Waiting for Breakout",
@@ -36,7 +36,7 @@ export const dummyAnalysis = {
     risk: "HIGH",
     target: 1480,
     stopLoss: 1610,
-    reason: [
+    reasons: [
       "Weak Trend",
       "RSI Below 40",
       "Heavy Selling Pressure",

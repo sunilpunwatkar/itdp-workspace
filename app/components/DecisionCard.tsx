@@ -5,7 +5,7 @@ type DecisionCardProps = {
   risk: string;
   target: number;
   stopLoss: number;
-  reason: string[];
+ reasons: string[];
   invalidIf: string;
 };
 
@@ -16,7 +16,7 @@ export default function DecisionCard({
   risk,
   target,
   stopLoss,
-  reason,
+  reasons,
   invalidIf,
 }: DecisionCardProps) {
   return (
@@ -92,7 +92,7 @@ export default function DecisionCard({
       <h3>AI Explanation</h3>
 
       <ul>
-        {reason.map((item) => (
+        {reasons.map((item) => (
           <li key={item}>✅ {item}</li>
         ))}
       </ul>
