@@ -37,10 +37,18 @@ const signal = buildMarketSignal(prices);
 console.log("Market Signal:", signal);
 
 // Decision Engine
-const result = analyzeStock(symbol);
+const result = analyzeStock(symbol, signal);
 
   return {
-    ...result,
-    entry: quote.price,
-  };
+  ...result,
+  entry: quote.price,
+  target:
+    result.decision === "BUY"
+      ? quote.price * 1.05
+      : quote.price * 0.95,
+  stopLoss:
+    result.decision === "BUY"
+      ? quote.price * 0.98
+      : quote.price * 1.02,
+};
 }

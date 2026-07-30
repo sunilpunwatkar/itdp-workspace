@@ -2,7 +2,7 @@ export class HistoricalProvider {
   async getHistoricalPrices(symbol: string): Promise<number[]> {
 
     const url =
-      `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.NS?range=2y&interval=1d`;
+      `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=2y&interval=1d`;
 
     console.log("Yahoo URL:", url);
       const response = await fetch(url);

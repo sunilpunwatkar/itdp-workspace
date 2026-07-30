@@ -1,28 +1,29 @@
+import { MarketSignal } from "../services/marketSignalService";
 import { AnalysisResult } from "../types/analysis";
 
-export function analyzeStock(symbol: string): AnalysisResult {
+export function analyzeStock(
+  symbol: string,
+  signal: MarketSignal
+): AnalysisResult {
   return {
     symbol,
 
-    decision: "BUY",
+    decision: signal.emaSignal,
 
-    confidence: 91,
+    confidence: 75,
 
-    risk: "LOW",
+    risk: "MEDIUM",
 
-    entry: 3200,
-
-    target: 3450,
-
-    stopLoss: 3100,
+    entry: signal.ema20,
+    target: 0,
+    stopLoss: 0,
 
     reasons: [
-      "EMA Bullish",
-      "RSI Above 60",
-      "MACD Positive",
-      "Strong Volume",
+      `EMA Signal: ${signal.emaSignal}`,
+      `RSI Signal: ${signal.rsiSignal}`,
+      `RSI Value: ${signal.rsi}`,
     ],
 
-    invalidIf: "Price closes below Stop Loss",
+    invalidIf: "Price closes below stop loss",
   };
 }
