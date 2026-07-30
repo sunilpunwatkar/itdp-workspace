@@ -1,64 +1,102 @@
 "use client";
 
 import { useState } from "react";
-import { getStockAnalysis } from "./services/stockService";
-import AnalysisCard from "./AnalysisCard";
 
 export default function StockAnalysis() {
-  const [symbol, setSymbol] = useState("");
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [symbol, setSymbol] = useState("RELIANCE");
+  const [result, setResult] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
-  async function handleAnalyze() {
-    const data = await getStockAnalysis(symbol.toUpperCase());
-    setAnalysis(data);
+  async function analyze() {
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        `/api/history?symbol=${symbol.toUpperCase()}`
+      );
+
+      const data = await response.json();
+
+      setResult(data);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to fetch analysis");
+    }
+
+    setLoading(false);
   }
 
   return (
-    <div style={{ color: "white" }}>
+    <div
+      style={{
+        color: "white",
+        background: "#1e293b",
+        padding: "20px",
+        borderRadius: "12px",
+      }}
+    >
       <h2>📈 Stock Analysis</h2>
 
-      <p>Analyze any stock using the ITDP Decision Engine.</p>
-
-      <div
-        style={{
-          background: "#1e293b",
-          padding: "20px",
-          borderRadius: "10px",
-          marginTop: "20px",
-        }}
-      >
+      <div style={{ marginTop: "20px" }}>
         <input
-          type="text"
           value={symbol}
-          onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-          placeholder="Enter Stock Symbol (Example: RELIANCE)"
+          onChange={(e) => setSymbol(e.target.value)}
+          placeholder="Enter Symbol"
           style={{
-            width: "100%",
-            padding: "12px",
-            borderRadius: "8px",
-            border: "1px solid #334155",
-            background: "#0f172a",
-            color: "white",
-            marginBottom: "15px",
+            padding: "10px",
+            width: "220px",
+            marginRight: "10px",
           }}
         />
 
-        <button
-          onClick={handleAnalyze}
-          style={{
-            background: "#2563eb",
-            color: "white",
-            border: "none",
-            padding: "12px 25px",
-            borderRadius: "8px",
-            cursor: "pointer",
-          }}
-        >
-          Analyze
+        <button onClick={analyze}>
+          {loading ? "Analyzing..." : "Analyze"}
         </button>
-
-{analysis && <AnalysisCard analysis={analysis} />}
       </div>
+
+      {result && (
+        <div style={{ marginTop: "25px", lineHeight: "2" }}>
+          <h3>{result.symbol}</h3>
+
+          <p>
+            <strong>Decision:</strong> {result.decision}
+          </p>
+
+          <p>
+            <strong>Confidence:</strong> {result.confidence}%
+          </p>
+
+          <p>
+            <strong>Risk:</strong> {result.risk}
+          </p>
+
+          <p>
+            <strong>Entry:</strong> ₹{result.entry}
+          </p>
+
+          <p>
+            <strong>Target:</strong> ₹{result.target}
+          </p>
+
+          <p>
+            <strong>Stop Loss:</strong> ₹{result.stopLoss}
+          </p>
+
+          <p>
+            <strong>Reasons:</strong>
+          </p>
+
+          <ul>
+            {result.reasons.map((reason: string, index: number) => (
+              <li key={index}>{reason}</li>
+            ))}
+          </ul>
+
+          <p>
+            <strong>Invalid If:</strong> {result.invalidIf}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

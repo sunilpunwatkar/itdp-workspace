@@ -4,7 +4,8 @@ export class HistoricalProvider {
     const url =
       `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.NS?range=6mo&interval=1d`;
 
-    const response = await fetch(url);
+    console.log("Yahoo URL:", url);
+      const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error(
