@@ -1,4 +1,4 @@
-import { MarketSignal } from "../services/marketSignalService";
+import { MarketSignal } from "../types/marketSignal";
 import { AnalysisResult } from "../types/analysis";
 
 export function analyzeStock(

@@ -16,6 +16,7 @@ export async function getStockAnalysis(
 
   // Live Quote
   const quote = await yahoo.getQuote(symbol);
+  console.log("QUOTE OBJECT:", quote);
 
   // Historical Prices
   const prices = await historical.getHistoricalPrices(symbol);
