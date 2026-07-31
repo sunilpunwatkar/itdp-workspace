@@ -5,6 +5,7 @@ import { AnalysisResult } from "../app/types/analysis";
 import { calculateEMAValues } from "../app/services/emaService";
 import { calculateRSIValues } from "../app/services/rsiService";
 import { buildMarketSignal } from "../app/services/marketSignalService";
+import { calculateATRValues } from "../app/services/atrService";
 
 const yahoo = new YahooProvider();
 const historical = new HistoricalProvider();
@@ -28,6 +29,12 @@ console.log("EMA Values:", ema);
 const rsi = calculateRSIValues(prices);
 
 console.log("RSI:", rsi);
+
+// ATR Calculation
+const atr = calculateATRValues(prices);
+
+console.log("ATR:", atr);
+
 
 // Market Signal
 console.log("Prices Array Length:", prices.length);
