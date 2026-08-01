@@ -47,6 +47,8 @@ console.log("Market Signal:", signal);
 // Decision Engine
 const result = analyzeStock(symbol, signal);
 
+console.log("Decision Engine Result:", result);
+
   return {
   ...result,
   entry: quote.price,

@@ -1,7 +1,8 @@
 import { calculateEMAValues } from "./emaService";
 import { calculateRSIValues } from "./rsiService";
-import { MarketSignal } from "../types/marketSignal";
 import { calculateATRValues } from "./atrService";
+import { calculateMACDValues } from "./macdService";
+import { MarketSignal } from "../types/marketSignal";
 
 export function buildMarketSignal(
   prices: number[]
@@ -10,6 +11,9 @@ export function buildMarketSignal(
   const ema = calculateEMAValues(prices);
   const rsi = calculateRSIValues(prices);
   const atr = calculateATRValues(prices);
+  const macd = calculateMACDValues(prices);
+
+  console.log("MACD:", macd);
 
   return {
     ema20: ema.ema20,
@@ -23,7 +27,12 @@ export function buildMarketSignal(
 
     rsi: rsi.rsi,
     rsiSignal: rsi.signal,
-    
+
     atr: atr.atr,
+
+    macd: macd.macd,
+    signal: macd.signal,
+    histogram: macd.histogram,
+    macdSignal: macd.macdSignal,
   };
 }
