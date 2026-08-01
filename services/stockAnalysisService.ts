@@ -6,6 +6,8 @@ import { calculateEMAValues } from "../app/services/emaService";
 import { calculateRSIValues } from "../app/services/rsiService";
 import { buildMarketSignal } from "../app/services/marketSignalService";
 import { calculateATRValues } from "../app/services/atrService";
+import { buildRiskPlan } from "../app/services/riskEngine";
+import { calculatePositionSize } from "../app/services/positionSizingService";
 
 const yahoo = new YahooProvider();
 const historical = new HistoricalProvider();
@@ -47,18 +49,40 @@ console.log("Market Signal:", signal);
 // Decision Engine
 const result = analyzeStock(symbol, signal);
 
+
 console.log("Decision Engine Result:", result);
 
-  return {
+const riskPlan = buildRiskPlan(
+  quote.price,
+  signal.atr,
+  result.decision
+);
+
+console.log("Risk Plan:", riskPlan);
+const position = calculatePositionSize(
+  75000,
+  2,
+  quote.price,
+  riskPlan.stopLoss
+);
+
+console.log("Position Size:", position);
+
+ return {
   ...result,
+
   entry: quote.price,
-  target:
-    result.decision === "BUY"
-      ? quote.price * 1.05
-      : quote.price * 0.95,
-  stopLoss:
-    result.decision === "BUY"
-      ? quote.price * 0.98
-      : quote.price * 1.02,
+
+  target: riskPlan.target1,
+
+  stopLoss: riskPlan.stopLoss,
+
+  reasons: [
+    ...result.reasons,
+    `Risk Reward : ${riskPlan.riskReward}`,
+    `Capital : ₹${position.capital}`,
+    `Max Risk : ₹${position.maxRisk}`,
+    `Quantity : ${position.quantity} Shares`,
+  ],
 };
 }
