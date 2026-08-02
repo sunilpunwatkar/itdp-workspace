@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -9,20 +9,38 @@ import MarketNews from "./components/MarketNews";
 import StockAnalysis from "./components/StockAnalysis";
 import SearchBar from "./components/SearchBar";
 
-import { analyzeStock } from "./utils/analyzeStock";
-
 export default function Home() {
   const [activePage, setActivePage] = useState("dashboard");
 
   const [symbol, setSymbol] = useState("RELIANCE");
 
-  const [analysis, setAnalysis] = useState(
-    analyzeStock("RELIANCE")
-  );
+  const [analysis, setAnalysis] = useState<any>(null);
 
-  function handleAnalyze() {
-    setAnalysis(analyzeStock(symbol));
+  async function handleAnalyze() {
+    try {
+      const finalSymbol = symbol.toUpperCase().endsWith(".NS")
+        ? symbol.toUpperCase()
+        : `${symbol.toUpperCase()}.NS`;
+
+      const response = await fetch(
+        `/api/analysis?symbol=${finalSymbol}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch analysis");
+      }
+
+      const data = await response.json();
+
+      setAnalysis(data);
+    } catch (error) {
+      console.error("Analysis Error:", error);
+    }
   }
+
+  useEffect(() => {
+    handleAnalyze();
+  }, []);
 
   return (
     <>
@@ -51,7 +69,9 @@ export default function Home() {
                 onAnalyze={handleAnalyze}
               />
 
-              <Dashboard analysis={analysis} />
+              {analysis && (
+                <Dashboard analysis={analysis} />
+              )}
             </>
           )}
 
