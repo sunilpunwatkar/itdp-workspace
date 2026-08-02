@@ -8,6 +8,7 @@ import { buildMarketSignal } from "../app/services/marketSignalService";
 import { calculateATRValues } from "../app/services/atrService";
 import { buildRiskPlan } from "../app/services/riskEngine";
 import { calculatePositionSize } from "../app/services/positionSizingService";
+import { buildTradePlan } from "../app/services/tradePlannerService";
 
 const yahoo = new YahooProvider();
 const historical = new HistoricalProvider();
@@ -68,14 +69,33 @@ const position = calculatePositionSize(
 
 console.log("Position Size:", position);
 
+const tradePlan = buildTradePlan(
+  result.decision,
+  quote.price,
+  signal.atr,
+  result.confidence
+);
+
+console.log("Trade Plan:", tradePlan);
+
  return {
   ...result,
 
   entry: quote.price,
 
-  target: riskPlan.target1,
+  target: tradePlan.target1,
+
+  target1: tradePlan.target1,
+
+  target2: tradePlan.target2,
 
   stopLoss: riskPlan.stopLoss,
+
+  tradeQuality: tradePlan.tradeQuality,
+
+  holdingPeriod: tradePlan.holdingPeriod,
+
+  aiSummary: tradePlan.aiSummary,
 
   reasons: [
     ...result.reasons,
@@ -84,5 +104,7 @@ console.log("Position Size:", position);
     `Max Risk : ₹${position.maxRisk}`,
     `Quantity : ${position.quantity} Shares`,
   ],
+
+  invalidIf: result.invalidIf,
 };
 }
