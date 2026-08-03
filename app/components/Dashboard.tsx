@@ -16,6 +16,14 @@ type DashboardProps = {
 export default function Dashboard({
   analysis,
 }: DashboardProps) {
+
+  const signalColor =
+    analysis.decision === "BUY"
+      ? "#22c55e"
+      : analysis.decision === "SELL"
+      ? "#ef4444"
+      : "#f59e0b";
+
   const cards = [
     {
       title: "NIFTY 50",
@@ -35,31 +43,43 @@ export default function Dashboard({
     {
       title: "AI SIGNAL",
       value: analysis.decision,
-      color:
-        analysis.decision === "BUY"
-          ? "#22c55e"
-          : analysis.decision === "SELL"
-          ? "#ef4444"
-          : "#f59e0b",
+      color: signalColor,
     },
   ];
 
   return (
     <main style={{ color: "white" }}>
-      <h1 style={{ marginTop: 0 }}>
-        📊 ITDP Decision Workspace
-      </h1>
 
-      <p style={{ color: "#94a3b8" }}>
-        India's Trading Decision Platform
-      </p>
+      <div
+        style={{
+          marginBottom: "25px",
+        }}
+      >
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "32px",
+          }}
+        >
+          📊 ITDP Decision Workspace
+        </h1>
+
+        <p
+          style={{
+            color: "#94a3b8",
+            marginTop: "8px",
+          }}
+        >
+          India's Trading Decision Platform
+        </p>
+      </div>
 
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4,1fr)",
           gap: "20px",
-          marginTop: "30px",
+          marginBottom: "30px",
         }}
       >
         {cards.map((card) => (
@@ -68,18 +88,26 @@ export default function Dashboard({
             style={{
               background: "#1e293b",
               border: "1px solid #334155",
-              borderRadius: "12px",
-              padding: "20px",
+              borderRadius: "14px",
+              padding: "22px",
+              transition: "0.3s",
             }}
           >
-            <div style={{ color: "#94a3b8" }}>
+            <div
+              style={{
+                color: "#94a3b8",
+                fontSize: "14px",
+              }}
+            >
               {card.title}
             </div>
 
             <h2
               style={{
                 color: card.color,
+                marginTop: "12px",
                 marginBottom: 0,
+                fontSize: "28px",
               }}
             >
               {card.value}
@@ -98,6 +126,7 @@ export default function Dashboard({
         reasons={analysis.reasons}
         invalidIf={analysis.invalidIf}
       />
+
     </main>
   );
 }
