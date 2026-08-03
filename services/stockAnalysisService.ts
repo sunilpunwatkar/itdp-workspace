@@ -9,6 +9,7 @@ import { calculateATRValues } from "../app/services/atrService";
 import { buildRiskPlan } from "../app/services/riskEngine";
 import { calculatePositionSize } from "../app/services/positionSizingService";
 import { buildTradePlan } from "../app/services/tradePlannerService";
+import { resolveSymbol } from "../app/services/symbolResolver";
 
 const yahoo = new YahooProvider();
 const historical = new HistoricalProvider();
@@ -16,13 +17,16 @@ const historical = new HistoricalProvider();
 export async function getStockAnalysis(
   symbol: string
 ): Promise<AnalysisResult> {
+  const resolvedSymbol = resolveSymbol(symbol);
+
+console.log("Resolved Symbol:", resolvedSymbol);
 
   // Live Quote
-  const quote = await yahoo.getQuote(symbol);
+  const quote = await yahoo.getQuote(resolvedSymbol);
   console.log("QUOTE OBJECT:", quote);
 
   // Historical Prices
-  const prices = await historical.getHistoricalPrices(symbol);
+  const prices = await historical.getHistoricalPrices(resolvedSymbol);
 
   // EMA Calculation
 const ema = calculateEMAValues(prices);
