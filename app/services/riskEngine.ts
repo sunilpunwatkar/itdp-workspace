@@ -1,7 +1,7 @@
 export interface RiskResult {
-  stopLoss: number;
-  target1: number;
-  target2: number;
+  stopLoss: number | null;
+  target1: number | null;
+  target2: number | null;
   riskReward: string;
 }
 
@@ -13,11 +13,11 @@ export function buildRiskPlan(
 
   if (decision === "BUY") {
 
-    const stopLoss = entry - (2 * atr);
+    const stopLoss = Number((entry - (2 * atr)).toFixed(2));
 
-    const target1 = entry + (2 * atr);
+    const target1 = Number((entry + (2 * atr)).toFixed(2));
 
-    const target2 = entry + (4 * atr);
+    const target2 = Number((entry + (4 * atr)).toFixed(2));
 
     return {
       stopLoss,
@@ -29,11 +29,11 @@ export function buildRiskPlan(
 
   if (decision === "SELL") {
 
-    const stopLoss = entry + (2 * atr);
+    const stopLoss = Number((entry + (2 * atr)).toFixed(2));
 
-    const target1 = entry - (2 * atr);
+    const target1 = Number((entry - (2 * atr)).toFixed(2));
 
-    const target2 = entry - (4 * atr);
+    const target2 = Number((entry - (4 * atr)).toFixed(2));
 
     return {
       stopLoss,
@@ -43,10 +43,11 @@ export function buildRiskPlan(
     };
   }
 
+  // HOLD
   return {
-    stopLoss: entry,
-    target1: entry,
-    target2: entry,
+    stopLoss: null,
+    target1: null,
+    target2: null,
     riskReward: "-",
   };
 }

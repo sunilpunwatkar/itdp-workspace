@@ -87,14 +87,14 @@ console.log("Trade Plan:", tradePlan);
 
   entry: quote.price,
 
-  target: tradePlan.target1,
+  target: riskPlan.target1 ?? 0,
 
-  target1: tradePlan.target1,
+target1: riskPlan.target1 ?? 0,
 
-  target2: tradePlan.target2,
+target2: riskPlan.target2 ?? 0,
 
-  stopLoss: riskPlan.stopLoss,
-
+  stopLoss: riskPlan.stopLoss ?? 0,
+  
   tradeQuality: tradePlan.tradeQuality,
 
   holdingPeriod: tradePlan.holdingPeriod,

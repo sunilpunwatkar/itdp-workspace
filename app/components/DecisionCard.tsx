@@ -169,13 +169,15 @@ export default function DecisionCard({
           </tr>
 
           <tr>
-            <td><strong>Target</strong></td>
-            <td>₹{target}</td>
+            <td>
+  {target === 0 ? "-" : `₹${target}`}
+</td>
           </tr>
 
           <tr>
-            <td><strong>Stop Loss</strong></td>
-            <td>₹{stopLoss}</td>
+            <td>
+  {stopLoss === 0 ? "-" : `₹${stopLoss}`}
+</td>
           </tr>
         </tbody>
       </table>
