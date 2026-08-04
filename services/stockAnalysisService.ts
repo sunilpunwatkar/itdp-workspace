@@ -68,7 +68,7 @@ const position = calculatePositionSize(
   75000,
   2,
   quote.price,
-  riskPlan.stopLoss
+  riskPlan.stopLoss ?? quote.price
 );
 
 console.log("Position Size:", position);
