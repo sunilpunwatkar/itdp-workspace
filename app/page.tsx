@@ -16,11 +16,11 @@ export default function Home() {
 
   const [analysis, setAnalysis] = useState<any>(null);
 
-  async function handleAnalyze() {
-    console.log("Current Symbol:", symbol);
+  async function handleAnalyze(inputSymbol: string) {
+    console.log("Current Symbol:", inputSymbol);
     try {
       const response = await fetch(
-  `/api/analysis?symbol=${symbol}`
+  `/api/analysis?symbol=${inputSymbol}`
 );
 
       if (!response.ok) {
@@ -36,8 +36,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    handleAnalyze();
-  }, []);
+  handleAnalyze(symbol);
+}, []);
 
   return (
     <>

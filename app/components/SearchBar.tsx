@@ -3,7 +3,7 @@
 type SearchBarProps = {
   symbol: string;
   onSymbolChange: (value: string) => void;
-  onAnalyze: () => void;
+  onAnalyze: (symbol: string) => void;
 };
 
 export default function SearchBar({
@@ -38,20 +38,20 @@ export default function SearchBar({
       />
 
       <button
-        onClick={onAnalyze}
-        style={{
-          padding: "12px 25px",
-          background: "#2563eb",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontSize: "16px",
-          fontWeight: "bold",
-        }}
-      >
-        Analyze
-      </button>
+  onClick={() => onAnalyze(symbol)}
+  style={{
+    padding: "12px 25px",
+    background: "#2563eb",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "16px",
+    fontWeight: "bold",
+  }}
+>
+  Analyze
+</button>
     </div>
   );
 }
