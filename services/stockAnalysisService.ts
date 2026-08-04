@@ -54,7 +54,7 @@ const signal = buildMarketSignal(prices);
 console.log("Market Signal:", signal);
 
 // Decision Engine
-const result = analyzeStock(symbol, signal);
+const result = analyzeStock(resolvedSymbol, signal);
 
 
 console.log("Decision Engine Result:", result);

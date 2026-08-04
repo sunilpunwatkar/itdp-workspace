@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 type SearchBarProps = {
   symbol: string;
   onSymbolChange: (value: string) => void;
@@ -11,6 +13,25 @@ export default function SearchBar({
   onSymbolChange,
   onAnalyze,
 }: SearchBarProps) {
+  const [localSymbol, setLocalSymbol] = useState(symbol);
+
+  useEffect(() => {
+    setLocalSymbol(symbol);
+  }, [symbol]);
+
+  function handleInput(value: string) {
+    setLocalSymbol(value);
+    onSymbolChange(value);
+  }
+
+  function handleAnalyzeClick() {
+    const finalSymbol = localSymbol.trim().toUpperCase();
+
+    if (!finalSymbol) return;
+
+    onAnalyze(finalSymbol);
+  }
+
   return (
     <div
       style={{
@@ -22,9 +43,16 @@ export default function SearchBar({
     >
       <input
         type="text"
-        value={symbol}
-        onChange={(e) => onSymbolChange(e.target.value)}
+        value={localSymbol}
+        onChange={(e) => handleInput(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleAnalyzeClick();
+          }
+        }}
         placeholder="Enter Stock Symbol (Example: RELIANCE)"
+        autoComplete="off"
+        spellCheck={false}
         style={{
           flex: 1,
           padding: "12px",
@@ -38,20 +66,20 @@ export default function SearchBar({
       />
 
       <button
-  onClick={() => onAnalyze(symbol)}
-  style={{
-    padding: "12px 25px",
-    background: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "16px",
-    fontWeight: "bold",
-  }}
->
-  Analyze
-</button>
+        onClick={handleAnalyzeClick}
+        style={{
+          padding: "12px 25px",
+          background: "#2563eb",
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+          fontSize: "16px",
+          fontWeight: "bold",
+        }}
+      >
+        Analyze
+      </button>
     </div>
   );
 }

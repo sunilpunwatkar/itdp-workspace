@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -16,39 +16,45 @@ export default function Home() {
 
   const [analysis, setAnalysis] = useState<any>(null);
 
-  async function handleAnalyze(inputSymbol: string) {
-    console.log("Current Symbol:", inputSymbol);
-    try {
-      const response = await fetch(
-  `/api/analysis?symbol=${inputSymbol}&ts=${Date.now()}`,
-  {
-    cache: "no-store",
-  }
-);
+  const [loading, setLoading] = useState(false);
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch analysis");
+  const handleAnalyze = useCallback(
+    async (inputSymbol: string) => {
+      try {
+        const finalSymbol = inputSymbol.trim().toUpperCase();
+
+        setLoading(true);
+
+        console.log("Analyzing :", finalSymbol);
+
+        const response = await fetch(
+          `/api/analysis?symbol=${finalSymbol}&ts=${Date.now()}`,
+          {
+            cache: "no-store",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch analysis");
+        }
+
+        const data = await response.json();
+
+        console.log("Analysis :", data);
+
+        setAnalysis(data);
+      } catch (error) {
+        console.error("Analysis Error :", error);
+      } finally {
+        setLoading(false);
       }
-
-      const data = await response.json();
-
-console.log("API Response:", data);
-
-setAnalysis(null);
-
-setTimeout(() => {
-  setAnalysis(data);
-}, 10);
-  refreshId: Date.now(),
-});
-    } catch (error) {
-      console.error("Analysis Error:", error);
-    }
-  }
+    },
+    []
+  );
 
   useEffect(() => {
-  handleAnalyze(symbol);
-}, []);
+    handleAnalyze(symbol);
+  }, [handleAnalyze]);
 
   return (
     <>
@@ -77,8 +83,21 @@ setTimeout(() => {
                 onAnalyze={handleAnalyze}
               />
 
+              {loading && (
+                <p
+                  style={{
+                    color: "#94a3b8",
+                    marginBottom: "20px",
+                  }}
+                >
+                  Analyzing...
+                </p>
+              )}
+
               {analysis && (
-                <Dashboard analysis={analysis} />
+                <Dashboard
+                  analysis={analysis}
+                />
               )}
             </>
           )}

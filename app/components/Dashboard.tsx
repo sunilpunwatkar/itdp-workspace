@@ -13,10 +13,7 @@ type DashboardProps = {
   };
 };
 
-export default function Dashboard({
-  analysis,
-}: DashboardProps) {
-
+export default function Dashboard({ analysis }: DashboardProps) {
   const signalColor =
     analysis.decision === "BUY"
       ? "#22c55e"
@@ -26,21 +23,25 @@ export default function Dashboard({
 
   const cards = [
     {
+      id: 1,
       title: "NIFTY 50",
       value: "25,120",
       color: "#22c55e",
     },
     {
+      id: 2,
       title: "SENSEX",
       value: "82,430",
       color: "#3b82f6",
     },
     {
+      id: 3,
       title: "BANK NIFTY",
       value: "56,720",
       color: "#f59e0b",
     },
     {
+      id: 4,
       title: "AI SIGNAL",
       value: analysis.decision,
       color: signalColor,
@@ -49,7 +50,6 @@ export default function Dashboard({
 
   return (
     <main style={{ color: "white" }}>
-
       <div
         style={{
           marginBottom: "25px",
@@ -84,13 +84,12 @@ export default function Dashboard({
       >
         {cards.map((card) => (
           <div
-            key={card.title}
+            key={card.id}
             style={{
               background: "#1e293b",
               border: "1px solid #334155",
               borderRadius: "14px",
               padding: "22px",
-              transition: "0.3s",
             }}
           >
             <div
@@ -117,6 +116,7 @@ export default function Dashboard({
       </div>
 
       <DecisionCard
+        key={analysis.symbol}
         symbol={analysis.symbol}
         decision={analysis.decision}
         confidence={analysis.confidence}
@@ -126,7 +126,6 @@ export default function Dashboard({
         reasons={analysis.reasons}
         invalidIf={analysis.invalidIf}
       />
-
     </main>
   );
 }

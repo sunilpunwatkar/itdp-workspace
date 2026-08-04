@@ -8,18 +8,33 @@ export async function GET(request: NextRequest) {
     const symbol = searchParams.get("symbol");
 
     if (!symbol) {
-      return NextResponse.json(result, {
-  headers: {
-    "Cache-Control": "no-store",
-  },
-});
+      return NextResponse.json(
+        {
+          error: "Symbol is required",
+        },
+        {
+          status: 400,
+        }
+      );
     }
+
+    console.log("API Symbol Received:", symbol);
 
     const result = await getStockAnalysis(symbol);
 
-    return NextResponse.json(result);
+    console.log("API Result Symbol:", result.symbol);
+
+    return NextResponse.json(result, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    });
 
   } catch (error) {
+    console.error("API Error:", error);
+
     return NextResponse.json(
       {
         error:
@@ -27,7 +42,9 @@ export async function GET(request: NextRequest) {
             ? error.message
             : "Unknown Error",
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }
