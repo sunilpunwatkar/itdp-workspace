@@ -15,7 +15,7 @@ export interface MarketSignal {
   macd: number;
   signal: number;
   histogram: number;
-  macdSignal: "BUY" | "SELL";
+ macdSignal: "BUY" | "SELL" | "HOLD";
 
   trend: "UPTREND" | "DOWNTREND" | "SIDEWAYS";
 }
