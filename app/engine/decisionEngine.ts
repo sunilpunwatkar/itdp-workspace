@@ -30,32 +30,18 @@ export function analyzeStock(
     decision = "HOLD";
 
   return {
-    symbol,
-
-    decision,
-
-    confidence: Math.abs(score) * 25 + 25,
-
-    risk:
-      decision === "BUY"
-        ? "LOW"
-        : decision === "SELL"
-        ? "HIGH"
-        : "MEDIUM",
-
-    entry: signal.ema20,
-
-    target: 0,
-
-    stopLoss: 0,
-
-    reasons: [
-      `EMA : ${signal.emaSignal}`,
-      `RSI : ${signal.rsiSignal}`,
-      `MACD : ${signal.macdSignal}`,
-      `Score : ${score}`,
-    ],
-
-    invalidIf: "Price closes below stop loss",
-  };
-}
+  symbol,
+  decision,
+  confidence,
+  risk,
+  entry,
+  target,
+  target1: target,
+  target2: target,
+  stopLoss,
+  tradeQuality: "-",
+  holdingPeriod: "-",
+  aiSummary: "",
+  reasons,
+  invalidIf,
+};}
