@@ -17,14 +17,11 @@ export default function Home() {
   const [analysis, setAnalysis] = useState<any>(null);
 
   async function handleAnalyze() {
+    console.log("Current Symbol:", symbol);
     try {
-      const finalSymbol = symbol.toUpperCase().endsWith(".NS")
-        ? symbol.toUpperCase()
-        : `${symbol.toUpperCase()}.NS`;
-
       const response = await fetch(
-        `/api/analysis?symbol=${finalSymbol}`
-      );
+  `/api/analysis?symbol=${symbol}`
+);
 
       if (!response.ok) {
         throw new Error("Failed to fetch analysis");

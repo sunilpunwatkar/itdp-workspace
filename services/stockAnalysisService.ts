@@ -9,7 +9,7 @@ import { calculateATRValues } from "../app/services/atrService";
 import { buildRiskPlan } from "../app/services/riskEngine";
 import { calculatePositionSize } from "../app/services/positionSizingService";
 import { buildTradePlan } from "../app/services/tradePlannerService";
-import { resolveSymbol } from "../app/services/symbolResolver";
+import { resolveUniversalSymbol } from "../app/services/universalSymbolEngine";
 
 const yahoo = new YahooProvider();
 const historical = new HistoricalProvider();
@@ -17,9 +17,11 @@ const historical = new HistoricalProvider();
 export async function getStockAnalysis(
   symbol: string
 ): Promise<AnalysisResult> {
-  const resolvedSymbol = resolveSymbol(symbol);
+  const resolvedSymbol = resolveUniversalSymbol(symbol);
 
-console.log("Resolved Symbol:", resolvedSymbol);
+console.log(
+  `USI Engine : ${symbol} -> ${resolvedSymbol}`
+);
 
   // Live Quote
   const quote = await yahoo.getQuote(resolvedSymbol);
