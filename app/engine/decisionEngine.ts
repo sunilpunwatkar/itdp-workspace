@@ -29,6 +29,27 @@ export function analyzeStock(
   else
     decision = "HOLD";
 
+  const confidence = Math.abs(score) * 25 + 50;
+
+const risk =
+  decision === "BUY"
+    ? "LOW"
+    : decision === "SELL"
+    ? "HIGH"
+    : "MEDIUM";
+
+const entry = 0;
+const target = 0;
+const stopLoss = 0;
+
+const reasons = [
+  `EMA : ${signal.emaSignal}`,
+  `RSI : ${signal.rsiSignal}`,
+  `MACD : ${signal.macdSignal}`,
+];
+
+const invalidIf = "-";
+
   return {
   symbol,
   decision,
