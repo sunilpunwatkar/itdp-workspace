@@ -20,7 +20,10 @@ export default function Home() {
     console.log("Current Symbol:", inputSymbol);
     try {
       const response = await fetch(
-  `/api/analysis?symbol=${inputSymbol}`
+  `/api/analysis?symbol=${inputSymbol}&ts=${Date.now()}`,
+  {
+    cache: "no-store",
+  }
 );
 
       if (!response.ok) {
@@ -29,7 +32,15 @@ export default function Home() {
 
       const data = await response.json();
 
-      setAnalysis(data);
+console.log("API Response:", data);
+
+setAnalysis(null);
+
+setTimeout(() => {
+  setAnalysis(data);
+}, 10);
+  refreshId: Date.now(),
+});
     } catch (error) {
       console.error("Analysis Error:", error);
     }

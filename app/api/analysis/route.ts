@@ -8,10 +8,11 @@ export async function GET(request: NextRequest) {
     const symbol = searchParams.get("symbol");
 
     if (!symbol) {
-      return NextResponse.json(
-        { error: "Symbol is required" },
-        { status: 400 }
-      );
+      return NextResponse.json(result, {
+  headers: {
+    "Cache-Control": "no-store",
+  },
+});
     }
 
     const result = await getStockAnalysis(symbol);
