@@ -1,5 +1,4 @@
-import { YahooProvider } from "../app/providers/yahooProvider";
-import { HistoricalProvider } from "../app/providers/historicalProvider";
+
 import { analyzeStock } from "../app/engine/decisionEngine";
 import { AnalysisResult } from "../app/types/analysis";
 import { calculateEMAValues } from "../app/services/emaService";
@@ -10,9 +9,9 @@ import { buildRiskPlan } from "../app/services/riskEngine";
 import { calculatePositionSize } from "../app/services/positionSizingService";
 import { buildTradePlan } from "../app/services/tradePlannerService";
 import { resolveUniversalSymbol } from "../app/services/universalSymbolEngine";
+import { getMarketData } from "../app/services/marketDataEngine";
 
-const yahoo = new YahooProvider();
-const historical = new HistoricalProvider();
+
 
 export async function getStockAnalysis(
   symbol: string
@@ -28,12 +27,14 @@ console.log(
 // Parallel Fetch
 // ================================
 
-const [quote, prices] = await Promise.all([
-  yahoo.getQuote(resolvedSymbol),
-  historical.getHistoricalPrices(resolvedSymbol),
-]);
+const market = await getMarketData(symbol);
+
+const quote = market.quote;
+
+const prices = market.prices;
 
 console.log("QUOTE OBJECT:", quote);
+
 console.log("Prices Length:", prices.length);
 
   // EMA Calculation

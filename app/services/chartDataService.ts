@@ -3,6 +3,7 @@ import {
   HistoricalProvider,
 } from "../providers/historicalProvider";
 import { resolveUniversalSymbol } from "./universalSymbolEngine";
+import { calculateEMAValues } from "./emaService";
 
 const historical = new HistoricalProvider();
 
@@ -61,12 +62,25 @@ export async function getChartData(
     await historical.getHistoricalOHLC(
       resolvedSymbol
     );
+    const ema = calculateEMAValues(ohlc.close);
 
-  return buildChartData(
-    ohlc.timestamps,
-    ohlc.open,
-    ohlc.high,
-    ohlc.low,
-    ohlc.close
-  );
+  const chartData = buildChartData(
+  ohlc.timestamps,
+  ohlc.open,
+  ohlc.high,
+  ohlc.low,
+  ohlc.close
+);
+
+for (let i = 0; i < chartData.length; i++) {
+
+  chartData[i].ema20 = ema.ema20[i];
+
+  chartData[i].ema50 = ema.ema50[i];
+
+  chartData[i].ema200 = ema.ema200[i];
+
+}
+
+return chartData;
 }
