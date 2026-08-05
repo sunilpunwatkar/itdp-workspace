@@ -1,9 +1,12 @@
 import { CandleData } from "../types/chart";
+
 import {
   HistoricalProvider,
 } from "../providers/historicalProvider";
+
 import { resolveUniversalSymbol } from "./universalSymbolEngine";
-import { calculateEMAValues } from "./emaService";
+
+import { calculateEMAArray } from "../indicators/ema";
 
 const historical = new HistoricalProvider();
 
@@ -42,9 +45,11 @@ export function buildChartData(
 
       volume: 0,
     });
+
   }
 
   return chartData;
+
 }
 
 export async function getChartData(
@@ -62,25 +67,31 @@ export async function getChartData(
     await historical.getHistoricalOHLC(
       resolvedSymbol
     );
-    const ema = calculateEMAValues(ohlc.close);
 
   const chartData = buildChartData(
-  ohlc.timestamps,
-  ohlc.open,
-  ohlc.high,
-  ohlc.low,
-  ohlc.close
-);
+    ohlc.timestamps,
+    ohlc.open,
+    ohlc.high,
+    ohlc.low,
+    ohlc.close
+  );
 
-for (let i = 0; i < chartData.length; i++) {
+  const ema = {
+    ema20: calculateEMAArray(ohlc.close, 20),
+    ema50: calculateEMAArray(ohlc.close, 50),
+    ema200: calculateEMAArray(ohlc.close, 200),
+  };
 
-  chartData[i].ema20 = ema.ema20[i];
+  for (let i = 0; i < chartData.length; i++) {
 
-  chartData[i].ema50 = ema.ema50[i];
+    chartData[i].ema20 = ema.ema20[i];
 
-  chartData[i].ema200 = ema.ema200[i];
+    chartData[i].ema50 = ema.ema50[i];
 
-}
+    chartData[i].ema200 = ema.ema200[i];
 
-return chartData;
+  }
+
+  return chartData;
+
 }

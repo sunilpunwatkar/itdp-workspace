@@ -35,15 +35,25 @@ export async function getMarketData(
 
   const [quote, prices, ohlc] =
     await Promise.all([
+
       yahoo.getQuote(symbol),
+
       historical.getHistoricalPrices(symbol),
+
       historical.getHistoricalOHLC(symbol),
+
     ]);
 
   return {
+
     symbol,
+
     quote,
+
     prices,
+
     ohlc,
+
   };
+
 }
