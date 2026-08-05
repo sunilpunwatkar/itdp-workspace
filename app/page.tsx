@@ -95,10 +95,11 @@ export default function Home() {
               )}
 
               {analysis && (
-                <Dashboard
-                  analysis={analysis}
-                />
-              )}
+  <Dashboard
+    key={`${analysis.symbol}-${Date.now()}`}
+    analysis={analysis}
+  />
+)}
             </>
           )}
 

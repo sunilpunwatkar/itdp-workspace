@@ -1,5 +1,19 @@
+export type HistoricalOHLC = {
+  timestamps: number[];
+  open: number[];
+  high: number[];
+  low: number[];
+  close: number[];
+  volume: number[];
+};
+
 export class HistoricalProvider {
+
+  // ==========================================
+  // Existing Method (EMA / RSI / MACD साठी)
+  // ==========================================
   async getHistoricalPrices(symbol: string): Promise<number[]> {
+
     const url =
       `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=2y&interval=1d`;
 
@@ -30,4 +44,53 @@ export class HistoricalProvider {
 
     return validPrices;
   }
+
+  // ==========================================
+  // NEW METHOD (Candlestick Chart साठी)
+  // ==========================================
+  async getHistoricalOHLC(
+    symbol: string
+  ): Promise<HistoricalOHLC> {
+
+    const url =
+      `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=2y&interval=1d`;
+
+    console.log("Yahoo OHLC URL:", url);
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch OHLC data for ${symbol}`
+      );
+    }
+
+    const data = await response.json();
+
+    const result = data.chart?.result?.[0];
+
+    if (!result) {
+      throw new Error("Yahoo returned empty data.");
+    }
+
+    return {
+      timestamps: result.timestamp ?? [],
+
+      open:
+        result.indicators?.quote?.[0]?.open ?? [],
+
+      high:
+        result.indicators?.quote?.[0]?.high ?? [],
+
+      low:
+        result.indicators?.quote?.[0]?.low ?? [],
+
+      close:
+        result.indicators?.quote?.[0]?.close ?? [],
+
+      volume:
+        result.indicators?.quote?.[0]?.volume ?? [],
+    };
+  }
+
 }

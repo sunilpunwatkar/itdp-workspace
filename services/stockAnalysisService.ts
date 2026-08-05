@@ -24,11 +24,17 @@ console.log(
 );
 
   // Live Quote
-  const quote = await yahoo.getQuote(resolvedSymbol);
-  console.log("QUOTE OBJECT:", quote);
+  // ================================
+// Parallel Fetch
+// ================================
 
-  // Historical Prices
-  const prices = await historical.getHistoricalPrices(resolvedSymbol);
+const [quote, prices] = await Promise.all([
+  yahoo.getQuote(resolvedSymbol),
+  historical.getHistoricalPrices(resolvedSymbol),
+]);
+
+console.log("QUOTE OBJECT:", quote);
+console.log("Prices Length:", prices.length);
 
   // EMA Calculation
 const ema = calculateEMAValues(prices);

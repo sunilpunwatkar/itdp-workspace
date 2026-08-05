@@ -1,4 +1,5 @@
 import DecisionCard from "./DecisionCard";
+import LiveChart from "./chart/LiveChart";
 
 type DashboardProps = {
   analysis: {
@@ -114,6 +115,7 @@ export default function Dashboard({ analysis }: DashboardProps) {
           </div>
         ))}
       </div>
+      <LiveChart symbol={analysis.symbol} />
 
       <DecisionCard
         key={analysis.symbol}
