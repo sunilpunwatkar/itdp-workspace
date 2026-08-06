@@ -1,11 +1,11 @@
-export type HistoricalOHLC = {
+export interface HistoricalOHLC {
   timestamps: number[];
   open: number[];
   high: number[];
   low: number[];
   close: number[];
   volume: number[];
-};
+}
 
 export class HistoricalProvider {
 

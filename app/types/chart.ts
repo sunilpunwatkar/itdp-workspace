@@ -1,6 +1,5 @@
 export type CandleData = {
   time: string;
-
   open: number;
   high: number;
   low: number;
@@ -11,4 +10,5 @@ export type CandleData = {
   ema20?: number;
   ema50?: number;
   ema200?: number;
+  rsi?: number;
 };

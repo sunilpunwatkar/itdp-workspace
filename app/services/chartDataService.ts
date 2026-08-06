@@ -7,6 +7,7 @@ import {
 import { resolveUniversalSymbol } from "./universalSymbolEngine";
 
 import { calculateEMAArray } from "../indicators/ema";
+import { calculateRSIArray } from "../indicators/rsi";
 
 const historical = new HistoricalProvider();
 
@@ -15,7 +16,8 @@ export function buildChartData(
   open: number[],
   high: number[],
   low: number[],
-  close: number[]
+  close: number[],
+  volume: number[]
 ): CandleData[] {
 
   const chartData: CandleData[] = [];
@@ -43,7 +45,7 @@ export function buildChartData(
       low: low[i],
       close: close[i],
 
-      volume: 0,
+      volume: volume[i],
     });
 
   }
@@ -69,18 +71,24 @@ export async function getChartData(
     );
 
   const chartData = buildChartData(
-    ohlc.timestamps,
-    ohlc.open,
-    ohlc.high,
-    ohlc.low,
-    ohlc.close
-  );
+  ohlc.timestamps,
+  ohlc.open,
+  ohlc.high,
+  ohlc.low,
+  ohlc.close,
+  ohlc.volume
+);
 
   const ema = {
     ema20: calculateEMAArray(ohlc.close, 20),
     ema50: calculateEMAArray(ohlc.close, 50),
     ema200: calculateEMAArray(ohlc.close, 200),
   };
+  const rsi =
+  calculateRSIArray(
+    ohlc.close,
+    14
+  );
 
   for (let i = 0; i < chartData.length; i++) {
 
@@ -90,7 +98,10 @@ export async function getChartData(
 
     chartData[i].ema200 = ema.ema200[i];
 
+    chartData[i].rsi = rsi[i];
+
   }
+  
 
   return chartData;
 
