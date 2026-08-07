@@ -111,6 +111,10 @@ export default function LiveChart({
         color: "#4CAF50",
       });
       // ===========================
+// RSI Series
+// ===========================
+
+      // ===========================
 // RSI Panel
 // ===========================
 
@@ -118,7 +122,6 @@ const rsiSeries =
   chart.addSeries(LineSeries, {
     color: "#A855F7",
     lineWidth: 2,
-
     priceScaleId: "rsi",
   });
 
@@ -129,7 +132,7 @@ chart.priceScale("rsi").applyOptions({
   },
 });
 
-const rsi30 =
+const rsi30Series =
   chart.addSeries(LineSeries, {
     color: "#EF4444",
     lineWidth: 1,
@@ -137,14 +140,14 @@ const rsi30 =
     priceScaleId: "rsi",
   });
 
-const rsi70 =
+const rsi70Series =
   chart.addSeries(LineSeries, {
     color: "#22C55E",
     lineWidth: 1,
     lineStyle: LineStyle.Dashed,
     priceScaleId: "rsi",
   });
-
+  
    async function loadChart() {
 
   try {
@@ -172,11 +175,13 @@ const rsi70 =
         );
 
         console.log(
-          "Last Candle:",
-          rawData[
-            rawData.length - 1
-          ]
-        );
+  "Last Candle JSON:",
+  JSON.stringify(
+    rawData[rawData.length - 1],
+    null,
+    2
+  )
+);
 
         // ===========================
         // Candles
@@ -270,9 +275,7 @@ const rsi70 =
                 ),
               })
             );
-            // ===========================
-// RSI Data
-// ===========================
+        
 // ===========================
 // RSI Data
 // ===========================
@@ -321,6 +324,17 @@ const rsi70Data =
                   : "#ef5350",
             })
           );
+          rsiSeries.setData(
+  rsiData
+);
+
+rsi30Series.setData(
+  rsi30Data
+);
+
+rsi70Series.setData(
+  rsi70Data
+);
 
         candleSeries.setData(
           chartData
@@ -341,6 +355,12 @@ const rsi70Data =
         volumeSeries.setData(
           volumeData
         );
+
+        rsiSeries.setData(rsiData);
+
+        rsi30Series.setData(rsi30Data);
+
+        rsi70Series.setData(rsi70Data);
 
             } catch (error) {
 

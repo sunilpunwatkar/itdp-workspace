@@ -1,3 +1,5 @@
+import { calculateEMAArray } from "../indicators/ema";
+
 export interface MACDResult {
   macd: number;
   signal: number;
@@ -5,55 +7,68 @@ export interface MACDResult {
   macdSignal: "BUY" | "SELL" | "HOLD";
 }
 
-function calculateEMA(
-  prices: number[],
-  period: number
-): number[] {
-  const multiplier = 2 / (period + 1);
-
-  const ema: number[] = [];
-  ema[0] = prices[0];
-
-  for (let i = 1; i < prices.length; i++) {
-    ema[i] =
-      (prices[i] - ema[i - 1]) * multiplier +
-      ema[i - 1];
-  }
-
-  return ema;
-}
-
 export function calculateMACDValues(
   prices: number[]
 ): MACDResult {
 
-  const ema12 = calculateEMA(prices, 12);
-  const ema26 = calculateEMA(prices, 26);
+  if (prices.length < 35) {
+    return {
+      macd: 0,
+      signal: 0,
+      histogram: 0,
+      macdSignal: "HOLD",
+    };
+  }
+
+  const ema12 = calculateEMAArray(prices, 12);
+
+  const ema26 = calculateEMAArray(prices, 26);
 
   const macdLine = ema12.map(
-    (value, index) => value - ema26[index]
+    (value, index) =>
+      Number((value - ema26[index]).toFixed(2))
   );
 
-  const signalLine = calculateEMA(macdLine, 9);
+  const signalLine =
+    calculateEMAArray(macdLine, 9);
+
+  const last =
+    macdLine.length - 1;
 
   const macd =
-    macdLine[macdLine.length - 1];
+    macdLine[last];
 
   const signal =
-    signalLine[signalLine.length - 1];
+    signalLine[last];
 
   const histogram =
-    macd - signal;
+    Number((macd - signal).toFixed(2));
+
+  let macdSignal:
+    | "BUY"
+    | "SELL"
+    | "HOLD" = "HOLD";
+
+  if (macd > signal) {
+
+    macdSignal = "BUY";
+
+  } else if (macd < signal) {
+
+    macdSignal = "SELL";
+
+  }
 
   return {
+
     macd,
+
     signal,
+
     histogram,
-    macdSignal:
-      macd > signal
-        ? "BUY"
-        : macd < signal
-        ? "SELL"
-        : "HOLD",
+
+    macdSignal,
+
   };
+
 }

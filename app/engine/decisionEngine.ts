@@ -20,6 +20,12 @@ export function analyzeStock(
   if (signal.macdSignal === "BUY") score++;
   if (signal.macdSignal === "SELL") score--;
 
+  if (signal.trend === "UPTREND")
+  score++;
+
+if (signal.trend === "DOWNTREND")
+  score--;
+
   let decision: "BUY" | "SELL" | "HOLD";
 
   if (score >= 2)
@@ -29,7 +35,10 @@ export function analyzeStock(
   else
     decision = "HOLD";
 
-  const confidence = Math.abs(score) * 25 + 50;
+  const confidence = Math.min(
+  Math.abs(score) * 20 + 40,
+  95
+);
 
 const risk =
   decision === "BUY"
@@ -42,11 +51,23 @@ const entry = 0;
 const target = 0;
 const stopLoss = 0;
 
-const reasons = [
-  `EMA : ${signal.emaSignal}`,
-  `RSI : ${signal.rsiSignal}`,
-  `MACD : ${signal.macdSignal}`,
-];
+const reasons: string[] = [];
+
+reasons.push(
+  `EMA : ${signal.emaSignal}`
+);
+
+reasons.push(
+  `RSI : ${signal.rsiSignal}`
+);
+
+reasons.push(
+  `MACD : ${signal.macdSignal}`
+);
+
+reasons.push(
+  `Trend : ${signal.trend}`
+);
 
 const invalidIf = "-";
 
