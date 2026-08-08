@@ -21,11 +21,15 @@ export default function Home() {
   const handleAnalyze = useCallback(
     async (inputSymbol: string) => {
       try {
-        const finalSymbol = inputSymbol.trim().toUpperCase();
+        const finalSymbol =
+          inputSymbol.trim().toUpperCase();
 
         setLoading(true);
 
-        console.log("Analyzing :", finalSymbol);
+        console.log(
+          "Analyzing :",
+          finalSymbol
+        );
 
         const response = await fetch(
           `/api/analysis?symbol=${finalSymbol}&ts=${Date.now()}`,
@@ -35,16 +39,25 @@ export default function Home() {
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch analysis");
+          throw new Error(
+            "Failed to fetch analysis"
+          );
         }
 
-        const data = await response.json();
+        const data =
+          await response.json();
 
-        console.log("Analysis :", data);
+        console.log(
+          "Analysis :",
+          data
+        );
 
         setAnalysis(data);
       } catch (error) {
-        console.error("Analysis Error :", error);
+        console.error(
+          "Analysis Error :",
+          error
+        );
       } finally {
         setLoading(false);
       }
@@ -60,52 +73,56 @@ export default function Home() {
     <>
       <Header />
 
-      <div
-        style={{
-          display: "flex",
-          minHeight: "calc(100vh - 70px)",
-        }}
-      >
-        <Sidebar onMenuClick={setActivePage} />
+      <div className="itdp-app-layout">
+        <Sidebar
+          onMenuClick={setActivePage}
+        />
 
-        <div
-          style={{
-            flex: 1,
-            background: "#0f172a",
-            padding: "25px",
-          }}
-        >
+        <div className="itdp-main-content">
           {activePage === "dashboard" && (
             <>
-              <SearchBar
-                symbol={symbol}
-                onSymbolChange={setSymbol}
-                onAnalyze={handleAnalyze}
-              />
+              {/* ==========================
+                  SEARCH / ANALYZE
+              ========================== */}
+
+              <div className="itdp-search-wrapper">
+                <SearchBar
+                  symbol={symbol}
+                  onSymbolChange={setSymbol}
+                  onAnalyze={handleAnalyze}
+                />
+              </div>
+
+              {/* ==========================
+                  LOADING
+              ========================== */}
 
               {loading && (
-                <p
-                  style={{
-                    color: "#94a3b8",
-                    marginBottom: "20px",
-                  }}
-                >
+                <p className="itdp-loading">
                   Analyzing...
                 </p>
               )}
 
+              {/* ==========================
+                  DASHBOARD
+              ========================== */}
+
               {analysis && (
-  <Dashboard
-    key={`${analysis.symbol}-${Date.now()}`}
-    analysis={analysis}
-  />
-)}
+                <Dashboard
+                  key={analysis.symbol}
+                  analysis={analysis}
+                />
+              )}
             </>
           )}
 
-          {activePage === "marketnews" && <MarketNews />}
+          {activePage === "marketnews" && (
+            <MarketNews />
+          )}
 
-          {activePage === "stock" && <StockAnalysis />}
+          {activePage === "stock" && (
+            <StockAnalysis />
+          )}
         </div>
       </div>
     </>

@@ -14,7 +14,9 @@ type DashboardProps = {
   };
 };
 
-export default function Dashboard({ analysis }: DashboardProps) {
+export default function Dashboard({
+  analysis,
+}: DashboardProps) {
   const signalColor =
     analysis.decision === "BUY"
       ? "#22c55e"
@@ -50,84 +52,74 @@ export default function Dashboard({ analysis }: DashboardProps) {
   ];
 
   return (
-    <main style={{ color: "white" }}>
-      <div
-        style={{
-          marginBottom: "25px",
-        }}
-      >
-        <h1
-          style={{
-            margin: 0,
-            fontSize: "32px",
-          }}
-        >
-          📊 ITDP Decision Workspace
-        </h1>
+    <main className="itdp-dashboard">
 
-        <p
-          style={{
-            color: "#94a3b8",
-            marginTop: "8px",
-          }}
-        >
+      {/* ==============================
+          TITLE
+      ============================== */}
+
+      <div className="itdp-dashboard-title">
+        <h1>📊 ITDP Decision Workspace</h1>
+
+        <p>
           India's Trading Decision Platform
         </p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4,1fr)",
-          gap: "20px",
-          marginBottom: "30px",
-        }}
-      >
+      {/* ==============================
+          MARKET CARDS
+      ============================== */}
+
+      <div className="itdp-market-cards">
         {cards.map((card) => (
           <div
             key={card.id}
-            style={{
-              background: "#1e293b",
-              border: "1px solid #334155",
-              borderRadius: "14px",
-              padding: "22px",
-            }}
+            className="itdp-market-card"
           >
-            <div
-              style={{
-                color: "#94a3b8",
-                fontSize: "14px",
-              }}
-            >
+            <div className="itdp-market-card-title">
               {card.title}
             </div>
 
-            <h2
+            <div
+              className="itdp-market-card-value"
               style={{
                 color: card.color,
-                marginTop: "12px",
-                marginBottom: 0,
-                fontSize: "28px",
               }}
             >
               {card.value}
-            </h2>
+            </div>
           </div>
         ))}
       </div>
-      <LiveChart symbol={analysis.symbol} />
 
-      <DecisionCard
-        key={analysis.symbol}
-        symbol={analysis.symbol}
-        decision={analysis.decision}
-        confidence={analysis.confidence}
-        risk={analysis.risk}
-        target={analysis.target}
-        stopLoss={analysis.stopLoss}
-        reasons={analysis.reasons}
-        invalidIf={analysis.invalidIf}
-      />
+      {/* ==============================
+          LIVE CHART
+      ============================== */}
+
+      <div className="itdp-chart-container">
+        <LiveChart
+          symbol={analysis.symbol}
+        />
+      </div>
+
+      {/* ==============================
+          AI DECISION
+      ============================== */}
+
+      <div className="itdp-decision-container">
+        <DecisionCard
+          key={analysis.symbol}
+          symbol={analysis.symbol}
+          decision={analysis.decision}
+          confidence={analysis.confidence}
+          risk={analysis.risk}
+          target={analysis.target}
+          stopLoss={analysis.stopLoss}
+          reasons={analysis.reasons}
+          invalidIf={analysis.invalidIf}
+        />
+      </div>
+
     </main>
   );
 }

@@ -19,14 +19,28 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
 }
-/* =========================================
-   ITDP SIDEBAR - DESKTOP
-========================================= */
+
+/* =====================================================
+   ITDP SIDEBAR
+===================================================== */
 
 .itdp-sidebar {
   width: 250px;
@@ -38,9 +52,9 @@ body {
   box-sizing: border-box;
 }
 
-/* =========================================
+/* =====================================================
    MOBILE MENU BUTTON
-========================================= */
+===================================================== */
 
 .itdp-mobile-menu-button {
   display: none;
@@ -64,19 +78,235 @@ body {
 
   cursor: pointer;
 
-  box-shadow: 0 4px 12px
-    rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
-/* =========================================
+/* =====================================================
+   ITDP HEADER
+===================================================== */
+
+.itdp-header {
+  height: 70px;
+  width: 100%;
+
+  background: #0f172a;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 25px;
+
+  border-bottom: 1px solid #334155;
+
+  box-sizing: border-box;
+}
+
+.itdp-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.itdp-header-logo {
+  font-size: 30px;
+}
+
+.itdp-header-title {
+  margin: 0;
+}
+
+.itdp-header-subtitle {
+  color: #94a3b8;
+}
+
+.itdp-founder {
+  background: #1e293b;
+  padding: 10px 18px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+.itdp-dashboard {
+  width: 100%;
+  max-width: 100%;
+
+  min-width: 0;
+
+  padding: 25px;
+
+  color: white;
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+}
+
+/* =====================================================
+   DASHBOARD TITLE
+===================================================== */
+
+.itdp-dashboard-title {
+  margin-bottom: 25px;
+}
+
+.itdp-dashboard-title h1 {
+  margin: 0;
+
+  font-size: 32px;
+  line-height: 1.25;
+
+  font-weight: 600;
+}
+
+.itdp-dashboard-title p {
+  color: #94a3b8;
+
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+/* =====================================================
+   MARKET CARDS
+===================================================== */
+
+.itdp-market-cards {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 20px;
+
+  width: 100%;
+
+  margin-bottom: 30px;
+}
+
+.itdp-market-card {
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  border-radius: 14px;
+
+  padding: 22px;
+
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+.itdp-market-card-title {
+  color: #94a3b8;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+.itdp-market-card-value {
+  margin-top: 12px;
+
+  font-size: 28px;
+
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   CHART CONTAINER
+===================================================== */
+
+.itdp-chart-container {
+  width: 100%;
+  max-width: 100%;
+
+  min-width: 0;
+
+  margin-bottom: 30px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   DECISION CONTAINER
+===================================================== */
+
+.itdp-decision-container {
+  width: 100%;
+  max-width: 100%;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+
+  .itdp-dashboard {
+    padding: 20px;
+  }
+
+  .itdp-market-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =====================================================
    MOBILE
-========================================= */
+===================================================== */
 
 @media (max-width: 768px) {
 
+  /* -----------------------------
+     MOBILE MENU BUTTON
+  ----------------------------- */
+
   .itdp-mobile-menu-button {
     display: block;
+
+    position: fixed;
+    top: 88px;
+    left: 10px;
+
+    z-index: 2000;
+
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #1e293b;
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   }
+
+
+  /* -----------------------------
+     SIDEBAR
+  ----------------------------- */
 
   .itdp-sidebar {
     position: fixed;
@@ -89,22 +319,342 @@ body {
 
     min-height: 0;
 
-    z-index: 1000;
+    z-index: 1500;
 
     overflow-y: auto;
 
     transform: translateX(-100%);
 
-    transition:
-      transform 0.25s ease;
+    transition: transform 0.25s ease;
 
-    box-shadow:
-      8px 0 20px
-      rgba(0, 0, 0, 0.35);
+    box-shadow: 8px 0 20px rgba(0, 0, 0, 0.35);
   }
 
   .itdp-sidebar-open {
     transform: translateX(0);
+  }
+
+
+  /* -----------------------------
+     HEADER
+  ----------------------------- */
+
+  .itdp-header {
+    width: 100%;
+    height: 70px;
+
+    padding: 0 10px 0 58px;
+
+    box-sizing: border-box;
+  }
+
+  .itdp-header-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 0;
+
+    overflow: hidden;
+  }
+
+  .itdp-header-logo {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .itdp-header-title {
+    font-size: 16px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .itdp-header-subtitle {
+    font-size: 9px;
+
+    white-space: nowrap;
+  }
+
+  .itdp-founder {
+    padding: 7px 8px;
+
+    border-radius: 6px;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+  }
+
+
+  /* -----------------------------
+     DASHBOARD MAIN
+  ----------------------------- */
+
+  .itdp-dashboard-main {
+    width: 100% !important;
+
+    max-width: none !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    padding: 18px 10px 30px 10px !important;
+
+    box-sizing: border-box;
+
+    overflow-x: hidden;
+  }
+
+
+  /* -----------------------------
+     SEARCH / ANALYZE AREA
+  ----------------------------- */
+
+  .itdp-dashboard-main > div:first-child {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding-left: 48px;
+  }
+
+
+  /* -----------------------------
+     TITLE
+  ----------------------------- */
+
+  .itdp-dashboard-title {
+    width: 100%;
+
+    margin-bottom: 18px;
+  }
+
+  .itdp-dashboard-title h1 {
+    font-size: 23px;
+
+    line-height: 1.25;
+
+    margin: 0;
+  }
+
+  .itdp-dashboard-title p {
+    font-size: 12px;
+
+    margin-top: 6px;
+  }
+
+
+  /* -----------------------------
+     MARKET CARDS
+  ----------------------------- */
+
+  .itdp-market-cards {
+    width: 100%;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+  }
+
+  .itdp-market-card {
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    box-sizing: border-box;
+  }
+
+  .itdp-market-card-title {
+    font-size: 10px;
+  }
+
+  .itdp-market-card-value {
+    font-size: 18px;
+
+    margin-top: 8px;
+  }
+
+
+  /* -----------------------------
+     CHART
+  ----------------------------- */
+
+  .itdp-chart-container {
+    width: 100% !important;
+
+    max-width: none !important;
+
+    min-width: 0 !important;
+
+    margin: 0 0 18px 0;
+
+    padding: 0 !important;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+  }
+
+
+  /* -----------------------------
+     DECISION CARD
+  ----------------------------- */
+
+  .itdp-decision-container {
+    width: 100% !important;
+
+    max-width: none !important;
+
+    min-width: 0 !important;
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+  }
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+  .itdp-dashboard-main {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .itdp-dashboard-title h1 {
+    font-size: 21px;
+  }
+
+  .itdp-dashboard-title p {
+    font-size: 11px;
+  }
+
+  .itdp-market-cards {
+    gap: 7px;
+  }
+
+  .itdp-market-card {
+    padding: 11px;
+  }
+
+  .itdp-market-card-value {
+    font-size: 17px;
+  }
+}
+/* =====================================================
+   ITDP APP LAYOUT
+===================================================== */
+
+.itdp-app-layout {
+  display: flex;
+  min-height: calc(100vh - 70px);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
+
+.itdp-main-content {
+  flex: 1;
+  min-width: 0;
+  background: #0f172a;
+  padding: 25px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* =====================================================
+   SEARCH WRAPPER
+===================================================== */
+
+.itdp-search-wrapper {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  margin-bottom: 25px;
+}
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.itdp-loading {
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .itdp-app-layout {
+    width: 100%;
+    min-height: calc(100vh - 70px);
+    overflow-x: hidden;
+  }
+
+  .itdp-main-content {
+    width: 100%;
+    min-width: 0;
+
+    padding: 18px 12px 30px 12px;
+
+    box-sizing: border-box;
+
+    overflow-x: hidden;
+  }
+
+  /* SearchBar ला ☰ button पासून दूर ठेवणे */
+
+  .itdp-search-wrapper {
+    width: 100%;
+
+    padding-left: 48px;
+    padding-right: 0;
+
+    box-sizing: border-box;
+
+    margin-bottom: 18px;
+  }
+
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+  .itdp-main-content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .itdp-search-wrapper {
+    padding-left: 48px;
   }
 
 }

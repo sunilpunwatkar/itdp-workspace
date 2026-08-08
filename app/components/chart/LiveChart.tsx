@@ -18,21 +18,34 @@ type Props = {
 export default function LiveChart({
   symbol,
 }: Props) {
-
   const chartContainerRef =
     useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-
     if (!chartContainerRef.current) return;
 
-    const chart = createChart(
-      chartContainerRef.current,
-      {
-        width:
-          chartContainerRef.current.clientWidth,
+    const container =
+      chartContainerRef.current;
 
-        height: 500,
+    // =========================================
+    // RESPONSIVE HEIGHT
+    // =========================================
+
+    const isMobile =
+      window.innerWidth <= 768;
+
+    const chartHeight =
+      isMobile ? 360 : 500;
+
+    // =========================================
+    // CREATE CHART
+    // =========================================
+
+    const chart = createChart(
+      container,
+      {
+        width: container.clientWidth,
+        height: chartHeight,
 
         layout: {
           background: {
@@ -57,101 +70,163 @@ export default function LiveChart({
           mode: 1,
         },
 
-        rightPriceScale: {
-          borderColor: "#475569",
-        },
+       rightPriceScale: {
+  borderColor: "#475569",
 
-        timeScale: {
-          borderColor: "#475569",
-        },
-      }
+  // Mobile वर price scale थोडा compact
+  minimumWidth: isMobile ? 48 : 70,
+
+  scaleMargins: {
+    top: 0.05,
+    bottom: 0.28,
+  },
+},
+
+timeScale: {
+  borderColor: "#475569",
+
+  // शेवटी अनावश्यक space कमी
+  rightOffset: isMobile ? 0 : 2,
+
+  barSpacing:
+    isMobile ? 4 : 6,
+
+  minBarSpacing:
+    isMobile ? 2 : 3,
+
+  // Mobile वर chart उपलब्ध width जास्त वापरेल
+  fixLeftEdge: false,
+  fixRightEdge: false,
+},      }
     );
 
-    // ===========================
-    // Candlestick
-    // ===========================
+    // =========================================
+    // CANDLESTICK
+    // =========================================
 
     const candleSeries =
-      chart.addSeries(CandlestickSeries);
+      chart.addSeries(
+        CandlestickSeries
+      );
 
-    // ===========================
-    // EMA Lines
-    // ===========================
+    // =========================================
+    // EMA 20
+    // =========================================
 
     const ema20Series =
-      chart.addSeries(LineSeries, {
-        color: "#FFD700",
-        lineWidth: 2,
-      });
+      chart.addSeries(
+        LineSeries,
+        {
+          color: "#FFD700",
+          lineWidth: 2,
+        }
+      );
+
+    // =========================================
+    // EMA 50
+    // =========================================
 
     const ema50Series =
-      chart.addSeries(LineSeries, {
-        color: "#00BFFF",
-        lineWidth: 2,
-      });
+      chart.addSeries(
+        LineSeries,
+        {
+          color: "#00BFFF",
+          lineWidth: 2,
+        }
+      );
+
+    // =========================================
+    // EMA 200
+    // =========================================
 
     const ema200Series =
-      chart.addSeries(LineSeries, {
-        color: "#FF4040",
-        lineWidth: 2,
-      });
+      chart.addSeries(
+        LineSeries,
+        {
+          color: "#FF4040",
+          lineWidth: 2,
+        }
+      );
 
-    // ===========================
-    // Volume Histogram
-    // ===========================
+    // =========================================
+    // VOLUME
+    // =========================================
 
     const volumeSeries =
-      chart.addSeries(HistogramSeries, {
-        priceFormat: {
-          type: "volume",
+      chart.addSeries(
+        HistogramSeries,
+        {
+          priceFormat: {
+            type: "volume",
+          },
+
+          priceScaleId: "",
+
+          color: "#4CAF50",
+        }
+      );
+
+    // =========================================
+    // RSI
+    // =========================================
+
+    const rsiSeries =
+      chart.addSeries(
+        LineSeries,
+        {
+          color: "#A855F7",
+          lineWidth: 2,
+          priceScaleId: "rsi",
+        }
+      );
+
+    chart
+      .priceScale("rsi")
+      .applyOptions({
+        scaleMargins: {
+          top: 0.78,
+          bottom: 0,
         },
-
-        priceScaleId: "",
-
-        color: "#4CAF50",
       });
-      // ===========================
-// RSI Series
-// ===========================
 
-      // ===========================
-// RSI Panel
-// ===========================
+    // =========================================
+    // RSI 30
+    // =========================================
 
-const rsiSeries =
-  chart.addSeries(LineSeries, {
-    color: "#A855F7",
-    lineWidth: 2,
-    priceScaleId: "rsi",
-  });
+    const rsi30Series =
+      chart.addSeries(
+        LineSeries,
+        {
+          color: "#EF4444",
+          lineWidth: 1,
+          lineStyle:
+            LineStyle.Dashed,
+          priceScaleId: "rsi",
+        }
+      );
 
-chart.priceScale("rsi").applyOptions({
-  scaleMargins: {
-    top: 0.75,
-    bottom: 0,
-  },
-});
+    // =========================================
+    // RSI 70
+    // =========================================
 
-const rsi30Series =
-  chart.addSeries(LineSeries, {
-    color: "#EF4444",
-    lineWidth: 1,
-    lineStyle: LineStyle.Dashed,
-    priceScaleId: "rsi",
-  });
+    const rsi70Series =
+      chart.addSeries(
+        LineSeries,
+        {
+          color: "#22C55E",
+          lineWidth: 1,
+          lineStyle:
+            LineStyle.Dashed,
+          priceScaleId: "rsi",
+        }
+      );
 
-const rsi70Series =
-  chart.addSeries(LineSeries, {
-    color: "#22C55E",
-    lineWidth: 1,
-    lineStyle: LineStyle.Dashed,
-    priceScaleId: "rsi",
-  });
-  
-   async function loadChart() {
+    // =========================================
+    // LOAD DATA
+    // =========================================
 
-  try {
-
+    async function loadChart() {
+      try {
         const response =
           await fetch(
             `/api/chart?symbol=${symbol}&ts=${Date.now()}`,
@@ -175,22 +250,25 @@ const rsi70Series =
         );
 
         console.log(
-  "Last Candle JSON:",
-  JSON.stringify(
-    rawData[rawData.length - 1],
-    null,
-    2
-  )
-);
+          "Last Candle JSON:",
+          JSON.stringify(
+            rawData[
+              rawData.length - 1
+            ],
+            null,
+            2
+          )
+        );
 
-        // ===========================
-        // Candles
-        // ===========================
+        // =====================================
+        // CANDLE DATA
+        // =====================================
 
         const chartData =
           rawData.map(
             (candle: any) => ({
-              time: candle.time as any,
+              time:
+                candle.time as any,
 
               open: Number(
                 candle.open
@@ -210,16 +288,15 @@ const rsi70Series =
             })
           );
 
-        // ===========================
-        // EMA20
-        // ===========================
+        // =====================================
+        // EMA 20
+        // =====================================
 
         const ema20Data =
           rawData
             .filter(
               (candle: any) =>
-                candle.ema20 !=
-                null
+                candle.ema20 != null
             )
             .map(
               (candle: any) => ({
@@ -232,16 +309,15 @@ const rsi70Series =
               })
             );
 
-        // ===========================
-        // EMA50
-        // ===========================
+        // =====================================
+        // EMA 50
+        // =====================================
 
         const ema50Data =
           rawData
             .filter(
               (candle: any) =>
-                candle.ema50 !=
-                null
+                candle.ema50 != null
             )
             .map(
               (candle: any) => ({
@@ -254,16 +330,15 @@ const rsi70Series =
               })
             );
 
-        // ===========================
-        // EMA200
-        // ===========================
+        // =====================================
+        // EMA 200
+        // =====================================
 
         const ema200Data =
           rawData
             .filter(
               (candle: any) =>
-                candle.ema200 !=
-                null
+                candle.ema200 != null
             )
             .map(
               (candle: any) => ({
@@ -275,37 +350,55 @@ const rsi70Series =
                 ),
               })
             );
-        
-// ===========================
-// RSI Data
-// ===========================
 
-const rsiData = rawData
-  .filter(
-    (candle: any) =>
-      candle.rsi != null
-  )
-  .map((candle: any) => ({
-    time: candle.time as any,
-    value: Number(candle.rsi),
-  }));
+        // =====================================
+        // RSI
+        // =====================================
 
-const rsi30Data =
-  rsiData.map((point: any) => ({
-    time: point.time,
-    value: 30,
-  }));
+        const rsiData =
+          rawData
+            .filter(
+              (candle: any) =>
+                candle.rsi != null
+            )
+            .map(
+              (candle: any) => ({
+                time:
+                  candle.time as any,
 
-const rsi70Data =
-  rsiData.map((point: any) => ({
-    time: point.time,
-    value: 70,
-  }));
+                value: Number(
+                  candle.rsi
+                ),
+              })
+            );
 
+        // =====================================
+        // RSI 30
+        // =====================================
 
-        // ===========================
-        // Volume
-        // ===========================
+        const rsi30Data =
+          rsiData.map(
+            (point: any) => ({
+              time: point.time,
+              value: 30,
+            })
+          );
+
+        // =====================================
+        // RSI 70
+        // =====================================
+
+        const rsi70Data =
+          rsiData.map(
+            (point: any) => ({
+              time: point.time,
+              value: 70,
+            })
+          );
+
+        // =====================================
+        // VOLUME
+        // =====================================
 
         const volumeData =
           rawData.map(
@@ -324,17 +417,10 @@ const rsi70Data =
                   : "#ef5350",
             })
           );
-          rsiSeries.setData(
-  rsiData
-);
 
-rsi30Series.setData(
-  rsi30Data
-);
-
-rsi70Series.setData(
-  rsi70Data
-);
+        // =====================================
+        // SET DATA
+        // =====================================
 
         candleSeries.setData(
           chartData
@@ -356,32 +442,57 @@ rsi70Series.setData(
           volumeData
         );
 
-        rsiSeries.setData(rsiData);
+        rsiSeries.setData(
+          rsiData
+        );
 
-        rsi30Series.setData(rsi30Data);
+        rsi30Series.setData(
+          rsi30Data
+        );
 
-        rsi70Series.setData(rsi70Data);
+        rsi70Series.setData(
+          rsi70Data
+        );
 
-            } catch (error) {
+        // =====================================
+        // FIT CONTENT
+        // =====================================
 
+        chart
+          .timeScale()
+          .fitContent();
+
+      } catch (error) {
         console.error(
           "Chart Load Error:",
           error
         );
-
       }
-
     }
 
     loadChart();
 
+    // =========================================
+    // RESPONSIVE RESIZE
+    // =========================================
+
     const handleResize = () => {
+      if (!chartContainerRef.current)
+        return;
+
+      const width =
+        chartContainerRef.current
+          .clientWidth;
+
+      const height =
+        window.innerWidth <= 768
+          ? 360
+          : 500;
 
       chart.applyOptions({
-        width:
-          chartContainerRef.current?.clientWidth ?? 0,
+        width,
+        height,
       });
-
     };
 
     window.addEventListener(
@@ -389,31 +500,44 @@ rsi70Series.setData(
       handleResize
     );
 
-    return () => {
+    // =========================================
+    // CLEANUP
+    // =========================================
 
+    return () => {
       window.removeEventListener(
         "resize",
         handleResize
       );
 
       chart.remove();
-
     };
-
   }, [symbol]);
 
   return (
-
     <div
-      ref={chartContainerRef}
       style={{
         width: "100%",
-        height: "500px",
-        borderRadius: "12px",
+        maxWidth: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
         overflow: "hidden",
+        borderRadius: "12px",
       }}
-    />
-
+    >
+      <div
+        ref={chartContainerRef}
+        style={{
+          width: "100%",
+          maxWidth: "100%",
+          minWidth: 0,
+          height:
+            "500px",
+          boxSizing: "border-box",
+          overflow: "hidden",
+          borderRadius: "12px",
+        }}
+      />
+    </div>
   );
-
 }
