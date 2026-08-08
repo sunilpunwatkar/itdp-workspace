@@ -20,29 +20,69 @@ export function calculateMACDValues(
     };
   }
 
-  const ema12 = calculateEMAArray(prices, 12);
+  const ema12 =
+    calculateEMAArray(prices, 12);
 
-  const ema26 = calculateEMAArray(prices, 26);
+  const ema26 =
+    calculateEMAArray(prices, 26);
 
-  const macdLine = ema12.map(
-    (value, index) =>
-      Number((value - ema26[index]).toFixed(2))
-  );
+  // =====================================
+  // MACD Line
+  // =====================================
+
+  const macdLine: number[] = [];
+
+  for (let i = 0; i < prices.length; i++) {
+
+    if (
+      Number.isFinite(ema12[i]) &&
+      Number.isFinite(ema26[i])
+    ) {
+      macdLine.push(
+        Number(
+          (ema12[i] - ema26[i]).toFixed(2)
+        )
+      );
+    }
+  }
+
+  // =====================================
+  // Signal Line
+  // =====================================
+
+  if (macdLine.length < 9) {
+    return {
+      macd: 0,
+      signal: 0,
+      histogram: 0,
+      macdSignal: "HOLD",
+    };
+  }
 
   const signalLine =
-    calculateEMAArray(macdLine, 9);
+    calculateEMAArray(
+      macdLine,
+      9
+    );
 
-  const last =
-    macdLine.length - 1;
+  // =====================================
+  // Latest Values
+  // =====================================
 
   const macd =
-    macdLine[last];
+    macdLine[macdLine.length - 1];
 
   const signal =
-    signalLine[last];
+    signalLine[signalLine.length - 1];
 
   const histogram =
-    Number((macd - signal).toFixed(2));
+    Number(
+      (macd - signal).toFixed(2)
+    );
+
+  // =====================================
+  // MACD Signal
+  // =====================================
 
   let macdSignal:
     | "BUY"
@@ -56,19 +96,12 @@ export function calculateMACDValues(
   } else if (macd < signal) {
 
     macdSignal = "SELL";
-
   }
 
   return {
-
     macd,
-
     signal,
-
     histogram,
-
     macdSignal,
-
   };
-
 }

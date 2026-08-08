@@ -1,4 +1,3 @@
-
 import { analyzeStock } from "../app/engine/decisionEngine";
 import { AnalysisResult } from "../app/types/analysis";
 import { calculateEMAValues } from "../app/services/emaService";
@@ -11,113 +10,230 @@ import { buildTradePlan } from "../app/services/tradePlannerService";
 import { resolveUniversalSymbol } from "../app/services/universalSymbolEngine";
 import { getMarketData } from "../app/services/marketDataEngine";
 
-
-
 export async function getStockAnalysis(
   symbol: string
 ): Promise<AnalysisResult> {
-  const resolvedSymbol = resolveUniversalSymbol(symbol);
 
-console.log(
-  `USI Engine : ${symbol} -> ${resolvedSymbol}`
-);
+  console.time("⏱ TOTAL ANALYSIS");
 
-  // Live Quote
-  // ================================
-// Parallel Fetch
-// ================================
+  const resolvedSymbol =
+    resolveUniversalSymbol(symbol);
 
-const market = await getMarketData(symbol);
+  console.log(
+    `USI Engine : ${symbol} -> ${resolvedSymbol}`
+  );
 
-const quote = market.quote;
+  // =====================================
+  // Market Data
+  // =====================================
 
-const prices = market.prices;
+  console.time("⏱ MarketData");
 
-console.log("QUOTE OBJECT:", quote);
+  const market =
+    await getMarketData(symbol);
 
-console.log("Prices Length:", prices.length);
+  console.timeEnd("⏱ MarketData");
 
-  // EMA Calculation
-const ema = calculateEMAValues(prices);
+  const quote = market.quote;
+  const prices = market.prices;
 
-console.log("EMA Values:", ema);
+  console.log("QUOTE OBJECT:", quote);
+  console.log("Prices Length:", prices.length);
 
-// RSI Calculation
-const rsi = calculateRSIValues(prices);
+  // =====================================
+  // EMA
+  // =====================================
 
-console.log("RSI:", rsi);
+  console.time("⏱ EMA");
 
-// ATR Calculation
-const atr = calculateATRValues(prices);
+  const ema =
+    calculateEMAValues(prices);
 
-console.log("ATR:", atr);
+  console.timeEnd("⏱ EMA");
 
+  console.log("EMA Values:", ema);
 
-// Market Signal
-console.log("Prices Array Length:", prices.length);
+  // =====================================
+  // RSI
+  // =====================================
 
-const signal = buildMarketSignal(prices);
+  console.time("⏱ RSI");
 
-console.log("Market Signal:", signal);
+  const rsi =
+    calculateRSIValues(prices);
 
-// Decision Engine
-const result = analyzeStock(resolvedSymbol, signal);
+  console.timeEnd("⏱ RSI");
 
+  console.log("RSI:", rsi);
 
-console.log("Decision Engine Result:", result);
+  // =====================================
+  // ATR
+  // =====================================
 
-const riskPlan = buildRiskPlan(
-  quote.price,
-  signal.atr,
-  result.decision
-);
+  console.time("⏱ ATR");
 
-console.log("Risk Plan:", riskPlan);
-const position = calculatePositionSize(
-  75000,
-  2,
-  quote.price,
-  riskPlan.stopLoss ?? quote.price
-);
+  const atr =
+    calculateATRValues(prices);
 
-console.log("Position Size:", position);
+  console.timeEnd("⏱ ATR");
 
-const tradePlan = buildTradePlan(
-  result.decision,
-  quote.price,
-  signal.atr,
-  result.confidence
-);
+  console.log("ATR:", atr);
 
-console.log("Trade Plan:", tradePlan);
+  // =====================================
+  // Market Signal
+  // =====================================
 
- return {
-  ...result,
+  console.time("⏱ MarketSignal");
 
-  entry: quote.price,
+  console.log(
+    "Prices Array Length:",
+    prices.length
+  );
 
-  target: riskPlan.target1 ?? 0,
+  const signal =
+  buildMarketSignal(
+    ema,
+    rsi,
+    atr,
+    prices
+  );
 
-target1: riskPlan.target1 ?? 0,
+  console.timeEnd("⏱ MarketSignal");
 
-target2: riskPlan.target2 ?? 0,
+  console.log(
+    "Market Signal:",
+    signal
+  );
 
-  stopLoss: riskPlan.stopLoss ?? 0,
-  
-  tradeQuality: tradePlan.tradeQuality,
+  // =====================================
+  // Decision Engine
+  // =====================================
 
-  holdingPeriod: tradePlan.holdingPeriod,
+  console.time("⏱ DecisionEngine");
 
-  aiSummary: tradePlan.aiSummary,
+  const result =
+    analyzeStock(
+      resolvedSymbol,
+      signal
+    );
 
-  reasons: [
-    ...result.reasons,
-    `Risk Reward : ${riskPlan.riskReward}`,
-    `Capital : ₹${position.capital}`,
-    `Max Risk : ₹${position.maxRisk}`,
-    `Quantity : ${position.quantity} Shares`,
-  ],
+  console.timeEnd("⏱ DecisionEngine");
 
-  invalidIf: result.invalidIf,
-};
+  console.log(
+    "Decision Engine Result:",
+    result
+  );
+
+  // =====================================
+  // Risk Plan
+  // =====================================
+
+  console.time("⏱ RiskPlan");
+
+  const riskPlan =
+    buildRiskPlan(
+      quote.price,
+      signal.atr,
+      result.decision
+    );
+
+  console.timeEnd("⏱ RiskPlan");
+
+  console.log(
+    "Risk Plan:",
+    riskPlan
+  );
+
+  // =====================================
+  // Position Size
+  // =====================================
+
+  console.time("⏱ PositionSize");
+
+  const position =
+    calculatePositionSize(
+      75000,
+      2,
+      quote.price,
+      riskPlan.stopLoss ??
+        quote.price
+    );
+
+  console.timeEnd("⏱ PositionSize");
+
+  console.log(
+    "Position Size:",
+    position
+  );
+
+  // =====================================
+  // Trade Plan
+  // =====================================
+
+  console.time("⏱ TradePlan");
+
+  const tradePlan =
+    buildTradePlan(
+      result.decision,
+      quote.price,
+      signal.atr,
+      result.confidence
+    );
+
+  console.timeEnd("⏱ TradePlan");
+
+  console.log(
+    "Trade Plan:",
+    tradePlan
+  );
+
+  // =====================================
+  // Final Result
+  // =====================================
+
+  const finalResult = {
+    ...result,
+
+    entry: quote.price,
+
+    target:
+      riskPlan.target1 ?? 0,
+
+    target1:
+      riskPlan.target1 ?? 0,
+
+    target2:
+      riskPlan.target2 ?? 0,
+
+    stopLoss:
+      riskPlan.stopLoss ?? 0,
+
+    tradeQuality:
+      tradePlan.tradeQuality,
+
+    holdingPeriod:
+      tradePlan.holdingPeriod,
+
+    aiSummary:
+      tradePlan.aiSummary,
+
+    reasons: [
+      ...result.reasons,
+
+      `Risk Reward : ${riskPlan.riskReward}`,
+
+      `Capital : ₹${position.capital}`,
+
+      `Max Risk : ₹${position.maxRisk}`,
+
+      `Quantity : ${position.quantity} Shares`,
+    ],
+
+    invalidIf:
+      result.invalidIf,
+  };
+
+  console.timeEnd("⏱ TOTAL ANALYSIS");
+
+  return finalResult;
 }

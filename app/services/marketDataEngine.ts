@@ -1,4 +1,5 @@
 import { YahooProvider } from "../providers/yahooProvider";
+
 import {
   HistoricalProvider,
   HistoricalOHLC,
@@ -33,27 +34,39 @@ export async function getMarketData(
     `MarketData Engine : ${inputSymbol} -> ${symbol}`
   );
 
-  const [quote, prices, ohlc] =
+  // =====================================
+  // Quote + OHLC
+  // =====================================
+
+  const [quote, ohlc] =
     await Promise.all([
 
       yahoo.getQuote(symbol),
-
-      historical.getHistoricalPrices(symbol),
 
       historical.getHistoricalOHLC(symbol),
 
     ]);
 
+  // =====================================
+  // Close Prices
+  // =====================================
+
+  const prices =
+    ohlc.close.filter(
+      (price): price is number =>
+        price != null &&
+        Number.isFinite(price)
+    );
+
+  console.log(
+    "MarketData Prices Length:",
+    prices.length
+  );
+
   return {
-
     symbol,
-
     quote,
-
     prices,
-
     ohlc,
-
   };
-
 }

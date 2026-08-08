@@ -1,25 +1,33 @@
-import { calculateEMAValues } from "./emaService";
-import { calculateRSIValues } from "./rsiService";
-import { calculateATRValues } from "./atrService";
 import { calculateMACDValues } from "./macdService";
 import { MarketSignal } from "../types/marketSignal";
 import { detectTrend } from "./trendService";
 
 export function buildMarketSignal(
+  ema: {
+    ema20: number;
+    ema50: number;
+    ema200: number;
+  },
+  rsi: {
+    rsi: number;
+    signal: "BUY" | "SELL" | "HOLD";
+  },
+  atr: {
+    atr: number;
+  },
   prices: number[]
 ): MarketSignal {
 
-  const ema = calculateEMAValues(prices);
-  const rsi = calculateRSIValues(prices);
-  const atr = calculateATRValues(prices);
   const trend = detectTrend(
-  ema.ema20,
-  ema.ema50,
-  ema.ema200
-);
+    ema.ema20,
+    ema.ema50,
+    ema.ema200
+  );
 
-console.log("Trend:", trend);
-  const macd = calculateMACDValues(prices);
+  console.log("Trend:", trend);
+
+  const macd =
+    calculateMACDValues(prices);
 
   console.log("MACD:", macd);
 
@@ -38,11 +46,11 @@ console.log("Trend:", trend);
 
     atr: atr.atr,
 
-macd: macd.macd,
-signal: macd.signal,
-histogram: macd.histogram,
-macdSignal: macd.macdSignal,
+    macd: macd.macd,
+    signal: macd.signal,
+    histogram: macd.histogram,
+    macdSignal: macd.macdSignal,
 
-trend: trend.trend,
+    trend: trend.trend,
   };
 }

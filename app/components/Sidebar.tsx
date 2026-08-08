@@ -1,47 +1,105 @@
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
+
 type SidebarProps = {
   onMenuClick: (page: string) => void;
 };
 
-export default function Sidebar({ onMenuClick }: SidebarProps) {
+export default function Sidebar({
+  onMenuClick,
+}: SidebarProps) {
+  const [mobileOpen, setMobileOpen] =
+    useState(false);
+
   const menuItems = [
-    { name: "📈 Stock Analysis", page: "stock" },
-    { name: "📰 Market News", page: "marketnews" },
-    { name: "🤖 AI Decision Engine", page: "ai-engine" },
-    { name: "💼 Portfolio", page: "portfolio" },
-    { name: "📊 Analytics", page: "analytics" },
-    { name: "⚙️ Settings", page: "settings" },
+    {
+      name: "📈 Stock Analysis",
+      page: "stock",
+    },
+    {
+      name: "📰 Market News",
+      page: "marketnews",
+    },
+    {
+      name: "🤖 AI Decision Engine",
+      page: "ai-engine",
+    },
+    {
+      name: "💼 Portfolio",
+      page: "portfolio",
+    },
+    {
+      name: "📊 Analytics",
+      page: "analytics",
+    },
+    {
+      name: "⚙️ Settings",
+      page: "settings",
+    },
   ];
 
-  return (
-    <aside
-      style={{
-        width: "250px",
-        background: "#111827",
-        color: "white",
-        padding: "20px",
-        borderRight: "1px solid #334155",
-        minHeight: "calc(100vh - 70px)",
-      }}
-    >
-      <h3 style={{ marginBottom: "25px" }}>Dashboard</h3>
+  const handleMenuClick = (
+    page: string
+  ) => {
+    onMenuClick(page);
+    setMobileOpen(false);
+  };
 
-      {menuItems.map((item) => (
-        <div
-          key={item.page}
-          onClick={() => onMenuClick(item.page)}
+  return (
+    <>
+      {/* =========================
+          MOBILE MENU BUTTON
+      ========================= */}
+
+      <button
+        className="itdp-mobile-menu-button"
+        onClick={() =>
+          setMobileOpen(!mobileOpen)
+        }
+        aria-label="Open navigation menu"
+      >
+        {mobileOpen ? "✕" : "☰"}
+      </button>
+
+      {/* =========================
+          SIDEBAR
+      ========================= */}
+
+      <aside
+        className={`itdp-sidebar ${
+          mobileOpen
+            ? "itdp-sidebar-open"
+            : ""
+        }`}
+      >
+        <h3
           style={{
-            padding: "12px",
-            marginBottom: "10px",
-            background: "#1e293b",
-            borderRadius: "8px",
-            cursor: "pointer",
-            transition: "0.2s",
+            marginBottom: "25px",
           }}
         >
-          {item.name}
-        </div>
-      ))}
-    </aside>
+          Dashboard
+        </h3>
+
+        {menuItems.map((item) => (
+          <div
+            key={item.page}
+            onClick={() =>
+              handleMenuClick(item.page)
+            }
+            style={{
+              padding: "12px",
+              marginBottom: "10px",
+              background: "#1e293b",
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "0.2s",
+            }}
+          >
+            {item.name}
+          </div>
+        ))}
+      </aside>
+    </>
   );
 }
