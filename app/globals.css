@@ -710,16 +710,7 @@ body {
     overflow-x: hidden;
   }
 
-  .itdp-app-layout {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-x: hidden !important;
-    box-sizing: border-box !important;
-  }
+  
 
   .itdp-sidebar {
     position: fixed !important;
@@ -778,16 +769,16 @@ body {
 
   .itdp-search-wrapper {
     width: 100%;
+    padding-left: 62px;
     box-sizing: border-box;
   }
 
   .itdp-search-bar {
     width: 100%;
     box-sizing: border-box;
-
-    /* Menu button साठी जागा */
-    padding-left: 58px;
   }
+
+}
 
   .itdp-main-content {
     width: 100%;
@@ -795,4 +786,4 @@ body {
     box-sizing: border-box;
   }
 
-}
+
