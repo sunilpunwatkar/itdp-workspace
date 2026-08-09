@@ -759,11 +759,11 @@ body {
 
     z-index: 3000 !important;
   }
-
 }
+
 /* =====================================================
    MOBILE MENU BUTTON + SEARCH BAR
-   ===================================================== */
+===================================================== */
 
 @media (max-width: 768px) {
 
@@ -778,12 +778,10 @@ body {
     box-sizing: border-box;
   }
 
-}
-
   .itdp-main-content {
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
   }
 
-
+}
