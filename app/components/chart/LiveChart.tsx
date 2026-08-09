@@ -28,14 +28,16 @@ export default function LiveChart({
       chartContainerRef.current;
 
     // =========================================
-    // RESPONSIVE HEIGHT
+    // RESPONSIVE SETTINGS
     // =========================================
 
     const isMobile =
       window.innerWidth <= 768;
 
-    const chartHeight =
-      isMobile ? 360 : 500;
+    const getChartHeight = () =>
+      window.innerWidth <= 768
+        ? 360
+        : 500;
 
     // =========================================
     // CREATE CHART
@@ -45,7 +47,7 @@ export default function LiveChart({
       container,
       {
         width: container.clientWidth,
-        height: chartHeight,
+        height: getChartHeight(),
 
         layout: {
           background: {
@@ -70,34 +72,46 @@ export default function LiveChart({
           mode: 1,
         },
 
-       rightPriceScale: {
-  borderColor: "#475569",
+        // =====================================
+        // RIGHT PRICE SCALE
+        // =====================================
 
-  // Mobile वर price scale थोडा compact
-  minimumWidth: isMobile ? 48 : 70,
+        rightPriceScale: {
+          borderColor: "#475569",
 
-  scaleMargins: {
-    top: 0.05,
-    bottom: 0.28,
-  },
-},
+          minimumWidth: isMobile
+            ? 52
+            : 70,
 
-timeScale: {
-  borderColor: "#475569",
+          scaleMargins: {
+            top: 0.05,
+            bottom: 0.28,
+          },
+        },
 
-  // शेवटी अनावश्यक space कमी
-  rightOffset: isMobile ? 0 : 2,
+        // =====================================
+        // TIME SCALE
+        // =====================================
 
-  barSpacing:
-    isMobile ? 4 : 6,
+        timeScale: {
+          borderColor: "#475569",
 
-  minBarSpacing:
-    isMobile ? 2 : 3,
+          rightOffset: 0,
 
-  // Mobile वर chart उपलब्ध width जास्त वापरेल
-  fixLeftEdge: false,
-  fixRightEdge: false,
-},      }
+          barSpacing: isMobile
+            ? 3
+            : 6,
+
+          minBarSpacing: isMobile
+            ? 1.5
+            : 3,
+
+          fixLeftEdge: false,
+          fixRightEdge: false,
+
+          rightBarStaysOnScroll: true,
+        },
+      }
     );
 
     // =========================================
@@ -485,9 +499,7 @@ timeScale: {
           .clientWidth;
 
       const height =
-        window.innerWidth <= 768
-          ? 360
-          : 500;
+        getChartHeight();
 
       chart.applyOptions({
         width,
@@ -514,6 +526,10 @@ timeScale: {
     };
   }, [symbol]);
 
+  // ===========================================
+  // RESPONSIVE CONTAINER
+  // ===========================================
+
   return (
     <div
       style={{
@@ -531,8 +547,13 @@ timeScale: {
           width: "100%",
           maxWidth: "100%",
           minWidth: 0,
+
+          // IMPORTANT:
+          // Mobile = 360px
+          // Desktop = 500px
           height:
-            "500px",
+            "min(500px, 90vw)",
+
           boxSizing: "border-box",
           overflow: "hidden",
           borderRadius: "12px",

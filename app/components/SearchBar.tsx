@@ -34,11 +34,14 @@ export default function SearchBar({
 
   return (
     <div
+      className="itdp-search-bar"
       style={{
         display: "flex",
         gap: "15px",
         alignItems: "center",
         marginBottom: "25px",
+        width: "100%",
+        boxSizing: "border-box",
       }}
     >
       <input
@@ -55,6 +58,7 @@ export default function SearchBar({
         spellCheck={false}
         style={{
           flex: 1,
+          minWidth: 0,
           padding: "12px",
           borderRadius: "8px",
           border: "1px solid #334155",
@@ -62,12 +66,14 @@ export default function SearchBar({
           color: "white",
           fontSize: "16px",
           outline: "none",
+          boxSizing: "border-box",
         }}
       />
 
       <button
         onClick={handleAnalyzeClick}
         style={{
+          flexShrink: 0,
           padding: "12px 25px",
           background: "#2563eb",
           color: "white",
@@ -76,6 +82,7 @@ export default function SearchBar({
           cursor: "pointer",
           fontSize: "16px",
           fontWeight: "bold",
+          whiteSpace: "nowrap",
         }}
       >
         Analyze
