@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 type SidebarProps = {
   onMenuClick: (page: string) => void;
   analysis: {
@@ -10,14 +8,16 @@ type SidebarProps = {
     confidence: number;
     risk: string;
   } | null;
+  mobileOpen: boolean;
+  onClose: () => void;
 };
 
 export default function Sidebar({
   onMenuClick,
   analysis,
+  mobileOpen,
+  onClose,
 }: SidebarProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
   const menuItems = [
     {
       name: "🏠 Dashboard",
@@ -51,29 +51,11 @@ export default function Sidebar({
 
   const handleMenuClick = (page: string) => {
     onMenuClick(page);
-    setMobileOpen(false);
+    onClose();
   };
 
   return (
     <>
-      {/* =====================================
-          MOBILE MENU BUTTON
-      ===================================== */}
-
-      <button
-        type="button"
-        className="itdp-mobile-menu-button"
-        onClick={() => setMobileOpen((prev) => !prev)}
-        aria-label={
-          mobileOpen
-            ? "Close navigation menu"
-            : "Open navigation menu"
-        }
-        aria-expanded={mobileOpen}
-      >
-        {mobileOpen ? "✕" : "☰"}
-      </button>
-
       {/* =====================================
           MOBILE OVERLAY
       ===================================== */}
@@ -81,7 +63,7 @@ export default function Sidebar({
       {mobileOpen && (
         <div
           className="itdp-sidebar-overlay"
-          onClick={() => setMobileOpen(false)}
+          onClick={onClose}
         />
       )}
 

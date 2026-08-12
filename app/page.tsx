@@ -18,6 +18,12 @@ export default function Home() {
 
   const [loading, setLoading] = useState(false);
 
+  /* =====================================
+     MOBILE SIDEBAR STATE
+  ===================================== */
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   const handleAnalyze = useCallback(
     async (inputSymbol: string) => {
       try {
@@ -71,15 +77,36 @@ export default function Home() {
 
   return (
     <>
-      <Header />
+      {/* =====================================
+          HEADER
+      ===================================== */}
+
+      <Header
+        mobileOpen={mobileOpen}
+        onMenuToggle={() =>
+          setMobileOpen((prev) => !prev)
+        }
+      />
 
       <div className="itdp-app-layout">
+
+        {/* =====================================
+            SIDEBAR
+        ===================================== */}
+
         <Sidebar
-  onMenuClick={setActivePage}
-  analysis={analysis}
-/>
+          onMenuClick={setActivePage}
+          analysis={analysis}
+          mobileOpen={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+        />
+
+        {/* =====================================
+            MAIN CONTENT
+        ===================================== */}
 
         <div className="itdp-main-content">
+
           {activePage === "dashboard" && (
             <>
               {/* ==========================
@@ -124,6 +151,7 @@ export default function Home() {
           {activePage === "stock" && (
             <StockAnalysis />
           )}
+
         </div>
       </div>
     </>
