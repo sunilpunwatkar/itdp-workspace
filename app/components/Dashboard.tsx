@@ -58,13 +58,7 @@ export default function Dashboard({
           TITLE
       ============================== */}
 
-      <div className="itdp-dashboard-title">
-        <h1>📊 ITDP Decision Workspace</h1>
-
-        <p>
-          India's Trading Decision Platform
-        </p>
-      </div>
+      
 
       {/* ==============================
           MARKET CARDS

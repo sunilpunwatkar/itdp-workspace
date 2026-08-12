@@ -75,8 +75,9 @@ export default function Home() {
 
       <div className="itdp-app-layout">
         <Sidebar
-          onMenuClick={setActivePage}
-        />
+  onMenuClick={setActivePage}
+  analysis={analysis}
+/>
 
         <div className="itdp-main-content">
           {activePage === "dashboard" && (
