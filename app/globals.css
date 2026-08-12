@@ -569,7 +569,29 @@ body {
 
     margin-bottom: 18px;
   }
+/* =====================================================
+   MOBILE CHART → AI DECISION : NO GAP
+===================================================== */
 
+.itdp-chart-container {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.itdp-chart-container > div {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.itdp-chart-container > div > div {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.itdp-decision-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 
   /* ===================================================
      MOBILE DECISION
@@ -649,56 +671,7 @@ body {
   }
 }
 /* =====================================================
-   MOBILE SEARCH + MENU ALIGNMENT
-===================================================== */
-
-@media (max-width: 768px) {
-
-  .itdp-search-wrapper {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .itdp-search-bar {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .itdp-main-content {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-  }
-
-}
-/* =====================================================
-   MOBILE APP LAYOUT FIX
-===================================================== */
-
-@media (max-width: 768px) {
-
-  .itdp-app-layout {
-    width: 100%;
-    min-width: 0;
-    margin: 0;
-    padding: 0;
-    display: block;
-    box-sizing: border-box;
-  }
-
-  .itdp-main-content {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    margin: 0;
-    padding-left: 0;
-    padding-right: 0;
-    box-sizing: border-box;
-  }
-
-}
-/* =====================================================
-   FINAL MOBILE SIDEBAR + APP LAYOUT FIX
+   FINAL RESPONSIVE MOBILE LAYOUT
 ===================================================== */
 
 @media (max-width: 768px) {
@@ -709,12 +682,16 @@ body {
     max-width: 100%;
     overflow-x: hidden;
   }
+  .itdp-search-bar {
+  margin-bottom: 10px !important;
+}
 
-  
+  /* -----------------------------
+     MOBILE SIDEBAR
+  ----------------------------- */
 
   .itdp-sidebar {
     position: fixed !important;
-
     top: 70px !important;
     left: 0 !important;
 
@@ -732,6 +709,45 @@ body {
     transform: translateX(0) !important;
   }
 
+
+  /* -----------------------------
+     MOBILE MENU BUTTON
+  ----------------------------- */
+
+  .itdp-mobile-menu-button {
+    display: flex !important;
+
+    position: fixed !important;
+    top: 74px !important;
+    left: 8px !important;
+
+    width: 52px !important;
+    height: 52px !important;
+
+    z-index: 3000 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+
+  /* -----------------------------
+     MAIN CONTENT
+  ----------------------------- */
+
+  .itdp-app-layout {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
   .itdp-main-content {
     display: block !important;
 
@@ -743,45 +759,95 @@ body {
     padding: 0 !important;
 
     box-sizing: border-box !important;
+
     overflow-x: hidden !important;
   }
 
-  .itdp-mobile-menu-button {
-    display: flex !important;
 
-    position: fixed !important;
-
-    top: 74px !important;
-    left: 8px !important;
-
-    width: 52px !important;
-    height: 52px !important;
-
-    z-index: 3000 !important;
-  }
-}
-
-/* =====================================================
-   MOBILE MENU BUTTON + SEARCH BAR
-===================================================== */
-
-@media (max-width: 768px) {
+  /* -----------------------------
+     SEARCH
+  ----------------------------- */
 
   .itdp-search-wrapper {
-    width: 100%;
-    padding-left: 62px;
-    box-sizing: border-box;
+    width: 100% !important;
+
+    padding-left: 62px !important;
+    padding-right: 0 !important;
+
+    box-sizing: border-box !important;
   }
 
   .itdp-search-bar {
-    width: 100%;
-    box-sizing: border-box;
+    width: 100% !important;
+
+    box-sizing: border-box !important;
   }
 
-  .itdp-main-content {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
+
+  /* -----------------------------
+     MARKET CARDS
+     Compact 2 × 2 layout
+  ----------------------------- */
+
+  .itdp-market-cards {
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 8px !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .itdp-market-card {
+    min-width: 0 !important;
+    height: 50px !important;
+
+    min-height: 50px !important;
+
+    padding: 6px 10px !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+
+
+  /* -----------------------------
+     CHART
+     Smaller mobile height
+  ----------------------------- */
+
+  .itdp-chart-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+  }
+
+  .itdp-chart-container > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .itdp-chart-container > div > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    height: 240px !important;
+
+    box-sizing: border-box !important;
+    overflow: hidden !important;
   }
 
 }
