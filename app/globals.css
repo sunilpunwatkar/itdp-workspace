@@ -200,6 +200,36 @@ body {
 .itdp-sidebar-overlay {
   display: none;
 }
+/* =====================================================
+   DESKTOP APP LAYOUT
+===================================================== */
+
+.itdp-app-layout {
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+.itdp-main-content {
+  flex: 1 1 auto;
+
+  width: auto;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+}
 
 /* =====================================================
    ITDP DASHBOARD
@@ -735,34 +765,40 @@ body {
      MAIN CONTENT
   ----------------------------- */
 
-  .itdp-app-layout {
-    display: block !important;
+  /* -----------------------------
+   MAIN CONTENT
+----------------------------- */
 
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
+.itdp-app-layout {
+  display: flex !important;
+  flex-direction: row !important;
 
-    margin: 0 !important;
-    padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 
-    box-sizing: border-box !important;
-  }
+  margin: 0 !important;
+  padding: 0 !important;
 
-  .itdp-main-content {
-    display: block !important;
+  box-sizing: border-box !important;
+}
 
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
+.itdp-main-content {
+  display: block !important;
 
-    margin: 0 !important;
-    padding: 0 !important;
+  flex: 1 1 auto !important;
 
-    box-sizing: border-box !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
 
-    overflow-x: hidden !important;
-  }
+  margin: 0 !important;
+  padding: 0 !important;
 
+  box-sizing: border-box !important;
+
+  overflow-x: hidden !important;
+}
 
   /* -----------------------------
      SEARCH
@@ -848,6 +884,48 @@ body {
 
     box-sizing: border-box !important;
     overflow: hidden !important;
+  }
+
+}
+/* =====================================================
+   DESKTOP POLISH
+   Mobile layout untouched
+===================================================== */
+
+@media (min-width: 769px) {
+
+  .itdp-search-wrapper {
+    margin-bottom: 0 !important;
+  }
+
+  .itdp-dashboard-title {
+    margin-bottom: 14px !important;
+  }
+
+  .itdp-dashboard-title p {
+    margin-top: 5px !important;
+  }
+
+  .itdp-market-cards {
+    gap: 16px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .itdp-market-card {
+    padding: 18px !important;
+  }
+
+  .itdp-market-card-value {
+    margin-top: 8px !important;
+  }
+
+  .itdp-chart-container {
+    margin-bottom: 0 !important;
+  }
+
+  .itdp-decision-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
   }
 
 }
