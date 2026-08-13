@@ -24,7 +24,7 @@
 }
 
 /* =====================================================
-   BODY
+   GLOBAL
 ===================================================== */
 
 html,
@@ -43,23 +43,28 @@ body {
 }
 
 /* =====================================================
-   ITDP HEADER
+   HEADER
 ===================================================== */
 
 .itdp-header {
+  width: 100%;
   height: 70px;
-  background: #0f172a;
-  color: white;
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
   padding: 0 25px;
+
+  background: #0f172a;
+  color: white;
 
   border-bottom: 1px solid #334155;
 
   box-sizing: border-box;
+
+  position: relative;
+  z-index: 3000;
 }
 
 .itdp-header-brand {
@@ -72,14 +77,19 @@ body {
 
 .itdp-header-logo {
   font-size: 30px;
+  flex-shrink: 0;
 }
 
 .itdp-header-title {
   margin: 0;
+
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .itdp-header-subtitle {
   color: #94a3b8;
+  font-size: 12px;
 }
 
 .itdp-founder {
@@ -90,118 +100,12 @@ body {
   border-radius: 8px;
 
   white-space: nowrap;
+
+  flex-shrink: 0;
 }
 
 /* =====================================================
-   ITDP SIDEBAR - DESKTOP
-===================================================== */
-
-.itdp-sidebar {
-  width: 250px;
-  flex: 0 0 250px;
-
-  background: #111827;
-  color: white;
-
-  padding: 20px;
-
-  border-right: 1px solid #334155;
-
-  min-height: calc(100vh - 70px);
-
-  box-sizing: border-box;
-
-  z-index: 1000;
-}
-
-/* Sidebar heading */
-
-.itdp-sidebar h3 {
-  margin-top: 0;
-  margin-bottom: 25px;
-}
-
-/* =====================================================
-   SIDEBAR MENU BUTTONS
-===================================================== */
-
-.itdp-sidebar-item {
-  display: block;
-
-  width: 100%;
-
-  padding: 12px;
-
-  margin-bottom: 10px;
-
-  background: #1e293b;
-
-  color: white;
-
-  border: none;
-
-  border-radius: 8px;
-
-  text-align: left;
-
-  font-size: 14px;
-
-  cursor: pointer;
-
-  box-sizing: border-box;
-
-  transition: background 0.2s ease;
-}
-
-.itdp-sidebar-item:hover {
-  background: #334155;
-}
-
-/* =====================================================
-   MOBILE MENU BUTTON
-===================================================== */
-
-.itdp-mobile-menu-button {
-  display: none;
-
-  position: fixed;
-
-  top: 82px;
-  left: 10px;
-
-  width: 42px;
-  height: 42px;
-
-  z-index: 2001;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background: #1e293b;
-
-  color: white;
-
-  font-size: 22px;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.35);
-
-  align-items: center;
-  justify-content: center;
-}
-
-/* =====================================================
-   SIDEBAR OVERLAY
-===================================================== */
-
-.itdp-sidebar-overlay {
-  display: none;
-}
-/* =====================================================
-   DESKTOP APP LAYOUT
+   APP LAYOUT — DESKTOP
 ===================================================== */
 
 .itdp-app-layout {
@@ -232,13 +136,129 @@ body {
 }
 
 /* =====================================================
-   ITDP DASHBOARD
+   SIDEBAR — DESKTOP
 ===================================================== */
 
+.itdp-sidebar {
+  width: 250px;
+  flex: 0 0 250px;
+
+  background: #111827;
+  color: white;
+
+  padding: 20px;
+
+  border-right: 1px solid #334155;
+
+  min-height: calc(100vh - 70px);
+
+  box-sizing: border-box;
+
+  z-index: 1000;
+}
+
+.itdp-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+/* =====================================================
+   SIDEBAR MENU
+===================================================== */
+
+.itdp-sidebar-item {
+  display: block;
+
+  width: 100%;
+
+  padding: 12px;
+
+  margin-bottom: 10px;
+
+  background: #1e293b;
+  color: white;
+
+  border: none;
+  border-radius: 8px;
+
+  text-align: left;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition: background 0.2s ease;
+}
+
+.itdp-sidebar-item:hover {
+  background: #334155;
+}
+
+/*
+   Sidebar.tsx सध्या inline style वापरत असेल
+   तरी खालील button rule त्याला disturb करणार नाही.
+*/
+
+/* =====================================================
+   MOBILE MENU BUTTON — DEFAULT HIDDEN
+===================================================== */
+
+.itdp-mobile-menu-button {
+  display: none;
+
+  position: fixed;
+
+  width: 42px;
+  height: 42px;
+
+  top: 64px;
+  left: 10px;
+
+  z-index: 5000;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: #1e293b;
+  color: white;
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  font-size: 22px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.35);
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   SIDEBAR OVERLAY — DEFAULT HIDDEN
+===================================================== */
+
+.itdp-sidebar-overlay {
+  display: none;
+}
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+.itdp-dashboard,
 .itdp-dashboard-main {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+
+  margin: 0;
 
   box-sizing: border-box;
 
@@ -248,6 +268,23 @@ body {
   overflow-x: hidden;
 }
 
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.itdp-search-wrapper {
+  width: 100%;
+  max-width: 100%;
+
+  box-sizing: border-box;
+}
+
+.itdp-search-bar {
+  width: 100%;
+  max-width: 100%;
+
+  box-sizing: border-box;
+}
 
 /* =====================================================
    DASHBOARD TITLE
@@ -261,7 +298,6 @@ body {
   margin: 0;
 
   font-size: 32px;
-
   font-weight: 600;
 }
 
@@ -286,6 +322,8 @@ body {
   width: 100%;
 
   margin-bottom: 30px;
+
+  box-sizing: border-box;
 }
 
 .itdp-market-card {
@@ -312,11 +350,9 @@ body {
 
 .itdp-market-card-value {
   margin-top: 12px;
-
   margin-bottom: 0;
 
   font-size: 28px;
-
   font-weight: 500;
 
   white-space: nowrap;
@@ -328,32 +364,60 @@ body {
 
 .itdp-chart-container {
   width: 100%;
-
   max-width: 100%;
-
   min-width: 0;
+
+  margin: 0;
+  padding: 0;
 
   box-sizing: border-box;
 
   overflow: hidden;
+}
 
-  margin-bottom: 30px;
+.itdp-chart-container > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
 }
 
 /* =====================================================
-   DECISION CARD
+   AI DECISION ENGINE
 ===================================================== */
 
 .itdp-decision-container {
   width: 100%;
-
   max-width: 100%;
-
   min-width: 0;
+
+  margin: 0;
+  padding: 0;
 
   box-sizing: border-box;
 
   overflow: hidden;
+}
+
+.itdp-decision-container > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.itdp-loading {
+  color: #94a3b8;
+
+  margin: 10px 0;
+
+  font-size: 14px;
 }
 
 /* =====================================================
@@ -368,115 +432,55 @@ body {
   }
 
 }
-
 /* =====================================================
-   MOBILE
+   MOBILE — FINAL CLEAN VERSION
 ===================================================== */
 
 @media (max-width: 768px) {
 
   /* ===================================================
-     MOBILE MENU BUTTON
+     GLOBAL MOBILE
   =================================================== */
 
-  .itdp-mobile-menu-button {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    top: 74px;
-    left: 8px;
-
-    width: 52px;
-    height: 52px;
-
-    z-index: 2001;
-}
-
-
-  /* ===================================================
-     MOBILE SIDEBAR
-  =================================================== */
-
-  .itdp-sidebar {
-    position: fixed;
-
-    top: 70px;
-    left: 0;
-
-    width: 250px;
-
-    height: calc(100vh - 70px);
-
-    min-height: 0;
-
-    padding: 20px;
-
-    box-sizing: border-box;
-
-    overflow-y: auto;
-
-    z-index: 2000;
-
-    background: #111827;
-
-    transform: translateX(-100%);
-
-    transition:
-      transform 0.25s ease;
-
-    box-shadow:
-      8px 0 20px rgba(0, 0, 0, 0.35);
-  }
-
-
-  /* ===================================================
-     MOBILE SIDEBAR OPEN
-  =================================================== */
-
-  .itdp-sidebar.itdp-sidebar-open {
-    transform: translateX(0);
-  }
-
-
-  /* ===================================================
-     MOBILE OVERLAY
-  =================================================== */
-
-  .itdp-sidebar-overlay {
-    display: block;
-
-    position: fixed;
-
-    top: 70px;
-    left: 0;
-
+  html,
+  body {
     width: 100%;
-    height: calc(100vh - 70px);
+    max-width: 100%;
 
-    background:
-      rgba(0, 0, 0, 0.45);
+    margin: 0;
+    padding: 0;
 
-    z-index: 1500;
+    overflow-x: hidden;
   }
 
-
   /* ===================================================
-     MOBILE HEADER
+     HEADER
   =================================================== */
 
   .itdp-header {
+    width: 100%;
     height: 70px;
 
-    padding:
-      0 10px 0 62px;
+    padding: 0 10px 0 62px;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    position: relative;
+    z-index: 3000;
   }
 
   .itdp-header-brand {
-    gap: 7px;
-
     min-width: 0;
+
+    max-width: calc(100% - 55px);
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
 
     overflow: hidden;
   }
@@ -491,15 +495,21 @@ body {
     font-size: 16px;
 
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .itdp-header-subtitle {
     font-size: 9px;
 
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .itdp-founder {
+    display: block;
+
     padding: 7px 8px;
 
     border-radius: 6px;
@@ -511,30 +521,204 @@ body {
     flex-shrink: 0;
   }
 
-
   /* ===================================================
-     MOBILE DASHBOARD
+     MOBILE MENU BUTTON
   =================================================== */
 
-  .itdp-dashboard-main {
-    width: 100%;
+  .itdp-mobile-menu-button {
+    display: flex !important;
 
-    max-width: 100%;
+    position: fixed !important;
 
-    min-width: 0;
+    top: 64px !important;
+    left: 10px !important;
 
-    padding: 18px 12px 30px 12px;
+    width: 42px !important;
+    height: 42px !important;
 
-    margin: 0;
+    z-index: 5000 !important;
 
-    box-sizing: border-box;
+    align-items: center !important;
+    justify-content: center !important;
 
-    overflow-x: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: #1e293b !important;
+    color: white !important;
+
+    border: 1px solid #334155 !important;
+    border-radius: 8px !important;
+
+    font-size: 22px !important;
+    line-height: 1 !important;
+
+    cursor: pointer !important;
+
+    box-sizing: border-box !important;
   }
 
+  /* ===================================================
+     APP LAYOUT
+  =================================================== */
+
+  .itdp-app-layout {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .itdp-main-content {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+
+    overflow-x: hidden !important;
+  }
 
   /* ===================================================
-     MOBILE TITLE
+     MOBILE SIDEBAR
+  =================================================== */
+
+  .itdp-sidebar {
+    position: fixed !important;
+
+    top: 70px !important;
+    left: 0 !important;
+    bottom: 0 !important;
+
+    width: 230px !important;
+    max-width: 80vw !important;
+
+    height: calc(100vh - 70px) !important;
+    min-height: 0 !important;
+
+    padding: 20px !important;
+
+    z-index: 4500 !important;
+
+    background: #111827 !important;
+
+    transform: translateX(-110%) !important;
+
+    transition:
+      transform 0.25s ease-in-out !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    box-sizing: border-box !important;
+
+    box-shadow:
+      8px 0 20px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  /* ===================================================
+     SIDEBAR OPEN
+  =================================================== */
+
+  .itdp-sidebar.itdp-sidebar-open {
+    transform: translateX(0) !important;
+  }
+
+  /* ===================================================
+     SIDEBAR OVERLAY
+  =================================================== */
+
+  .itdp-sidebar-overlay {
+    display: block !important;
+
+    position: fixed !important;
+
+    top: 70px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
+    width: 100% !important;
+    height: calc(100vh - 70px) !important;
+
+    z-index: 4400 !important;
+
+    background:
+      rgba(0, 0, 0, 0.45) !important;
+  }
+
+  /* ===================================================
+     SEARCH
+  =================================================== */
+
+  .itdp-search-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0 !important;
+
+    padding:
+      0 8px !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .itdp-search-bar {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin-bottom: 10px !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .itdp-search-bar input {
+    font-size: 14px !important;
+    padding: 12px !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .itdp-search-bar button {
+    padding:
+      12px 18px !important;
+
+    font-size: 14px !important;
+  }
+
+  /* ===================================================
+     DASHBOARD
+  =================================================== */
+
+  .itdp-dashboard,
+  .itdp-dashboard-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    padding:
+      8px !important;
+
+    box-sizing: border-box !important;
+
+    overflow-x: hidden !important;
+  }
+
+  /* ===================================================
+     DASHBOARD TITLE
   =================================================== */
 
   .itdp-dashboard-title {
@@ -553,88 +737,155 @@ body {
     margin-top: 6px;
   }
 
-
   /* ===================================================
-     MOBILE MARKET CARDS
+     MARKET CARDS — 2 × 2
   =================================================== */
 
   .itdp-market-cards {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    display: grid !important;
+
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      repeat(2, minmax(0, 1fr)) !important;
 
-    gap: 10px;
+    gap: 6px !important;
 
-    margin-bottom: 18px;
+    margin-bottom: 10px !important;
+
+    box-sizing: border-box !important;
   }
 
   .itdp-market-card {
-    padding: 14px;
+    width: 100% !important;
+    min-width: 0 !important;
 
-    border-radius: 10px;
+    height: 50px !important;
+    min-height: 50px !important;
+
+    padding:
+      6px 10px !important;
+
+    border-radius: 10px !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
   }
 
   .itdp-market-card-title {
-    font-size: 11px;
+    font-size: 11px !important;
+
+    line-height: 1.1;
   }
 
   .itdp-market-card-value {
-    font-size: 20px;
+    font-size: 20px !important;
 
-    margin-top: 8px;
+    margin-top: 5px !important;
+
+    line-height: 1;
   }
 
-
   /* ===================================================
-     MOBILE CHART
+     CHART
+     
+     IMPORTANT:
+     Chart आणि AI Decision मध्ये मोठा gap नाही.
+     Chart पूर्ण width मध्ये राहील.
   =================================================== */
 
   .itdp-chart-container {
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
 
-    max-width: 100%;
+    margin:
+      0 !important;
 
-    min-width: 0;
+    padding:
+      0 !important;
 
-    overflow: hidden;
+    box-sizing: border-box !important;
 
-    margin-bottom: 18px;
+    overflow: hidden !important;
   }
-/* =====================================================
-   MOBILE CHART → AI DECISION : NO GAP
-===================================================== */
 
-.itdp-chart-container {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
+  .itdp-chart-container > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
 
-.itdp-chart-container > div {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
+    margin: 0 !important;
 
-.itdp-chart-container > div > div {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-.itdp-decision-container {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-}
+    box-sizing: border-box !important;
+  }
 
   /* ===================================================
-     MOBILE DECISION
+     CHART INNER HEIGHT
+     
+     Mobile वर chart compact.
+  =================================================== */
+
+  .itdp-chart-container > div {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .itdp-chart-container > div > div {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+
+    height: 240px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+  }
+
+  /* ===================================================
+     AI DECISION ENGINE
+     
+     Chart च्या लगेच खाली.
+     Hide / collapse नाही.
   =================================================== */
 
   .itdp-decision-container {
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
 
-    max-width: 100%;
+    margin:
+      0 !important;
 
-    min-width: 0;
+    padding:
+      0 !important;
 
-    overflow: hidden;
+    box-sizing: border-box !important;
+
+    overflow: visible !important;
+  }
+
+  .itdp-decision-container > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    margin-top: 0 !important;
+
+    box-sizing: border-box !important;
   }
 
 }
@@ -645,251 +896,71 @@ body {
 
 @media (max-width: 480px) {
 
-  .itdp-dashboard-title h1 {
-    font-size: 21px;
+  .itdp-header {
+    padding-left: 60px;
+    padding-right: 8px;
   }
 
-  .itdp-dashboard-title p {
-    font-size: 12px;
+  .itdp-header-title {
+    font-size: 15px;
+  }
+
+  .itdp-header-subtitle {
+    font-size: 8px;
+  }
+
+  .itdp-founder {
+    padding:
+      6px 7px;
+
+    font-size: 10px;
+  }
+
+  .itdp-mobile-menu-button {
+    width: 42px !important;
+    height: 42px !important;
+
+    top: 64px !important;
+    left: 10px !important;
+
+    font-size: 21px !important;
+  }
+
+  .itdp-sidebar {
+    width: 230px !important;
+    max-width: 82vw !important;
+  }
+
+  .itdp-dashboard,
+  .itdp-dashboard-main {
+    padding: 6px !important;
   }
 
   .itdp-market-cards {
-    gap: 8px;
+    gap: 6px !important;
   }
 
   .itdp-market-card {
-    padding: 12px;
+    padding:
+      6px 8px !important;
+  }
+
+  .itdp-market-card-title {
+    font-size: 10px !important;
   }
 
   .itdp-market-card-value {
-    font-size: 18px;
-  }
-
-  .itdp-mobile-menu-button {
-    width: 40px;
-    height: 40px;
-
-    font-size: 20px;
-  }
-
-}
-/* =====================================================
-   SEARCH BAR - MOBILE
-===================================================== */
-
-
-
-  .itdp-search-bar input {
-    font-size: 14px !important;
-    padding: 12px !important;
-  }
-
-  .itdp-search-bar button {
-    padding: 12px 18px !important;
-    font-size: 14px !important;
-  }
-
-/* =====================================================
-   SEARCH BAR - MOBILE MENU ALIGNMENT
-===================================================== */
-
-
-
-@media (max-width: 480px) {
-  .itdp-search-bar {
-    padding-left: 50px;
-  }
-}
-/* =====================================================
-   FINAL RESPONSIVE MOBILE LAYOUT
-===================================================== */
-
-@media (max-width: 768px) {
-
-  html,
-  body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-  .itdp-search-bar {
-  margin-bottom: 10px !important;
-}
-
-  /* -----------------------------
-     MOBILE SIDEBAR
-  ----------------------------- */
-
-  .itdp-sidebar {
-    position: fixed !important;
-    top: 70px !important;
-    left: 0 !important;
-
-    width: 250px !important;
-    height: calc(100vh - 70px) !important;
-
-    margin: 0 !important;
-
-    transform: translateX(-100%) !important;
-
-    z-index: 2000 !important;
-  }
-
-  .itdp-sidebar.itdp-sidebar-open {
-    transform: translateX(0) !important;
-  }
-
-
-  /* -----------------------------
-     MOBILE MENU BUTTON
-  ----------------------------- */
-
-  .itdp-mobile-menu-button {
-    display: flex !important;
-
-    position: fixed !important;
-    top: 74px !important;
-    left: 8px !important;
-
-    width: 52px !important;
-    height: 52px !important;
-
-    z-index: 3000 !important;
-
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-
-  /* -----------------------------
-     MAIN CONTENT
-  ----------------------------- */
-
-  /* -----------------------------
-   MAIN CONTENT
------------------------------ */
-
-.itdp-app-layout {
-  display: flex !important;
-  flex-direction: row !important;
-
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  box-sizing: border-box !important;
-}
-
-.itdp-main-content {
-  display: block !important;
-
-  flex: 1 1 auto !important;
-
-  width: auto !important;
-  max-width: none !important;
-  min-width: 0 !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  box-sizing: border-box !important;
-
-  overflow-x: hidden !important;
-}
-
-  /* -----------------------------
-     SEARCH
-  ----------------------------- */
-
-  .itdp-search-wrapper {
-    width: 100% !important;
-
-    padding-left: 62px !important;
-    padding-right: 0 !important;
-
-    box-sizing: border-box !important;
-  }
-
-  .itdp-search-bar {
-    width: 100% !important;
-
-    box-sizing: border-box !important;
-  }
-
-
-  /* -----------------------------
-     MARKET CARDS
-     Compact 2 × 2 layout
-  ----------------------------- */
-
-  .itdp-market-cards {
-    width: 100% !important;
-
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-
-    gap: 8px !important;
-
-    box-sizing: border-box !important;
-  }
-
-  .itdp-market-card {
-    min-width: 0 !important;
-    height: 50px !important;
-
-    min-height: 50px !important;
-
-    padding: 6px 10px !important;
-
-    box-sizing: border-box !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-  }
-
-
-  /* -----------------------------
-     CHART
-     Smaller mobile height
-  ----------------------------- */
-
-  .itdp-chart-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-
-    box-sizing: border-box !important;
-
-    overflow: hidden !important;
-  }
-
-  .itdp-chart-container > div {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-
-    box-sizing: border-box !important;
+    font-size: 18px !important;
   }
 
   .itdp-chart-container > div > div {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-
     height: 240px !important;
-
-    box-sizing: border-box !important;
-    overflow: hidden !important;
   }
 
 }
+
 /* =====================================================
    DESKTOP POLISH
-   Mobile layout untouched
 ===================================================== */
 
 @media (min-width: 769px) {
@@ -908,6 +979,7 @@ body {
 
   .itdp-market-cards {
     gap: 16px !important;
+
     margin-bottom: 14px !important;
   }
 
@@ -918,6 +990,11 @@ body {
   .itdp-market-card-value {
     margin-top: 8px !important;
   }
+
+  /*
+     Desktop वर Chart आणि AI Decision
+     एकमेकांच्या जवळ.
+  */
 
   .itdp-chart-container {
     margin-bottom: 0 !important;
