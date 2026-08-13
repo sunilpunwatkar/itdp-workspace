@@ -72,8 +72,8 @@ export default function Home() {
   );
 
   useEffect(() => {
-    handleAnalyze(symbol);
-  }, [handleAnalyze]);
+  handleAnalyze(symbol);
+}, [handleAnalyze, symbol]);
 
   return (
     <>

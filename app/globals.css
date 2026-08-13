@@ -663,16 +663,15 @@ body {
   =================================================== */
 
   .itdp-search-wrapper {
-    width: 100% !important;
-    max-width: 100% !important;
+  width: calc(100% - 58px) !important;
+  max-width: calc(100% - 58px) !important;
 
-    margin: 0 !important;
+  margin: 0 0 0 58px !important;
 
-    padding:
-      0 8px !important;
+  padding: 0 !important;
 
-    box-sizing: border-box !important;
-  }
+  box-sizing: border-box !important;
+}
 
   .itdp-search-bar {
     width: 100% !important;
@@ -1003,6 +1002,87 @@ body {
   .itdp-decision-container {
     margin-top: 0 !important;
     padding-top: 0 !important;
+  }
+
+}
+/* =====================================================
+   MOBILE SIDEBAR - CLOSED BY DEFAULT
+   ===================================================== */
+
+/* =========================================
+   MOBILE SIDEBAR AND MENU BUTTON
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  /* Mobile menu button - closed state */
+  .itdp-mobile-menu-button {
+    display: flex !important;
+
+    position: fixed !important;
+
+    top: 128px !important;
+    left: 10px !important;
+
+    width: 42px !important;
+    height: 42px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: #1e293b !important;
+    color: white !important;
+
+    border: 1px solid #334155 !important;
+    border-radius: 8px !important;
+
+    font-size: 22px !important;
+    line-height: 1 !important;
+
+    cursor: pointer !important;
+
+    z-index: 10000 !important;
+
+    box-sizing: border-box !important;
+
+    transition: left 0.25s ease !important;
+  }
+
+  /* Move button to the right when sidebar is open */
+  .itdp-mobile-menu-button-open {
+    left: 240px !important;
+  }
+
+  /* Sidebar - closed by default */
+  .itdp-sidebar {
+    position: fixed !important;
+
+    top: 70px !important;
+    left: 0 !important;
+
+    width: 230px !important;
+    height: calc(100vh - 70px) !important;
+
+    transform: translateX(-100%) !important;
+
+    transition: transform 0.25s ease !important;
+
+    z-index: 9000 !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    box-sizing: border-box !important;
+  }
+
+  /* Sidebar - open state */
+  .itdp-sidebar.itdp-sidebar-open {
+    transform: translateX(0) !important;
+  }
+
+  /* Search area spacing */
+  .itdp-search-wrapper {
+    margin-top: 58px !important;
   }
 
 }
