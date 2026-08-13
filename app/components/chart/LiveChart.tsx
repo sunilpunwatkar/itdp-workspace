@@ -27,7 +27,7 @@ export default function LiveChart({ symbol }: Props) {
     const isMobile = window.innerWidth <= 768;
 
     const getChartHeight = () =>
-      window.innerWidth <= 768 ? 500 : 650;
+  isMobile ? 500 : 400;
 
     // =========================================
     // CREATE CHART
@@ -453,8 +453,7 @@ export default function LiveChart({ symbol }: Props) {
 
           minWidth: 0,
 
-          height:
-            "min(650px, 140vw)",
+          height: "450px",
 
           boxSizing: "border-box",
 
