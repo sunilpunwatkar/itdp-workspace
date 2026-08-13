@@ -15,192 +15,161 @@ type Props = {
   symbol: string;
 };
 
-export default function LiveChart({
-  symbol,
-}: Props) {
+export default function LiveChart({ symbol }: Props) {
   const chartContainerRef =
     useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
-    const container =
-      chartContainerRef.current;
+    const container = chartContainerRef.current;
 
-    // =========================================
-    // RESPONSIVE SETTINGS
-    // =========================================
-
-    const isMobile =
-      window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= 768;
 
     const getChartHeight = () =>
-      window.innerWidth <= 768
-        ? 360
-        : 500;
+      window.innerWidth <= 768 ? 500 : 650;
 
     // =========================================
     // CREATE CHART
     // =========================================
 
-    const chart = createChart(
-      container,
-      {
-        width: container.clientWidth,
-        height: getChartHeight(),
+    const chart = createChart(container, {
+      width: container.clientWidth,
+      height: getChartHeight(),
 
-        layout: {
-          background: {
-            type: ColorType.Solid,
-            color: "#0f172a",
-          },
-
-          textColor: "#ffffff",
+      layout: {
+        background: {
+          type: ColorType.Solid,
+          color: "#0f172a",
         },
 
-        grid: {
-          vertLines: {
-            color: "#334155",
-          },
+        textColor: "#ffffff",
+      },
 
-          horzLines: {
-            color: "#334155",
-          },
+      grid: {
+        vertLines: {
+          color: "#334155",
         },
 
-        crosshair: {
-          mode: 1,
+        horzLines: {
+          color: "#334155",
         },
+      },
 
-        // =====================================
-        // RIGHT PRICE SCALE
-        // =====================================
+      crosshair: {
+        mode: 1,
+      },
 
-        rightPriceScale: {
-          borderColor: "#475569",
+      rightPriceScale: {
+        borderColor: "#475569",
 
-          minimumWidth: isMobile
-            ? 52
-            : 70,
+        minimumWidth: isMobile ? 52 : 70,
 
-          scaleMargins: {
-            top: 0.05,
-            bottom: 0.28,
-          },
+        scaleMargins: {
+          top: 0.05,
+          bottom: 0.30,
         },
+      },
 
-        // =====================================
-        // TIME SCALE
-        // =====================================
+      timeScale: {
+        borderColor: "#475569",
 
-        timeScale: {
-          borderColor: "#475569",
+        rightOffset: 0,
 
-          rightOffset: 0,
+        barSpacing: isMobile ? 3 : 6,
 
-          barSpacing: isMobile
-            ? 3
-            : 6,
+        minBarSpacing: isMobile ? 1.5 : 3,
 
-          minBarSpacing: isMobile
-            ? 1.5
-            : 3,
+        fixLeftEdge: false,
 
-          fixLeftEdge: false,
-          fixRightEdge: false,
+        fixRightEdge: false,
 
-          rightBarStaysOnScroll: true,
-        },
-      }
-    );
+        rightBarStaysOnScroll: true,
+      },
+    });
 
     // =========================================
-    // CANDLESTICK
+    // PRICE — CANDLESTICK
     // =========================================
 
     const candleSeries =
-      chart.addSeries(
-        CandlestickSeries
-      );
+      chart.addSeries(CandlestickSeries);
 
     // =========================================
     // EMA 20
     // =========================================
 
     const ema20Series =
-      chart.addSeries(
-        LineSeries,
-        {
-          color: "#FFD700",
-          lineWidth: 2,
-        }
-      );
+      chart.addSeries(LineSeries, {
+        color: "#FFD700",
+        lineWidth: 2,
+      });
 
     // =========================================
     // EMA 50
     // =========================================
 
     const ema50Series =
-      chart.addSeries(
-        LineSeries,
-        {
-          color: "#00BFFF",
-          lineWidth: 2,
-        }
-      );
+      chart.addSeries(LineSeries, {
+        color: "#00BFFF",
+        lineWidth: 2,
+      });
 
     // =========================================
     // EMA 200
     // =========================================
 
     const ema200Series =
-      chart.addSeries(
-        LineSeries,
-        {
-          color: "#FF4040",
-          lineWidth: 2,
-        }
-      );
+      chart.addSeries(LineSeries, {
+        color: "#FF4040",
+        lineWidth: 2,
+      });
 
     // =========================================
     // VOLUME
     // =========================================
 
     const volumeSeries =
-      chart.addSeries(
-        HistogramSeries,
-        {
-          priceFormat: {
-            type: "volume",
-          },
+      chart.addSeries(HistogramSeries, {
+        priceFormat: {
+          type: "volume",
+        },
 
-          priceScaleId: "",
+        priceScaleId: "",
 
-          color: "#4CAF50",
-        }
-      );
+        color: "#4CAF50",
+      });
+
+    // Volume occupies the lower section
+    chart
+      .priceScale("")
+      .applyOptions({
+        scaleMargins: {
+          top: 0.72,
+          bottom: 0.16,
+        },
+      });
 
     // =========================================
     // RSI
     // =========================================
 
     const rsiSeries =
-      chart.addSeries(
-        LineSeries,
-        {
-          color: "#A855F7",
-          lineWidth: 2,
-          priceScaleId: "rsi",
-        }
-      );
+      chart.addSeries(LineSeries, {
+        color: "#A855F7",
+        lineWidth: 2,
+        priceScaleId: "rsi",
+      });
 
     chart
       .priceScale("rsi")
       .applyOptions({
         scaleMargins: {
-          top: 0.78,
-          bottom: 0,
+          top: 0.82,
+          bottom: 0.02,
         },
+
+        minimumWidth: isMobile ? 52 : 70,
       });
 
     // =========================================
@@ -208,32 +177,24 @@ export default function LiveChart({
     // =========================================
 
     const rsi30Series =
-      chart.addSeries(
-        LineSeries,
-        {
-          color: "#EF4444",
-          lineWidth: 1,
-          lineStyle:
-            LineStyle.Dashed,
-          priceScaleId: "rsi",
-        }
-      );
+      chart.addSeries(LineSeries, {
+        color: "#EF4444",
+        lineWidth: 1,
+        lineStyle: LineStyle.Dashed,
+        priceScaleId: "rsi",
+      });
 
     // =========================================
     // RSI 70
     // =========================================
 
     const rsi70Series =
-      chart.addSeries(
-        LineSeries,
-        {
-          color: "#22C55E",
-          lineWidth: 1,
-          lineStyle:
-            LineStyle.Dashed,
-          priceScaleId: "rsi",
-        }
-      );
+      chart.addSeries(LineSeries, {
+        color: "#22C55E",
+        lineWidth: 1,
+        lineStyle: LineStyle.Dashed,
+        priceScaleId: "rsi",
+      });
 
     // =========================================
     // LOAD DATA
@@ -241,22 +202,22 @@ export default function LiveChart({
 
     async function loadChart() {
       try {
-        const response =
-          await fetch(
-            `/api/chart?symbol=${symbol}&ts=${Date.now()}`,
-            {
-              cache: "no-store",
-            }
-          );
+        const response = await fetch(
+          `/api/chart?symbol=${symbol}&ts=${Date.now()}`,
+          {
+            cache: "no-store",
+          }
+        );
 
         if (!response.ok) {
-          throw new Error(
-            "Chart API Failed"
-          );
+          throw new Error("Chart API Failed");
         }
 
-        const rawData =
-          await response.json();
+        const rawData = await response.json();
+
+        if (!Array.isArray(rawData)) {
+          throw new Error("Invalid chart data");
+        }
 
         console.log(
           "First Candle:",
@@ -266,9 +227,7 @@ export default function LiveChart({
         console.log(
           "Last Candle JSON:",
           JSON.stringify(
-            rawData[
-              rawData.length - 1
-            ],
+            rawData[rawData.length - 1],
             null,
             2
           )
@@ -279,28 +238,17 @@ export default function LiveChart({
         // =====================================
 
         const chartData =
-          rawData.map(
-            (candle: any) => ({
-              time:
-                candle.time as any,
+          rawData.map((candle: any) => ({
+            time: candle.time as any,
 
-              open: Number(
-                candle.open
-              ),
+            open: Number(candle.open),
 
-              high: Number(
-                candle.high
-              ),
+            high: Number(candle.high),
 
-              low: Number(
-                candle.low
-              ),
+            low: Number(candle.low),
 
-              close: Number(
-                candle.close
-              ),
-            })
-          );
+            close: Number(candle.close),
+          }));
 
         // =====================================
         // EMA 20
@@ -312,16 +260,11 @@ export default function LiveChart({
               (candle: any) =>
                 candle.ema20 != null
             )
-            .map(
-              (candle: any) => ({
-                time:
-                  candle.time as any,
+            .map((candle: any) => ({
+              time: candle.time as any,
 
-                value: Number(
-                  candle.ema20
-                ),
-              })
-            );
+              value: Number(candle.ema20),
+            }));
 
         // =====================================
         // EMA 50
@@ -333,16 +276,11 @@ export default function LiveChart({
               (candle: any) =>
                 candle.ema50 != null
             )
-            .map(
-              (candle: any) => ({
-                time:
-                  candle.time as any,
+            .map((candle: any) => ({
+              time: candle.time as any,
 
-                value: Number(
-                  candle.ema50
-                ),
-              })
-            );
+              value: Number(candle.ema50),
+            }));
 
         // =====================================
         // EMA 200
@@ -354,16 +292,11 @@ export default function LiveChart({
               (candle: any) =>
                 candle.ema200 != null
             )
-            .map(
-              (candle: any) => ({
-                time:
-                  candle.time as any,
+            .map((candle: any) => ({
+              time: candle.time as any,
 
-                value: Number(
-                  candle.ema200
-                ),
-              })
-            );
+              value: Number(candle.ema200),
+            }));
 
         // =====================================
         // RSI
@@ -375,106 +308,75 @@ export default function LiveChart({
               (candle: any) =>
                 candle.rsi != null
             )
-            .map(
-              (candle: any) => ({
-                time:
-                  candle.time as any,
+            .map((candle: any) => ({
+              time: candle.time as any,
 
-                value: Number(
-                  candle.rsi
-                ),
-              })
-            );
+              value: Number(candle.rsi),
+            }));
 
         // =====================================
         // RSI 30
         // =====================================
 
         const rsi30Data =
-          rsiData.map(
-            (point: any) => ({
-              time: point.time,
-              value: 30,
-            })
-          );
+          rsiData.map((point: any) => ({
+            time: point.time,
+
+            value: 30,
+          }));
 
         // =====================================
         // RSI 70
         // =====================================
 
         const rsi70Data =
-          rsiData.map(
-            (point: any) => ({
-              time: point.time,
-              value: 70,
-            })
-          );
+          rsiData.map((point: any) => ({
+            time: point.time,
+
+            value: 70,
+          }));
 
         // =====================================
         // VOLUME
         // =====================================
 
         const volumeData =
-          rawData.map(
-            (candle: any) => ({
-              time:
-                candle.time as any,
+          rawData.map((candle: any) => ({
+            time: candle.time as any,
 
-              value: Number(
-                candle.volume
-              ),
+            value: Number(candle.volume),
 
-              color:
-                candle.close >=
-                candle.open
-                  ? "#26a69a"
-                  : "#ef5350",
-            })
-          );
+            color:
+              candle.close >= candle.open
+                ? "#26a69a"
+                : "#ef5350",
+          }));
 
         // =====================================
         // SET DATA
         // =====================================
 
-        candleSeries.setData(
-          chartData
-        );
+        candleSeries.setData(chartData);
 
-        ema20Series.setData(
-          ema20Data
-        );
+        ema20Series.setData(ema20Data);
 
-        ema50Series.setData(
-          ema50Data
-        );
+        ema50Series.setData(ema50Data);
 
-        ema200Series.setData(
-          ema200Data
-        );
+        ema200Series.setData(ema200Data);
 
-        volumeSeries.setData(
-          volumeData
-        );
+        volumeSeries.setData(volumeData);
 
-        rsiSeries.setData(
-          rsiData
-        );
+        rsiSeries.setData(rsiData);
 
-        rsi30Series.setData(
-          rsi30Data
-        );
+        rsi30Series.setData(rsi30Data);
 
-        rsi70Series.setData(
-          rsi70Data
-        );
+        rsi70Series.setData(rsi70Data);
 
         // =====================================
         // FIT CONTENT
         // =====================================
 
-        chart
-          .timeScale()
-          .fitContent();
+        chart.timeScale().fitContent();
 
       } catch (error) {
         console.error(
@@ -491,19 +393,17 @@ export default function LiveChart({
     // =========================================
 
     const handleResize = () => {
-      if (!chartContainerRef.current)
+      if (!chartContainerRef.current) {
         return;
+      }
 
       const width =
-        chartContainerRef.current
-          .clientWidth;
-
-      const height =
-        getChartHeight();
+        chartContainerRef.current.clientWidth;
 
       chart.applyOptions({
         width,
-        height,
+
+        height: getChartHeight(),
       });
     };
 
@@ -536,8 +436,11 @@ export default function LiveChart({
         width: "100%",
         maxWidth: "100%",
         minWidth: 0,
+
         boxSizing: "border-box",
+
         overflow: "hidden",
+
         borderRadius: "12px",
       }}
     >
@@ -545,17 +448,18 @@ export default function LiveChart({
         ref={chartContainerRef}
         style={{
           width: "100%",
+
           maxWidth: "100%",
+
           minWidth: 0,
 
-          // IMPORTANT:
-          // Mobile = 360px
-          // Desktop = 500px
           height:
-            "min(500px, 90vw)",
+            "min(650px, 140vw)",
 
           boxSizing: "border-box",
+
           overflow: "hidden",
+
           borderRadius: "12px",
         }}
       />

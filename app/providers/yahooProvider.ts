@@ -9,40 +9,78 @@ export class YahooProvider implements MarketProvider {
 
     console.log("Yahoo Quote URL:", url);
 
-    const response = await fetch(url);
+    try {
+      const response = await fetch(url, {
+        cache: "no-store",
+      });
 
-   console.log("Response received");
-console.log(response.status);
+      console.log("Response received");
+      console.log("Yahoo Status:", response.status);
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch live quote for ${symbol}. Status: ${response.status}`
+      if (!response.ok) {
+        throw new Error(
+          `Yahoo HTTP ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+
+      const result =
+        data.chart?.result?.[0];
+
+      const meta = result?.meta;
+
+      const quote =
+        result?.indicators?.quote?.[0];
+
+      const price =
+        meta?.regularMarketPrice ??
+        quote?.close?.[0] ??
+        0;
+
+      const open =
+        quote?.open?.[0] ?? 0;
+
+      const high =
+        quote?.high?.[0] ?? 0;
+
+      const low =
+        quote?.low?.[0] ?? 0;
+
+      const close =
+        quote?.close?.[0] ?? 0;
+
+      const volume =
+        quote?.volume?.[0] ?? 0;
+
+      console.log("LIVE QUOTE:", {
+        symbol,
+        price,
+        open,
+        high,
+        low,
+        close,
+        volume,
+      });
+
+      return {
+        symbol,
+        price,
+        open,
+        high,
+        low,
+        close,
+        volume,
+      };
+
+    } catch (error) {
+
+      console.error(
+        "Yahoo Quote Error:",
+        error
       );
+
+      throw error;
     }
-
-    const data = await response.json();
-
-    const result = data.chart?.result?.[0];
-    const meta = result?.meta;
-    const quote = result?.indicators?.quote?.[0];
-
-    console.log("LIVE QUOTE:", {
-      price: meta?.regularMarketPrice,
-      open: quote?.open?.[0],
-      high: quote?.high?.[0],
-      low: quote?.low?.[0],
-      close: quote?.close?.[0],
-      volume: quote?.volume?.[0],
-    });
-
-    return {
-      symbol,
-      price: meta?.regularMarketPrice ?? 0,
-      open: quote?.open?.[0] ?? 0,
-      high: quote?.high?.[0] ?? 0,
-      low: quote?.low?.[0] ?? 0,
-      close: quote?.close?.[0] ?? 0,
-      volume: quote?.volume?.[0] ?? 0,
-    };
   }
 }
