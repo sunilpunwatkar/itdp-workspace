@@ -12,17 +12,17 @@ import SearchBar from "./components/SearchBar";
 export default function Home() {
   const [activePage, setActivePage] = useState("dashboard");
 
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+const handleMenuToggle = () => {
+  setMobileOpen((prev) => !prev);
+};
+
   const [symbol, setSymbol] = useState("RELIANCE");
 
   const [analysis, setAnalysis] = useState<any>(null);
 
   const [loading, setLoading] = useState(false);
-
-  /* =====================================
-     MOBILE SIDEBAR STATE
-  ===================================== */
-
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleAnalyze = useCallback(
     async (inputSymbol: string) => {
@@ -72,40 +72,26 @@ export default function Home() {
   );
 
   useEffect(() => {
-  handleAnalyze(symbol);
-}, [handleAnalyze, symbol]);
+    handleAnalyze(symbol);
+  }, [handleAnalyze, symbol]);
 
   return (
     <>
-      {/* =====================================
-          HEADER
-      ===================================== */}
-
       <Header
-        mobileOpen={mobileOpen}
-        onMenuToggle={() =>
-          setMobileOpen((prev) => !prev)
-        }
-      />
+  mobileOpen={mobileOpen}
+  onMenuToggle={handleMenuToggle}
+/>
 
       <div className="itdp-app-layout">
 
-        {/* =====================================
-            SIDEBAR
-        ===================================== */}
+  <Sidebar
+    onMenuClick={setActivePage}
+    analysis={analysis}
+    mobileOpen={mobileOpen}
+    onClose={() => setMobileOpen(false)}
+  />
 
-        <Sidebar
-          onMenuClick={setActivePage}
-          analysis={analysis}
-          mobileOpen={mobileOpen}
-          onClose={() => setMobileOpen(false)}
-        />
-
-        {/* =====================================
-            MAIN CONTENT
-        ===================================== */}
-
-        <div className="itdp-main-content">
+  <div className="itdp-main-content">
 
           {activePage === "dashboard" && (
             <>
@@ -144,9 +130,17 @@ export default function Home() {
             </>
           )}
 
+          {/* ==========================
+              MARKET NEWS
+          ========================== */}
+
           {activePage === "marketnews" && (
             <MarketNews />
           )}
+
+          {/* ==========================
+              STOCK ANALYSIS
+          ========================== */}
 
           {activePage === "stock" && (
             <StockAnalysis />

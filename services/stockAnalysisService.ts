@@ -1,5 +1,6 @@
 import { analyzeStock } from "../app/engine/decisionEngine";
 import { AnalysisResult } from "../app/types/analysis";
+import { CandleData } from "../app/types/chart";
 import { calculateEMAValues } from "../app/services/emaService";
 import { calculateRSIValues } from "../app/services/rsiService";
 import { buildMarketSignal } from "../app/services/marketSignalService";
@@ -9,6 +10,9 @@ import { calculatePositionSize } from "../app/services/positionSizingService";
 import { buildTradePlan } from "../app/services/tradePlannerService";
 import { resolveUniversalSymbol } from "../app/services/universalSymbolEngine";
 import { getMarketData } from "../app/services/marketDataEngine";
+import { calculateSupportResistance } from "../app/services/supportResistanceService";
+import { buildChartData } from "../app/services/chartDataService";
+
 
 export async function getStockAnalysis(
   symbol: string
@@ -39,6 +43,24 @@ export async function getStockAnalysis(
 
   console.log("QUOTE OBJECT:", quote);
   console.log("Prices Length:", prices.length);
+
+    const candles: CandleData[] =
+    buildChartData(
+      market.ohlc.timestamps,
+      market.ohlc.open,
+      market.ohlc.high,
+      market.ohlc.low,
+      market.ohlc.close,
+      market.ohlc.volume
+    );
+
+  const supportResistance =
+    calculateSupportResistance(candles);
+
+  console.log(
+    "Support Resistance:",
+    supportResistance
+  );
 
   // =====================================
   // EMA
@@ -78,6 +100,7 @@ export async function getStockAnalysis(
   console.timeEnd("⏱ ATR");
 
   console.log("ATR:", atr);
+  
 
   // =====================================
   // Market Signal
@@ -191,19 +214,25 @@ export async function getStockAnalysis(
   // Final Result
   // =====================================
 
-  const finalResult = {
+    const finalResult = {
     ...result,
 
     entry: quote.price,
 
+    support1:
+      supportResistance.support1 ?? 0,
+
+    support2:
+      supportResistance.support2 ?? 0,
+
+    resistance1:
+      supportResistance.resistance1 ?? 0,
+
+    resistance2:
+      supportResistance.resistance2 ?? 0,
+
     target:
       riskPlan.target1 ?? 0,
-
-    target1:
-      riskPlan.target1 ?? 0,
-
-    target2:
-      riskPlan.target2 ?? 0,
 
     stopLoss:
       riskPlan.stopLoss ?? 0,

@@ -15,6 +15,14 @@ export interface AnalysisResult {
 
   target1: number;
 
+  support1: number | null;
+
+  support2: number | null;
+
+  resistance1: number | null;
+  
+  resistance2: number | null;
+
   target2: number;
 
   stopLoss: number;

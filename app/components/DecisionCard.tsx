@@ -7,6 +7,10 @@ type DecisionCardProps = {
   risk: string;
   target: number;
   stopLoss: number;
+   support1: number | null;
+  support2: number | null;
+  resistance1: number | null;
+  resistance2: number | null;
   reasons: string[];
   invalidIf: string;
 };
@@ -18,6 +22,10 @@ export default function DecisionCard({
   risk,
   target,
   stopLoss,
+  support1,
+  support2,
+  resistance1,
+  resistance2,
   reasons,
   invalidIf,
 }: DecisionCardProps) {
@@ -159,6 +167,84 @@ export default function DecisionCard({
 
           <strong className="itdp-stoploss">
             {formatMoney(stopLoss)}
+          </strong>
+        </div>
+      </div>
+            {/* ========================================
+          SUPPORT / RESISTANCE
+      ======================================== */}
+
+      <div
+        className="itdp-analysis-grid"
+        style={{
+          marginTop: "20px",
+        }}
+      >
+        {/* SUPPORT 1 */}
+
+        <div className="itdp-analysis-item">
+          <span className="itdp-analysis-label">
+            Support 1
+          </span>
+
+          <strong
+            className="itdp-analysis-value"
+            style={{
+              color: "#22c55e",
+            }}
+          >
+            {formatMoney(support1 ?? 0)}
+          </strong>
+        </div>
+
+        {/* SUPPORT 2 */}
+
+        <div className="itdp-analysis-item">
+          <span className="itdp-analysis-label">
+            Support 2
+          </span>
+
+          <strong
+            className="itdp-analysis-value"
+            style={{
+              color: "#16a34a",
+            }}
+          >
+            {formatMoney(support2 ?? 0)}
+          </strong>
+        </div>
+
+        {/* RESISTANCE 1 */}
+
+        <div className="itdp-analysis-item">
+          <span className="itdp-analysis-label">
+            Resistance 1
+          </span>
+
+          <strong
+            className="itdp-analysis-value"
+            style={{
+              color: "#ef4444",
+            }}
+          >
+            {formatMoney(resistance1 ?? 0)}
+          </strong>
+        </div>
+
+        {/* RESISTANCE 2 */}
+
+        <div className="itdp-analysis-item">
+          <span className="itdp-analysis-label">
+            Resistance 2
+          </span>
+
+          <strong
+            className="itdp-analysis-value"
+            style={{
+              color: "#dc2626",
+            }}
+          >
+            {formatMoney(resistance2 ?? 0)}
           </strong>
         </div>
       </div>

@@ -9,6 +9,10 @@ type DashboardProps = {
     risk: string;
     target: number;
     stopLoss: number;
+    support1: number | null;
+    support2: number | null;
+    resistance1: number | null;
+    resistance2: number | null;
     reasons: string[];
     invalidIf: string;
   };
@@ -102,16 +106,20 @@ export default function Dashboard({
 
       <div className="itdp-decision-container">
         <DecisionCard
-          key={analysis.symbol}
-          symbol={analysis.symbol}
-          decision={analysis.decision}
-          confidence={analysis.confidence}
-          risk={analysis.risk}
-          target={analysis.target}
-          stopLoss={analysis.stopLoss}
-          reasons={analysis.reasons}
-          invalidIf={analysis.invalidIf}
-        />
+  key={analysis.symbol}
+  symbol={analysis.symbol}
+  decision={analysis.decision}
+  confidence={analysis.confidence}
+  risk={analysis.risk}
+  target={analysis.target}
+  stopLoss={analysis.stopLoss}
+  support1={analysis.support1}
+  support2={analysis.support2}
+  resistance1={analysis.resistance1}
+  resistance2={analysis.resistance2}
+  reasons={analysis.reasons}
+  invalidIf={analysis.invalidIf}
+/>
       </div>
 
     </main>

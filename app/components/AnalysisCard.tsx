@@ -47,15 +47,10 @@ export default function AnalysisCard({ analysis }: AnalysisProps) {
                 : analysis.decision === "SELL"
                 ? "#b91c1c"
                 : "#ca8a04",
-
             color: "white",
-
             padding: "12px 20px",
-
             borderRadius: "10px",
-
             fontWeight: "bold",
-
             height: "fit-content",
           }}
         >
@@ -73,84 +68,194 @@ export default function AnalysisCard({ analysis }: AnalysisProps) {
         <strong>Risk :</strong> {analysis.risk}
       </p>
 
+      {/* ==========================
+          ENTRY / TARGET / STOP LOSS
+      ========================== */}
+
       <div
-  style={{
-    display: "flex",
-    gap: "20px",
-    marginTop: "20px",
-    marginBottom: "20px",
-    flexWrap: "wrap",
-  }}
->
-  <div
-    style={{
-      flex: 1,
-      background: "#1e293b",
-      padding: "18px",
-      borderRadius: "10px",
-      textAlign: "center",
-      minWidth: "180px",
-    }}
-  >
-    <div style={{ color: "#94a3b8" }}>ENTRY</div>
+        style={{
+          display: "flex",
+          gap: "20px",
+          marginTop: "20px",
+          marginBottom: "20px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            background: "#1e293b",
+            padding: "18px",
+            borderRadius: "10px",
+            textAlign: "center",
+            minWidth: "180px",
+          }}
+        >
+          <div style={{ color: "#94a3b8" }}>ENTRY</div>
 
-    <div
-      style={{
-        fontSize: "24px",
-        fontWeight: "bold",
-        color: "#38bdf8",
-      }}
-    >
-      ₹ {analysis.entry.toFixed(2)}
-    </div>
-  </div>
+          <div
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#38bdf8",
+            }}
+          >
+            ₹ {analysis.entry.toFixed(2)}
+          </div>
+        </div>
 
-  <div
-    style={{
-      flex: 1,
-      background: "#1e293b",
-      padding: "18px",
-      borderRadius: "10px",
-      textAlign: "center",
-      minWidth: "180px",
-    }}
-  >
-    <div style={{ color: "#94a3b8" }}>TARGET</div>
+        <div
+          style={{
+            flex: 1,
+            background: "#1e293b",
+            padding: "18px",
+            borderRadius: "10px",
+            textAlign: "center",
+            minWidth: "180px",
+          }}
+        >
+          <div style={{ color: "#94a3b8" }}>TARGET</div>
 
-    <div
-      style={{
-        fontSize: "24px",
-        fontWeight: "bold",
-        color: "#22c55e",
-      }}
-    >
-      ₹ {analysis.target.toFixed(2)}
-    </div>
-  </div>
+          <div
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#22c55e",
+            }}
+          >
+            ₹ {analysis.target.toFixed(2)}
+          </div>
+        </div>
 
-  <div
-    style={{
-      flex: 1,
-      background: "#1e293b",
-      padding: "18px",
-      borderRadius: "10px",
-      textAlign: "center",
-      minWidth: "180px",
-    }}
-  >
-    <div style={{ color: "#94a3b8" }}>STOP LOSS</div>
+        <div
+          style={{
+            flex: 1,
+            background: "#1e293b",
+            padding: "18px",
+            borderRadius: "10px",
+            textAlign: "center",
+            minWidth: "180px",
+          }}
+        >
+          <div style={{ color: "#94a3b8" }}>STOP LOSS</div>
 
-    <div
-      style={{
-        fontSize: "24px",
-        fontWeight: "bold",
-        color: "#ef4444",
-      }}
-    >
-      ₹ {analysis.stopLoss.toFixed(2)}
-    </div>
-  </div>
-</div>
+          <div
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#ef4444",
+            }}
+          >
+            ₹ {analysis.stopLoss.toFixed(2)}
+          </div>
+        </div>
+      </div>
+
+      {/* ==========================
+          SUPPORT / RESISTANCE
+      ========================== */}
+
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          marginTop: "20px",
+          marginBottom: "20px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            background: "#1e293b",
+            padding: "18px",
+            borderRadius: "10px",
+            textAlign: "center",
+            minWidth: "180px",
+          }}
+        >
+          <div style={{ color: "#94a3b8" }}>SUPPORT 1</div>
+
+          <div
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#22c55e",
+            }}
+          >
+            ₹ {analysis.support1?.toFixed(2) ?? "-"}
+          </div>
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            background: "#1e293b",
+            padding: "18px",
+            borderRadius: "10px",
+            textAlign: "center",
+            minWidth: "180px",
+          }}
+        >
+          <div style={{ color: "#94a3b8" }}>SUPPORT 2</div>
+
+          <div
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#16a34a",
+            }}
+          >
+            ₹ {analysis.support2?.toFixed(2) ?? "-"}
+          </div>
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            background: "#1e293b",
+            padding: "18px",
+            borderRadius: "10px",
+            textAlign: "center",
+            minWidth: "180px",
+          }}
+        >
+          <div style={{ color: "#94a3b8" }}>RESISTANCE 1</div>
+
+          <div
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#f97316",
+            }}
+          >
+            ₹ {analysis.resistance1?.toFixed(2) ?? "-"}
+          </div>
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            background: "#1e293b",
+            padding: "18px",
+            borderRadius: "10px",
+            textAlign: "center",
+            minWidth: "180px",
+          }}
+        >
+          <div style={{ color: "#94a3b8" }}>RESISTANCE 2</div>
+
+          <div
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#ea580c",
+            }}
+          >
+            ₹ {analysis.resistance2?.toFixed(2) ?? "-"}
+          </div>
+        </div>
+      </div>
 
       <h3>Reasons</h3>
 
