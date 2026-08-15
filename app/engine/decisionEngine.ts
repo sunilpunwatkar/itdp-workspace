@@ -1,9 +1,11 @@
+import { SupportResistanceResult } from "../services/supportResistanceService";
 import { MarketSignal } from "../types/marketSignal";
 import { AnalysisResult } from "../types/analysis";
 
 export function analyzeStock(
   symbol: string,
-  signal: MarketSignal
+  signal: MarketSignal,
+  supportResistance: SupportResistanceResult
 ): AnalysisResult {
 
   // =====================================================
@@ -238,10 +240,10 @@ export function analyzeStock(
 
     entry,
 
-    support1: null,
-    support2: null,
-    resistance1: null,
-    resistance2: null,
+    support1: supportResistance.support1,
+    support2: supportResistance.support2,
+    resistance1: supportResistance.resistance1,
+    resistance2: supportResistance.resistance2,
 
     target,
     target1: target,

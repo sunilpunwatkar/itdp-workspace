@@ -12,6 +12,7 @@ import { resolveUniversalSymbol } from "../app/services/universalSymbolEngine";
 import { getMarketData } from "../app/services/marketDataEngine";
 import { calculateSupportResistance } from "../app/services/supportResistanceService";
 import { buildChartData } from "../app/services/chartDataService";
+import { calculatePriceStructure } from "../app/services/priceStructureService";
 
 
 export async function getStockAnalysis(
@@ -60,6 +61,25 @@ export async function getStockAnalysis(
   console.log(
     "Support Resistance:",
     supportResistance
+  );
+    // =====================================
+  // Price Structure
+  // =====================================
+
+  console.time("⏱ PriceStructure");
+
+  const priceStructure =
+    calculatePriceStructure(
+      quote.price,
+      supportResistance.support1,
+      supportResistance.resistance1
+    );
+
+  console.timeEnd("⏱ PriceStructure");
+
+  console.log(
+    "Price Structure:",
+    priceStructure
   );
 
   // =====================================
@@ -135,10 +155,11 @@ export async function getStockAnalysis(
   console.time("⏱ DecisionEngine");
 
   const result =
-    analyzeStock(
-      resolvedSymbol,
-      signal
-    );
+  analyzeStock(
+    resolvedSymbol,
+    signal,
+    supportResistance
+  );
 
   console.timeEnd("⏱ DecisionEngine");
 
