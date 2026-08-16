@@ -175,11 +175,15 @@ export async function getStockAnalysis(
   console.time("⏱ RiskPlan");
 
   const riskPlan =
-    buildRiskPlan(
-      quote.price,
-      signal.atr,
-      result.decision
-    );
+  buildRiskPlan(
+    quote.price,
+    signal.atr,
+    result.decision,
+    supportResistance.support1,
+    supportResistance.support2,
+    supportResistance.resistance1,
+    supportResistance.resistance2
+  );
 
   console.timeEnd("⏱ RiskPlan");
 
@@ -195,14 +199,19 @@ export async function getStockAnalysis(
   console.time("⏱ PositionSize");
 
   const position =
-    calculatePositionSize(
-      75000,
-      2,
-      quote.price,
-      riskPlan.stopLoss ??
-        quote.price
-    );
-
+  riskPlan.stopLoss !== null
+    ? calculatePositionSize(
+        75000,
+        2,
+        quote.price,
+        riskPlan.stopLoss
+      )
+    : {
+        capital: 75000,
+        riskPercent: 2,
+        maxRisk: 1500,
+        quantity: 0,
+      };
   console.timeEnd("⏱ PositionSize");
 
   console.log(
@@ -217,12 +226,10 @@ export async function getStockAnalysis(
   console.time("⏱ TradePlan");
 
   const tradePlan =
-    buildTradePlan(
-      result.decision,
-      quote.price,
-      signal.atr,
-      result.confidence
-    );
+  buildTradePlan(
+    result.decision,
+    result.confidence
+  );
 
   console.timeEnd("⏱ TradePlan");
 
@@ -253,10 +260,16 @@ export async function getStockAnalysis(
       supportResistance.resistance2 ?? 0,
 
     target:
-      riskPlan.target1 ?? 0,
+    riskPlan.target1 ?? 0,
+
+    target1:
+    riskPlan.target1 ?? 0,
+
+    target2:
+    riskPlan.target2 ?? 0,
 
     stopLoss:
-      riskPlan.stopLoss ?? 0,
+    riskPlan.stopLoss ?? 0,
 
     tradeQuality:
       tradePlan.tradeQuality,
