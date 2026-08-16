@@ -1,13 +1,14 @@
 import { SupportResistanceResult } from "../services/supportResistanceService";
 import { MarketSignal } from "../types/marketSignal";
 import { AnalysisResult } from "../types/analysis";
+import { PriceStructureResult } from "../services/priceStructureService";
 
 export function analyzeStock(
   symbol: string,
   signal: MarketSignal,
-  supportResistance: SupportResistanceResult
+  supportResistance: SupportResistanceResult,
+  priceStructure: PriceStructureResult
 ): AnalysisResult {
-
   // =====================================================
   // INTELLIGENT MULTI-FACTOR SCORING
   // =====================================================
@@ -105,6 +106,33 @@ export function analyzeStock(
     score -= 1;
     reasons.push("MACD Histogram: NEGATIVE");
   }
+  // =====================================================
+// 6. PRICE STRUCTURE — PRICE ACTION CONFIRMATION
+// =====================================================
+
+if (priceStructure.structure === "BREAKOUT") {
+  score += 2;
+  reasons.push("Price Structure: BREAKOUT");
+}
+
+if (priceStructure.structure === "NEAR_SUPPORT") {
+  score += 1;
+  reasons.push("Price Structure: NEAR_SUPPORT");
+}
+
+if (priceStructure.structure === "BREAKDOWN") {
+  score -= 2;
+  reasons.push("Price Structure: BREAKDOWN");
+}
+
+if (priceStructure.structure === "NEAR_RESISTANCE") {
+  score -= 1;
+  reasons.push("Price Structure: NEAR_RESISTANCE");
+}
+
+if (priceStructure.structure === "RANGE") {
+  reasons.push("Price Structure: RANGE");
+}
 
   // =====================================================
   // FINAL DECISION
@@ -124,7 +152,7 @@ export function analyzeStock(
   // CONFIDENCE
   // =====================================================
 
-  const maxScore = 7;
+  const maxScore = 9;
 
   const confidence = Math.min(
     Math.round(

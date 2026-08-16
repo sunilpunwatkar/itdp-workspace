@@ -7,6 +7,12 @@ const supportResistance = {
   resistance2: 1400,
 };
 
+const priceStructure = {
+  structure: "NEAR_SUPPORT" as const,
+  distanceToSupport1: 30,
+  distanceToResistance1: 60,
+};
+
 const buySignal = {
   ema20: 1350,
   ema50: 1330,
@@ -31,7 +37,8 @@ console.log("=== CONTROLLED BUY DECISION TEST ===");
 const result = analyzeStock(
   "TEST.BUY",
   buySignal,
-  supportResistance
+  supportResistance,
+  priceStructure
 );
 
 console.log(JSON.stringify(result, null, 2));

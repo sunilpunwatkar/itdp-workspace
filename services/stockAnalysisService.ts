@@ -155,11 +155,12 @@ export async function getStockAnalysis(
   console.time("⏱ DecisionEngine");
 
   const result =
-  analyzeStock(
-    resolvedSymbol,
-    signal,
-    supportResistance
-  );
+analyzeStock(
+  resolvedSymbol,
+  signal,
+  supportResistance,
+  priceStructure
+);
 
   console.timeEnd("⏱ DecisionEngine");
 
