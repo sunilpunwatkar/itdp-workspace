@@ -133,7 +133,34 @@ export function analyzeStock(
     score -= 1;
     reasons.push("MACD Histogram: NEGATIVE");
   }
-  
+    // =====================================================
+  // 7. PRIMARY DIRECTION GATE
+  // =====================================================
+
+  const primaryDirection =
+    signal.trend === "UPTREND" && bullishEMA
+      ? "BUY"
+      : signal.trend === "DOWNTREND" && bearishEMA
+      ? "SELL"
+      : signal.trend === "SIDEWAYS"
+      ? "NONE"
+      : "MIXED";
+
+  if (primaryDirection === "BUY") {
+    reasons.push("Primary Direction: BUY");
+  }
+
+  if (primaryDirection === "SELL") {
+    reasons.push("Primary Direction: SELL");
+  }
+
+  if (primaryDirection === "MIXED") {
+    reasons.push("Primary Direction: MIXED");
+  }
+
+  if (primaryDirection === "NONE") {
+    reasons.push("Primary Direction: NONE");
+  }
 
 
   // =====================================================
@@ -142,9 +169,15 @@ export function analyzeStock(
 
   let decision: "BUY" | "SELL" | "HOLD";
 
-  if (score >= 4) {
+    if (
+    primaryDirection === "BUY" &&
+    score >= 4
+  ) {
     decision = "BUY";
-  } else if (score <= -4) {
+  } else if (
+    primaryDirection === "SELL" &&
+    score <= -4
+  ) {
     decision = "SELL";
   } else {
     decision = "HOLD";
