@@ -74,9 +74,36 @@ export function analyzeStock(
   if (signal.rsiSignal === "HOLD") {
     reasons.push(`RSI: HOLD (${signal.rsi.toFixed(2)})`);
   }
+    // =====================================================
+  // 4. PRICE STRUCTURE — MARKET LOCATION
+  // =====================================================
+
+  if (priceStructure.structure === "BREAKOUT") {
+    score += 2;
+    reasons.push("Price Structure: BREAKOUT");
+  }
+
+  if (priceStructure.structure === "NEAR_SUPPORT") {
+    score += 1;
+    reasons.push("Price Structure: NEAR_SUPPORT");
+  }
+
+  if (priceStructure.structure === "BREAKDOWN") {
+    score -= 2;
+    reasons.push("Price Structure: BREAKDOWN");
+  }
+
+  if (priceStructure.structure === "NEAR_RESISTANCE") {
+    score -= 1;
+    reasons.push("Price Structure: NEAR_RESISTANCE");
+  }
+
+  if (priceStructure.structure === "RANGE") {
+    reasons.push("Price Structure: RANGE");
+  }
 
   // =====================================================
-  // 4. MACD — MOMENTUM CONFIRMATION
+  // 5. MACD HISTOGRAM CONFIRMATION
   // =====================================================
 
   if (signal.macdSignal === "BUY") {
@@ -94,7 +121,7 @@ export function analyzeStock(
   }
 
   // =====================================================
-  // 5. MACD HISTOGRAM CONFIRMATION
+  // 6. MACD HISTOGRAM CONFIRMATION
   // =====================================================
 
   if (signal.histogram > 0) {
@@ -106,33 +133,8 @@ export function analyzeStock(
     score -= 1;
     reasons.push("MACD Histogram: NEGATIVE");
   }
-  // =====================================================
-// 6. PRICE STRUCTURE — PRICE ACTION CONFIRMATION
-// =====================================================
+  
 
-if (priceStructure.structure === "BREAKOUT") {
-  score += 2;
-  reasons.push("Price Structure: BREAKOUT");
-}
-
-if (priceStructure.structure === "NEAR_SUPPORT") {
-  score += 1;
-  reasons.push("Price Structure: NEAR_SUPPORT");
-}
-
-if (priceStructure.structure === "BREAKDOWN") {
-  score -= 2;
-  reasons.push("Price Structure: BREAKDOWN");
-}
-
-if (priceStructure.structure === "NEAR_RESISTANCE") {
-  score -= 1;
-  reasons.push("Price Structure: NEAR_RESISTANCE");
-}
-
-if (priceStructure.structure === "RANGE") {
-  reasons.push("Price Structure: RANGE");
-}
 
   // =====================================================
   // FINAL DECISION
