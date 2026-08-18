@@ -14,6 +14,19 @@ export function buildRiskPlan(
   resistance1: number | null,
   resistance2: number | null
 ): RiskResult {
+    // =====================================================
+  // ATR VALIDATION
+  // =====================================================
+
+  if (atr <= 0) {
+    return {
+      stopLoss: null,
+      target1: null,
+      target2: null,
+      riskReward: "INVALID ATR",
+    };
+  }
+
 
   // =====================================================
   // HOLD
