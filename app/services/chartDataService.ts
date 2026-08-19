@@ -1,15 +1,15 @@
 import { CandleData } from "../types/chart";
 
 import {
-  HistoricalProvider,
-} from "../providers/historicalProvider";
+  getCachedHistoricalOHLC,
+} from "./historicalDataCache";
 
 import { resolveUniversalSymbol } from "./universalSymbolEngine";
 
 import { calculateEMAArray } from "../indicators/ema";
 import { calculateRSIArray } from "../indicators/rsi";
 
-const historical = new HistoricalProvider();
+
 
 // =====================================
 // Chart Data Cache
@@ -155,9 +155,9 @@ export async function getChartData(
       );
 
       const ohlc =
-        await historical.getHistoricalOHLC(
-          resolvedSymbol
-        );
+  await getCachedHistoricalOHLC(
+    resolvedSymbol
+  );
 
       console.timeEnd(
         historicalLabel

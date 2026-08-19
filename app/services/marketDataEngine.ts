@@ -1,14 +1,16 @@
 import { YahooProvider } from "../providers/yahooProvider";
 
 import {
-  HistoricalProvider,
   HistoricalOHLC,
 } from "../providers/historicalProvider";
 
 import { resolveUniversalSymbol } from "./universalSymbolEngine";
 
+import {
+  getCachedHistoricalOHLC,
+} from "./historicalDataCache";
+
 const yahoo = new YahooProvider();
-const historical = new HistoricalProvider();
 
 export type MarketData = {
   symbol: string;
@@ -35,7 +37,7 @@ export async function getMarketData(
   );
 
   // =====================================
-  // Quote + OHLC
+  // Quote + Cached Historical OHLC
   // =====================================
 
   const [quote, ohlc] =
@@ -43,7 +45,7 @@ export async function getMarketData(
 
       yahoo.getQuote(symbol),
 
-      historical.getHistoricalOHLC(symbol),
+      getCachedHistoricalOHLC(symbol),
 
     ]);
 
