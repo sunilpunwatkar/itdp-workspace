@@ -1,4 +1,6 @@
-"use client";
+﻿"use client";
+
+import { mr } from "../i18n/decisionResult/mr";
 
 type DecisionCardProps = {
   symbol: string;
@@ -49,9 +51,70 @@ export default function DecisionCard({
       return "-";
     }
 
-    return `₹${value.toFixed(2)}`;
+    return `${String.fromCharCode(0x20b9)}${value.toFixed(2)}`;
   };
 
+  // ==========================================
+  // REASON LANGUAGE TRANSLATOR
+  // ==========================================
+
+  const translateReason = (reason: string) => {
+    const trendMatch = reason.match(/^Trend:\s*(UPTREND|DOWNTREND|SIDEWAYS)$/);
+    if (trendMatch) {
+      const key = `trend_${trendMatch[1]}` as keyof typeof mr.reasons;
+      return `${mr.reasons.trend}: ${mr.reasons[key]}`;
+    }
+
+    const emaMatch = reason.match(/^EMA Structure:\s*(BULLISH|BEARISH|MIXED)$/);
+    if (emaMatch) {
+      const key = `ema_${emaMatch[1]}` as keyof typeof mr.reasons;
+      return `${mr.reasons.emaStructure}: ${mr.reasons[key]}`;
+    }
+
+    const rsiMatch = reason.match(/^RSI:\s*(BUY|SELL|HOLD)\s*(\(.*\))?$/);
+    if (rsiMatch) {
+      const key = `rsi_${rsiMatch[1]}` as keyof typeof mr.reasons;
+      return `${mr.reasons.rsi}: ${mr.reasons[key]} ${rsiMatch[2] ?? ""}`.trim();
+    }
+
+    const priceMatch = reason.match(
+      /^Price Structure:\s*(BREAKOUT|NEAR_SUPPORT|BREAKDOWN|NEAR_RESISTANCE|RANGE)$/
+    );
+    if (priceMatch) {
+      const key =
+        `price_${priceMatch[1]}` as keyof typeof mr.reasons;
+
+      return `${mr.reasons.priceStructure}: ${mr.reasons[key]}`;
+    }
+
+    const macdMatch = reason.match(/^MACD:\s*(BUY|SELL|HOLD)$/);
+    if (macdMatch) {
+      const key = `macd_${macdMatch[1]}` as keyof typeof mr.reasons;
+      return `${mr.reasons.macd}: ${mr.reasons[key]}`;
+    }
+
+    const histogramMatch = reason.match(
+      /^MACD Histogram:\s*(POSITIVE|NEGATIVE)$/
+    );
+    if (histogramMatch) {
+      const key =
+        `histogram_${histogramMatch[1]}` as keyof typeof mr.reasons;
+
+      return `${mr.reasons.macdHistogram}: ${mr.reasons[key]}`;
+    }
+
+    const primaryMatch = reason.match(
+      /^Primary Direction:\s*(BUY|SELL|MIXED|NONE)$/
+    );
+    if (primaryMatch) {
+      const key =
+        `primaryDirection_${primaryMatch[1]}` as keyof typeof mr.reasons;
+
+      return `${mr.reasons.primaryDirection}: ${mr.reasons[key]}`;
+    }
+
+    return reason;
+  };
   return (
     <div className="itdp-decision-card">
       {/* ========================================
@@ -61,7 +124,7 @@ export default function DecisionCard({
       <div className="itdp-decision-header">
         <div>
           <h2 className="itdp-decision-title">
-            🤖 AI Decision Engine
+            ◈ AI Decision Engine
           </h2>
 
           <p className="itdp-decision-subtitle">
@@ -83,7 +146,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Stock
+            {mr.labels.stock}
           </span>
 
           <strong className="itdp-analysis-value">
@@ -95,7 +158,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Decision
+            {mr.labels.decision}
           </span>
 
           <span
@@ -104,7 +167,7 @@ export default function DecisionCard({
               background: decisionColor,
             }}
           >
-            {decision}
+            {mr.values[decision as keyof typeof mr.values] ?? decision}
           </span>
         </div>
 
@@ -112,7 +175,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Confidence
+            {mr.labels.confidence}
           </span>
 
           <div className="itdp-confidence-wrapper">
@@ -138,11 +201,11 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Risk
+            {mr.labels.risk}
           </span>
 
           <strong className="itdp-analysis-value">
-            {risk}
+            {mr.values[risk as keyof typeof mr.values] ?? risk}
           </strong>
         </div>
 
@@ -150,7 +213,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Target
+            {mr.labels.target}
           </span>
 
           <strong className="itdp-target">
@@ -162,7 +225,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Stop Loss
+            {mr.labels.stopLoss}
           </span>
 
           <strong className="itdp-stoploss">
@@ -184,7 +247,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Support 1
+            ◈ {mr.labels.support1}
           </span>
 
           <strong
@@ -201,7 +264,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Support 2
+            ◈ {mr.labels.support2}
           </span>
 
           <strong
@@ -218,7 +281,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Resistance 1
+            ◈ {mr.labels.resistance1}
           </span>
 
           <strong
@@ -235,7 +298,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            Resistance 2
+            ◈ {mr.labels.resistance2}
           </span>
 
           <strong
@@ -261,7 +324,7 @@ export default function DecisionCard({
 
       <section>
         <h3 className="itdp-section-title">
-          AI Explanation
+          {mr.labels.aiSummary}
         </h3>
 
         <div className="itdp-reasons">
@@ -272,11 +335,11 @@ export default function DecisionCard({
                 className="itdp-reason"
               >
                 <span className="itdp-check">
-                  ✓
+                  {String.fromCharCode(0x2713)}
                 </span>
 
                 <span className="itdp-reason-text">
-                  {item}
+                  {translateReason(item)}
                 </span>
               </div>
             ))
@@ -296,12 +359,12 @@ export default function DecisionCard({
 
       <section className="itdp-invalid-section">
         <h3 className="itdp-section-title">
-          Invalid If
+          {mr.labels.invalidIf}
         </h3>
 
         <div className="itdp-invalid-box">
           <span className="itdp-invalid-icon">
-            ✕
+            {String.fromCharCode(0x2715)}
           </span>
 
           <span>
@@ -709,3 +772,14 @@ export default function DecisionCard({
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
