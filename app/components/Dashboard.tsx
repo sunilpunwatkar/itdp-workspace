@@ -16,10 +16,13 @@ type DashboardProps = {
     reasons: string[];
     invalidIf: string;
   };
+
+  language: "en" | "mr";
 };
 
 export default function Dashboard({
   analysis,
+  language,
 }: DashboardProps) {
   const signalColor =
     analysis.decision === "BUY"
@@ -119,6 +122,7 @@ export default function Dashboard({
   resistance2={analysis.resistance2}
   reasons={analysis.reasons}
   invalidIf={analysis.invalidIf}
+  language={language}
 />
       </div>
 

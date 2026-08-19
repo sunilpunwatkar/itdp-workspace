@@ -12,6 +12,8 @@ import SearchBar from "./components/SearchBar";
 export default function Home() {
   const [activePage, setActivePage] = useState("dashboard");
 
+  const [language, setLanguage] = useState<"en" | "mr">("en");
+
   const [mobileOpen, setMobileOpen] = useState(false);
 
 const handleMenuToggle = () => {
@@ -80,6 +82,8 @@ const handleMenuToggle = () => {
       <Header
   mobileOpen={mobileOpen}
   onMenuToggle={handleMenuToggle}
+  language={language}
+  onLanguageChange={setLanguage}
 />
 
       <div className="itdp-app-layout">
@@ -123,9 +127,11 @@ const handleMenuToggle = () => {
 
               {analysis && (
                 <Dashboard
-                  key={analysis.symbol}
-                  analysis={analysis}
-                />
+  key={analysis.symbol}
+  analysis={analysis}
+  language={language}
+/>
+
               )}
             </>
           )}

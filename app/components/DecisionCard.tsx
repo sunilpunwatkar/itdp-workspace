@@ -3,6 +3,7 @@
 import { mr } from "../i18n/decisionResult/mr";
 
 type DecisionCardProps = {
+  language: "en" | "mr";
   symbol: string;
   decision: string;
   confidence: number;
@@ -18,6 +19,7 @@ type DecisionCardProps = {
 };
 
 export default function DecisionCard({
+  language,
   symbol,
   decision,
   confidence,
@@ -53,12 +55,36 @@ export default function DecisionCard({
 
     return `${String.fromCharCode(0x20b9)}${value.toFixed(2)}`;
   };
+    // ==========================================
+  // LANGUAGE DISPLAY HELPERS
+  // ==========================================
+
+  const displayLabel = (
+    english: string,
+    marathi: string
+  ) => {
+    return language === "mr"
+      ? marathi
+      : english;
+  };
+
+  const displayValue = (
+    english: string,
+    marathi: string
+  ) => {
+    return language === "mr"
+      ? marathi
+      : english;
+  };
 
   // ==========================================
   // REASON LANGUAGE TRANSLATOR
   // ==========================================
 
   const translateReason = (reason: string) => {
+    if (language === "en") {
+      return reason;
+    }
     const trendMatch = reason.match(/^Trend:\s*(UPTREND|DOWNTREND|SIDEWAYS)$/);
     if (trendMatch) {
       const key = `trend_${trendMatch[1]}` as keyof typeof mr.reasons;
@@ -146,7 +172,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            {mr.labels.stock}
+            {language === "mr" ? mr.labels.stock : "Stock"}
           </span>
 
           <strong className="itdp-analysis-value">
@@ -158,7 +184,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            {mr.labels.decision}
+            {language === "mr" ? mr.labels.decision : "Decision"}
           </span>
 
           <span
@@ -167,7 +193,9 @@ export default function DecisionCard({
               background: decisionColor,
             }}
           >
-            {mr.values[decision as keyof typeof mr.values] ?? decision}
+            {language === "mr"
+  ? mr.values[decision as keyof typeof mr.values] ?? decision
+  : decision}
           </span>
         </div>
 
@@ -175,7 +203,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            {mr.labels.confidence}
+            {language === "mr" ? mr.labels.confidence : "Confidence"}
           </span>
 
           <div className="itdp-confidence-wrapper">
@@ -201,11 +229,13 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            {mr.labels.risk}
+            {language === "mr" ? mr.labels.risk : "Risk"}
           </span>
 
           <strong className="itdp-analysis-value">
-            {mr.values[risk as keyof typeof mr.values] ?? risk}
+           {language === "mr"
+  ? mr.values[risk as keyof typeof mr.values] ?? risk
+  : risk}
           </strong>
         </div>
 
@@ -213,7 +243,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            {mr.labels.target}
+            {language === "mr" ? mr.labels.target : "Target"}
           </span>
 
           <strong className="itdp-target">
@@ -225,7 +255,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            {mr.labels.stopLoss}
+            {language === "mr" ? mr.labels.stopLoss : "Stop Loss"}
           </span>
 
           <strong className="itdp-stoploss">
@@ -247,7 +277,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            ◈ {mr.labels.support1}
+            ◈ {language === "mr" ? mr.labels.support1 : "Support 1"}
           </span>
 
           <strong
@@ -264,7 +294,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            ◈ {mr.labels.support2}
+            ◈ {language === "mr" ? mr.labels.support2 : "Support 2"}
           </span>
 
           <strong
@@ -281,7 +311,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            ◈ {mr.labels.resistance1}
+            ◈ {language === "mr" ? mr.labels.resistance1 : "Resistance 1"}
           </span>
 
           <strong
@@ -298,7 +328,7 @@ export default function DecisionCard({
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
-            ◈ {mr.labels.resistance2}
+            ◈ {language === "mr" ? mr.labels.resistance2 : "Resistance 2"}
           </span>
 
           <strong
@@ -324,7 +354,7 @@ export default function DecisionCard({
 
       <section>
         <h3 className="itdp-section-title">
-          {mr.labels.aiSummary}
+          {language === "mr" ? mr.labels.aiSummary : "AI Summary"}
         </h3>
 
         <div className="itdp-reasons">
@@ -359,7 +389,7 @@ export default function DecisionCard({
 
       <section className="itdp-invalid-section">
         <h3 className="itdp-section-title">
-          {mr.labels.invalidIf}
+          {language === "mr" ? mr.labels.invalidIf : "Invalid Condition"}
         </h3>
 
         <div className="itdp-invalid-box">
@@ -772,6 +802,10 @@ export default function DecisionCard({
     </div>
   );
 }
+
+
+
+
 
 
 
