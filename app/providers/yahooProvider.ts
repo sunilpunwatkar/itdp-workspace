@@ -10,6 +10,7 @@ export class YahooProvider implements MarketProvider {
     console.log("Yahoo Quote URL:", url);
 
     try {
+      console.time(`Yahoo Quote Fetch ${symbol}`);
       const response = await fetch(url, {
         cache: "no-store",
       });

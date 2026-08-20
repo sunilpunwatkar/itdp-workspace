@@ -17,7 +17,7 @@ const historicalFetchCache =
   new Map<string, Promise<HistoricalOHLC>>();
 
 const CACHE_TTL =
-  60 * 1000;
+  15 * 60 * 1000;
 
 export async function getCachedHistoricalOHLC(
   symbol: string
