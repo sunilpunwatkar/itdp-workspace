@@ -28,6 +28,8 @@ export default function LiveChart({ symbol }: Props) {
 
     const getChartHeight = () =>
   isMobile ? 500 : 400;
+    console.time("CHART TOTAL");
+console.time("CHART FETCH");
 
     // =========================================
     // CREATE CHART
@@ -208,12 +210,17 @@ export default function LiveChart({ symbol }: Props) {
             cache: "no-store",
           }
         );
+        console.timeEnd("CHART FETCH");
+console.time("CHART JSON");
 
         if (!response.ok) {
           throw new Error("Chart API Failed");
         }
 
         const rawData = await response.json();
+
+        console.timeEnd("CHART JSON");
+        console.time("CHART SET DATA");
 
         if (!Array.isArray(rawData)) {
           throw new Error("Invalid chart data");
@@ -376,7 +383,15 @@ export default function LiveChart({ symbol }: Props) {
         // FIT CONTENT
         // =====================================
 
+        console.timeEnd("CHART SET DATA");
+
+        console.time("CHART FIT CONTENT");
+
         chart.timeScale().fitContent();
+
+        console.timeEnd("CHART FIT CONTENT");
+
+        console.timeEnd("CHART TOTAL");
 
       } catch (error) {
         console.error(

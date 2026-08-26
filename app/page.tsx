@@ -38,6 +38,8 @@ const handleMenuToggle = () => {
           "Analyzing :",
           finalSymbol
         );
+        console.time("ANALYSIS TOTAL");
+        console.time("ANALYSIS FETCH");
 
         const response = await fetch(
           `/api/analysis?symbol=${finalSymbol}&ts=${Date.now()}`,
@@ -45,6 +47,8 @@ const handleMenuToggle = () => {
             cache: "no-store",
           }
         );
+        console.timeEnd("ANALYSIS FETCH");
+        console.time("ANALYSIS JSON");
 
         if (!response.ok) {
           throw new Error(
@@ -55,12 +59,18 @@ const handleMenuToggle = () => {
         const data =
           await response.json();
 
+          console.timeEnd("ANALYSIS JSON");
+          console.time("ANALYSIS SET STATE");
+
         console.log(
           "Analysis :",
           data
         );
 
         setAnalysis(data);
+        console.timeEnd("ANALYSIS SET STATE");
+        console.timeEnd("ANALYSIS TOTAL");
+        
       } catch (error) {
         console.error(
           "Analysis Error :",
@@ -105,9 +115,8 @@ const handleMenuToggle = () => {
 
               <div className="itdp-search-wrapper">
                 <SearchBar
-                  symbol={symbol}
-                  onSymbolChange={setSymbol}
-                  onAnalyze={handleAnalyze}
+                    symbol={symbol}
+                    onSymbolChange={setSymbol}
                 />
               </div>
 

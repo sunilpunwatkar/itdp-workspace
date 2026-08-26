@@ -5,13 +5,11 @@ import { useEffect, useState } from "react";
 type SearchBarProps = {
   symbol: string;
   onSymbolChange: (value: string) => void;
-  onAnalyze: (symbol: string) => void;
 };
 
 export default function SearchBar({
   symbol,
   onSymbolChange,
-  onAnalyze,
 }: SearchBarProps) {
   const [localSymbol, setLocalSymbol] = useState(symbol);
 
@@ -21,7 +19,6 @@ export default function SearchBar({
 
   function handleInput(value: string) {
     setLocalSymbol(value);
-    onSymbolChange(value);
   }
 
   function handleAnalyzeClick() {
@@ -29,7 +26,7 @@ export default function SearchBar({
 
     if (!finalSymbol) return;
 
-    onAnalyze(finalSymbol);
+    onSymbolChange(finalSymbol);
   }
 
   return (
