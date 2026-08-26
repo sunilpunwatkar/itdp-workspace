@@ -5,6 +5,10 @@ export interface RiskResult {
   riskReward: string;
 }
 
+// =====================================================
+// RISK ENGINE
+// =====================================================
+
 export function buildRiskPlan(
   entry: number,
   atr: number,
@@ -16,13 +20,10 @@ export function buildRiskPlan(
 ): RiskResult {
 
   // =====================================================
-  // BASIC VALIDATION
+  // 1. BASIC VALIDATION
   // =====================================================
 
-  if (
-    !Number.isFinite(entry) ||
-    entry <= 0
-  ) {
+  if (!Number.isFinite(entry) || entry <= 0) {
     return {
       stopLoss: null,
       target1: null,
@@ -31,10 +32,7 @@ export function buildRiskPlan(
     };
   }
 
-  if (
-    !Number.isFinite(atr) ||
-    atr <= 0
-  ) {
+  if (!Number.isFinite(atr) || atr <= 0) {
     return {
       stopLoss: null,
       target1: null,
@@ -44,7 +42,7 @@ export function buildRiskPlan(
   }
 
   // =====================================================
-  // HOLD
+  // 2. HOLD = NO TRADE
   // =====================================================
 
   if (decision === "HOLD") {
@@ -57,7 +55,7 @@ export function buildRiskPlan(
   }
 
   // =====================================================
-  // BUY
+  // 3. BUY
   // =====================================================
 
   if (decision === "BUY") {
@@ -66,110 +64,97 @@ export function buildRiskPlan(
     // ATR STOP
     // ---------------------------------------------------
 
-    const atrStop =
-      entry - (2 * atr);
+    const atrStop = entry - (2 * atr);
 
     // ---------------------------------------------------
-    // TECHNICAL STOP
+    // Technical Stop
     // ---------------------------------------------------
 
     let stopLoss =
       support1 !== null &&
       Number.isFinite(support1) &&
       support1 < entry
-        ? Math.min(
-            support1,
-            atrStop
-          )
+        ? Math.min(support1, atrStop)
         : atrStop;
 
-    stopLoss =
-      Number(stopLoss.toFixed(2));
+    stopLoss = Number(stopLoss.toFixed(2));
+
+    // ---------------------------------------------------
+    // Risk per share
+    // ---------------------------------------------------
+
+    const risk = entry - stopLoss;
+
+    if (risk <= 0) {
+      return {
+        stopLoss: null,
+        target1: null,
+        target2: null,
+        riskReward: "INVALID RISK",
+      };
+    }
+
+    // ---------------------------------------------------
+    // Minimum required reward
+    //
+    // Minimum RR = 1 : 1.5
+    // ---------------------------------------------------
+
+    const minimumTarget =
+      entry + (risk * 1.5);
 
     // ---------------------------------------------------
     // TARGET 1
+    //
+    // Prefer Resistance 1 only if it satisfies
+    // minimum Risk/Reward.
+    // Otherwise use ATR-based target.
     // ---------------------------------------------------
 
-    let target1 =
+    let target1: number;
+
+    if (
       resistance1 !== null &&
       Number.isFinite(resistance1) &&
-      resistance1 > entry
-        ? resistance1
-        : entry + (2 * atr);
+      resistance1 > entry &&
+      resistance1 >= minimumTarget
+    ) {
+      target1 = resistance1;
+    } else {
+      target1 = minimumTarget;
+    }
 
-    target1 =
-      Number(target1.toFixed(2));
+    target1 = Number(target1.toFixed(2));
 
     // ---------------------------------------------------
     // TARGET 2
     // ---------------------------------------------------
 
-    let target2 =
+    let target2: number;
+
+    if (
       resistance2 !== null &&
       Number.isFinite(resistance2) &&
       resistance2 > target1
-        ? resistance2
-        : entry + (4 * atr);
+    ) {
+      target2 = resistance2;
+    } else {
+      target2 = entry + (risk * 2);
+    }
 
-    target2 =
-      Number(target2.toFixed(2));
-
-    // ---------------------------------------------------
-    // RISK PER SHARE
-    // ---------------------------------------------------
-
-    const risk =
-      entry - stopLoss;
+    target2 = Number(target2.toFixed(2));
 
     // ---------------------------------------------------
-    // REWARD TO TARGET 1
+    // FINAL RR
     // ---------------------------------------------------
 
     const reward =
       target1 - entry;
 
-    // ---------------------------------------------------
-    // VALIDATION
-    // ---------------------------------------------------
-
-    if (
-      risk <= 0 ||
-      reward <= 0
-    ) {
-      return {
-        stopLoss: null,
-        target1: null,
-        target2: null,
-        riskReward: "INVALID RISK/REWARD",
-      };
-    }
-
-    // ---------------------------------------------------
-    // RISK / REWARD RATIO
-    // ---------------------------------------------------
-
     const rewardRiskRatio =
       reward / risk;
 
-    console.log(
-      "BUY Risk Calculation:",
-      {
-        entry,
-        stopLoss,
-        target1,
-        target2,
-        risk,
-        reward,
-        rewardRiskRatio,
-      }
-    );
-
-    // ---------------------------------------------------
-    // MINIMUM REQUIRED R:R = 1:1.5
-    // ---------------------------------------------------
-
     if (rewardRiskRatio < 1.5) {
-
       return {
         stopLoss: null,
         target1: null,
@@ -189,7 +174,7 @@ export function buildRiskPlan(
   }
 
   // =====================================================
-  // SELL
+  // 4. SELL
   // =====================================================
 
   if (decision === "SELL") {
@@ -202,106 +187,95 @@ export function buildRiskPlan(
       entry + (2 * atr);
 
     // ---------------------------------------------------
-    // TECHNICAL STOP
+    // Technical Stop
     // ---------------------------------------------------
 
     let stopLoss =
       resistance1 !== null &&
       Number.isFinite(resistance1) &&
       resistance1 > entry
-        ? Math.max(
-            resistance1,
-            atrStop
-          )
+        ? Math.max(resistance1, atrStop)
         : atrStop;
 
-    stopLoss =
-      Number(stopLoss.toFixed(2));
+    stopLoss = Number(stopLoss.toFixed(2));
 
     // ---------------------------------------------------
-    // TARGET 1
-    // ---------------------------------------------------
-
-    let target1 =
-      support1 !== null &&
-      Number.isFinite(support1) &&
-      support1 < entry
-        ? support1
-        : entry - (2 * atr);
-
-    target1 =
-      Number(target1.toFixed(2));
-
-    // ---------------------------------------------------
-    // TARGET 2
-    // ---------------------------------------------------
-
-    let target2 =
-      support2 !== null &&
-      Number.isFinite(support2) &&
-      support2 < target1
-        ? support2
-        : entry - (4 * atr);
-
-    target2 =
-      Number(target2.toFixed(2));
-
-    // ---------------------------------------------------
-    // RISK PER SHARE
+    // Risk per share
     // ---------------------------------------------------
 
     const risk =
       stopLoss - entry;
 
+    if (risk <= 0) {
+      return {
+        stopLoss: null,
+        target1: null,
+        target2: null,
+        riskReward: "INVALID RISK",
+      };
+    }
+
     // ---------------------------------------------------
-    // REWARD TO TARGET 1
+    // Minimum required reward
+    //
+    // Minimum RR = 1 : 1.5
+    // ---------------------------------------------------
+
+    const minimumTarget =
+      entry - (risk * 1.5);
+
+    // ---------------------------------------------------
+    // TARGET 1
+    //
+    // Prefer Support 1 only if it satisfies
+    // minimum Risk/Reward.
+    // Otherwise use ATR-based target.
+    // ---------------------------------------------------
+
+    let target1: number;
+
+    if (
+      support1 !== null &&
+      Number.isFinite(support1) &&
+      support1 < entry &&
+      support1 <= minimumTarget
+    ) {
+      target1 = support1;
+    } else {
+      target1 = minimumTarget;
+    }
+
+    target1 = Number(target1.toFixed(2));
+
+    // ---------------------------------------------------
+    // TARGET 2
+    // ---------------------------------------------------
+
+    let target2: number;
+
+    if (
+      support2 !== null &&
+      Number.isFinite(support2) &&
+      support2 < target1
+    ) {
+      target2 = support2;
+    } else {
+      target2 = entry - (risk * 2);
+    }
+
+    target2 = Number(target2.toFixed(2));
+
+    // ---------------------------------------------------
+    // FINAL RR
     // ---------------------------------------------------
 
     const reward =
       entry - target1;
 
-    // ---------------------------------------------------
-    // VALIDATION
-    // ---------------------------------------------------
-
-    if (
-      risk <= 0 ||
-      reward <= 0
-    ) {
-      return {
-        stopLoss: null,
-        target1: null,
-        target2: null,
-        riskReward: "INVALID RISK/REWARD",
-      };
-    }
-
-    // ---------------------------------------------------
-    // RISK / REWARD RATIO
-    // ---------------------------------------------------
-
     const rewardRiskRatio =
       reward / risk;
 
-    console.log(
-      "SELL Risk Calculation:",
-      {
-        entry,
-        stopLoss,
-        target1,
-        target2,
-        risk,
-        reward,
-        rewardRiskRatio,
-      }
-    );
-
-    // ---------------------------------------------------
-    // MINIMUM REQUIRED R:R = 1:1.5
-    // ---------------------------------------------------
-
     if (rewardRiskRatio < 1.5) {
-
       return {
         stopLoss: null,
         target1: null,
@@ -321,7 +295,7 @@ export function buildRiskPlan(
   }
 
   // =====================================================
-  // SAFETY FALLBACK
+  // 5. SAFETY FALLBACK
   // =====================================================
 
   return {
