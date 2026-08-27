@@ -9,9 +9,6 @@ type QuoteCacheEntry = {
   timestamp: number;
 };
 
-// Live quote cache.
-// Short TTL keeps the quote reasonably fresh while
-// preventing repeated Yahoo requests during analysis.
 const quoteCache =
   new Map<string, QuoteCacheEntry>();
 
@@ -19,8 +16,6 @@ const quoteCache =
 // IN-FLIGHT REQUEST CACHE
 // =====================================================
 
-// If multiple requests ask for the same symbol at the
-// same time, they share ONE Yahoo request.
 const quoteFetchCache =
   new Map<string, Promise<MarketData>>();
 
@@ -32,6 +27,13 @@ const quoteFetchCache =
 const QUOTE_CACHE_TTL =
   30 * 1000;
 
+// =====================================================
+// YAHOO REQUEST TIMEOUT
+// =====================================================
+
+// Never allow Yahoo request to hang indefinitely.
+const YAHOO_TIMEOUT =
+  12 * 1000;
 
 // =====================================================
 // YAHOO PROVIDER
@@ -69,9 +71,10 @@ export class YahooProvider implements MarketProvider {
         `♻️ Quote Cache EXPIRED: ${symbol}`
       );
 
-      quoteCache.delete(symbol);
+      // IMPORTANT:
+      // Keep expired data in memory.
+      // It can be used as a fallback if Yahoo fails.
     }
-
 
     // ===================================================
     // 2. IN-FLIGHT REQUEST CHECK
@@ -89,7 +92,6 @@ export class YahooProvider implements MarketProvider {
       return existingFetch;
     }
 
-
     // ===================================================
     // 3. CREATE ONE SHARED FETCH
     // ===================================================
@@ -97,14 +99,10 @@ export class YahooProvider implements MarketProvider {
     const fetchPromise =
       this.fetchQuoteFromYahoo(symbol);
 
-
-    // Store the Promise immediately so concurrent
-    // requests share the same Yahoo request.
     quoteFetchCache.set(
       symbol,
       fetchPromise
     );
-
 
     // ===================================================
     // 4. WAIT FOR FETCH
@@ -116,11 +114,9 @@ export class YahooProvider implements MarketProvider {
 
     } finally {
 
-      // Always remove in-flight entry after completion.
       quoteFetchCache.delete(symbol);
     }
   }
-
 
   // =====================================================
   // YAHOO HTTP FETCH
@@ -143,7 +139,6 @@ export class YahooProvider implements MarketProvider {
       url
     );
 
-
     // ===================================================
     // TIMING LABELS
     // ===================================================
@@ -157,9 +152,25 @@ export class YahooProvider implements MarketProvider {
     const jsonLabel =
       `Yahoo Quote JSON ${symbol}`;
 
-
     console.time(totalLabel);
 
+    // ===================================================
+    // ABORT CONTROLLER
+    // ===================================================
+
+    const controller =
+      new AbortController();
+
+    const timeout =
+      setTimeout(() => {
+
+        console.error(
+          `⏰ Yahoo Timeout (${YAHOO_TIMEOUT / 1000}s): ${symbol}`
+        );
+
+        controller.abort();
+
+      }, YAHOO_TIMEOUT);
 
     try {
 
@@ -174,11 +185,11 @@ export class YahooProvider implements MarketProvider {
           url,
           {
             cache: "no-store",
+            signal: controller.signal,
           }
         );
 
       console.timeEnd(fetchLabel);
-
 
       console.log(
         "Yahoo Response received:",
@@ -189,7 +200,6 @@ export class YahooProvider implements MarketProvider {
         "Yahoo Status:",
         response.status
       );
-
 
       // =================================================
       // RATE LIMIT
@@ -202,10 +212,9 @@ export class YahooProvider implements MarketProvider {
         );
 
         throw new Error(
-          `Yahoo rate limit (HTTP 429) for ${symbol}. Please wait before retrying.`
+          `Yahoo rate limit (HTTP 429) for ${symbol}.`
         );
       }
-
 
       // =================================================
       // OTHER HTTP ERRORS
@@ -218,7 +227,6 @@ export class YahooProvider implements MarketProvider {
         );
       }
 
-
       // =================================================
       // JSON PARSE
       // =================================================
@@ -229,7 +237,6 @@ export class YahooProvider implements MarketProvider {
         await response.json();
 
       console.timeEnd(jsonLabel);
-
 
       // =================================================
       // RESULT EXTRACTION
@@ -245,13 +252,11 @@ export class YahooProvider implements MarketProvider {
         );
       }
 
-
       const meta =
         result?.meta;
 
       const quote =
         result?.indicators?.quote?.[0];
-
 
       if (!quote) {
 
@@ -259,7 +264,6 @@ export class YahooProvider implements MarketProvider {
           `Yahoo returned empty quote data for ${symbol}`
         );
       }
-
 
       // =================================================
       // PRICE
@@ -269,7 +273,6 @@ export class YahooProvider implements MarketProvider {
         meta?.regularMarketPrice ??
         quote?.close?.[0] ??
         0;
-
 
       // =================================================
       // OHLC
@@ -295,7 +298,6 @@ export class YahooProvider implements MarketProvider {
         quote?.volume?.[0] ??
         0;
 
-
       // =================================================
       // VALIDATE PRICE
       // =================================================
@@ -309,7 +311,6 @@ export class YahooProvider implements MarketProvider {
           `Yahoo returned invalid price for ${symbol}`
         );
       }
-
 
       // =================================================
       // MARKET DATA OBJECT
@@ -332,7 +333,6 @@ export class YahooProvider implements MarketProvider {
         volume,
       };
 
-
       // =================================================
       // LOG
       // =================================================
@@ -341,7 +341,6 @@ export class YahooProvider implements MarketProvider {
         "LIVE QUOTE:",
         marketData
       );
-
 
       // =================================================
       // SAVE CACHE
@@ -359,21 +358,36 @@ export class YahooProvider implements MarketProvider {
         `💾 Quote Cache SAVED: ${symbol}`
       );
 
-
       // =================================================
       // TOTAL TIME
       // =================================================
 
       console.timeEnd(totalLabel);
 
-
       return marketData;
-
 
     } catch (error) {
 
       // =================================================
-      // ERROR
+      // TIMEOUT
+      // =================================================
+
+      if (
+        error instanceof Error &&
+        error.name === "AbortError"
+      ) {
+
+        console.error(
+          `⏰ Yahoo request timed out after ${YAHOO_TIMEOUT / 1000}s: ${symbol}`
+        );
+
+        throw new Error(
+          `Yahoo request timeout after ${YAHOO_TIMEOUT / 1000}s for ${symbol}`
+        );
+      }
+
+      // =================================================
+      // OTHER ERROR
       // =================================================
 
       console.error(
@@ -381,11 +395,13 @@ export class YahooProvider implements MarketProvider {
         error
       );
 
+      throw error;
+
+    } finally {
+
+      clearTimeout(timeout);
 
       console.timeEnd(totalLabel);
-
-
-      throw error;
     }
   }
 }

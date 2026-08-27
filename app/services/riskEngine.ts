@@ -270,27 +270,30 @@ export function buildRiskPlan(
     // ---------------------------------------------------
 
     const reward =
-      entry - target1;
+  entry - target1;
 
-    const rewardRiskRatio =
-      reward / risk;
+const rewardRiskRatio =
+  reward / risk;
 
-    if (rewardRiskRatio < 1.5) {
-      return {
-        stopLoss: null,
-        target1: null,
-        target2: null,
-        riskReward:
-          `BELOW 1:1.5 (${rewardRiskRatio.toFixed(2)})`,
-      };
-    }
+const roundedRewardRiskRatio =
+  Number(rewardRiskRatio.toFixed(2));
+
+if (roundedRewardRiskRatio < 1.5) {
+  return {
+    stopLoss: null,
+    target1: null,
+    target2: null,
+    riskReward:
+      `BELOW 1:1.5 (${roundedRewardRiskRatio.toFixed(2)})`,
+  };
+}
 
     return {
       stopLoss,
       target1,
       target2,
       riskReward:
-        `1 : ${rewardRiskRatio.toFixed(2)}`,
+        `1 : ${roundedRewardRiskRatio.toFixed(2)}`,
     };
   }
 
