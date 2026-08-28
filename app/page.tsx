@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
+import ChartSection from "./components/ChartSection";
 import MarketNews from "./components/MarketNews";
 import StockAnalysis from "./components/StockAnalysis";
 import SearchBar from "./components/SearchBar";
@@ -129,6 +130,7 @@ const handleMenuToggle = () => {
                   Analyzing...
                 </p>
               )}
+              <ChartSection symbol={symbol} />
 
               {/* ==========================
                   DASHBOARD

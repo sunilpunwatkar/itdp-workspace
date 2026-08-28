@@ -1,5 +1,4 @@
 import DecisionCard from "./DecisionCard";
-import LiveChart from "./chart/LiveChart";
 
 type DashboardProps = {
   analysis: {
@@ -97,11 +96,7 @@ export default function Dashboard({
           LIVE CHART
       ============================== */}
 
-      <div className="itdp-chart-container">
-        <LiveChart
-          symbol={analysis.symbol}
-        />
-      </div>
+      
 
       {/* ==============================
           AI DECISION
