@@ -39,17 +39,15 @@ export async function getCachedHistoricalOHLC(
     if (age < CACHE_TTL) {
 
       console.log(
-        `?? Historical Cache HIT: ${symbol}`
+        `📦 Historical Cache HIT: ${symbol}`
       );
 
       return cached.data;
     }
 
     console.log(
-      `?? Historical Cache EXPIRED: ${symbol}`
+      `♻️ Historical Cache EXPIRED: ${symbol}`
     );
-
-    historicalCache.delete(symbol);
   }
 
   // =====================================
@@ -62,7 +60,7 @@ export async function getCachedHistoricalOHLC(
   if (existingFetch) {
 
     console.log(
-      `? Historical Fetch IN-FLIGHT: ${symbol}`
+      `⏳ Historical Fetch IN-FLIGHT: ${symbol}`
     );
 
     return existingFetch;
@@ -75,36 +73,61 @@ export async function getCachedHistoricalOHLC(
   const fetchPromise =
     (async (): Promise<HistoricalOHLC> => {
 
-      console.log(
-        `?? Historical Yahoo FETCH: ${symbol}`
-      );
+      try {
 
-      console.time(
-        `Historical Fetch ${symbol}`
-      );
-
-      const data =
-        await historical.getHistoricalOHLC(
-          symbol
+        console.log(
+          `🔄 Historical Yahoo FETCH: ${symbol}`
         );
 
-      console.timeEnd(
-        `Historical Fetch ${symbol}`
-      );
+        console.time(
+          `Historical Fetch ${symbol}`
+        );
 
-      historicalCache.set(
-        symbol,
-        {
-          data,
-          timestamp: Date.now(),
+        const data =
+          await historical.getHistoricalOHLC(
+            symbol
+          );
+
+        console.timeEnd(
+          `Historical Fetch ${symbol}`
+        );
+
+        historicalCache.set(
+          symbol,
+          {
+            data,
+            timestamp: Date.now(),
+          }
+        );
+
+        console.log(
+          `💾 Historical Cache SAVED: ${symbol}`
+        );
+
+        return data;
+
+      } catch (error) {
+
+        console.error(
+          `❌ Historical Yahoo FETCH FAILED: ${symbol}`,
+          error
+        );
+
+        // =================================
+        // STALE CACHE FALLBACK
+        // =================================
+
+        if (cached) {
+
+          console.log(
+            `♻️ Historical STALE CACHE FALLBACK: ${symbol}`
+          );
+
+          return cached.data;
         }
-      );
 
-      console.log(
-        `?? Historical Cache SAVED: ${symbol}`
-      );
-
-      return data;
+        throw error;
+      }
 
     })();
 

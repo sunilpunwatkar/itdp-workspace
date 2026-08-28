@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getChartData } from "../../services/chartDataService";
 
+let chartApiCallCount = 0;
+
 export async function GET(request: NextRequest) {
+  chartApiCallCount++;
+
+  console.log(
+    `🎯 CHART API CALL #${chartApiCallCount}`
+  );
+
   try {
     const { searchParams } = new URL(request.url);
 
