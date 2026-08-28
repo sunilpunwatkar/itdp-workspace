@@ -362,7 +362,7 @@ export class YahooProvider implements MarketProvider {
       // TOTAL TIME
       // =================================================
 
-      console.timeEnd(totalLabel);
+      
 
       return marketData;
 
