@@ -37,20 +37,14 @@ export async function getMarketData(
   );
 
   // =====================================
-  // Quote + Cached Historical OHLC
+  // HISTORICAL DATA
   // =====================================
 
-  const [quote, ohlc] =
-    await Promise.all([
-
-      yahoo.getQuote(symbol),
-
-      getCachedHistoricalOHLC(symbol),
-
-    ]);
+  const ohlc =
+    await getCachedHistoricalOHLC(symbol);
 
   // =====================================
-  // Close Prices
+  // CLOSE PRICES
   // =====================================
 
   const prices =
@@ -64,6 +58,70 @@ export async function getMarketData(
     "MarketData Prices Length:",
     prices.length
   );
+
+  // =====================================
+  // LIVE QUOTE
+  // =====================================
+
+  let quote: {
+    symbol: string;
+    price: number;
+  };
+
+  try {
+
+    quote =
+      await yahoo.getQuote(symbol);
+
+    console.log(
+      "MarketData Live Quote OK:",
+      quote
+    );
+
+  } catch (error) {
+
+    // =====================================
+    // LIVE QUOTE FAILED
+    // =====================================
+
+    console.error(
+      `⚠ Live Quote FAILED: ${symbol}`,
+      error
+    );
+
+    // =====================================
+    // HISTORICAL FALLBACK PRICE
+    // =====================================
+
+    const lastPrice =
+      prices.length > 0
+        ? prices[prices.length - 1]
+        : null;
+
+    if (
+      lastPrice === null ||
+      !Number.isFinite(lastPrice) ||
+      lastPrice <= 0
+    ) {
+
+      throw new Error(
+        `Live quote unavailable and no historical fallback price exists for ${symbol}`
+      );
+    }
+
+    console.warn(
+      `🔄 Using Historical Fallback Quote: ${symbol} -> ${lastPrice}`
+    );
+
+    quote = {
+      symbol,
+      price: lastPrice,
+    };
+  }
+
+  // =====================================
+  // FINAL MARKET DATA
+  // =====================================
 
   return {
     symbol,
