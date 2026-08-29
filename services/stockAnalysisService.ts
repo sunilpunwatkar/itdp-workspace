@@ -13,6 +13,7 @@ import { getMarketData } from "../app/services/marketDataEngine";
 import { calculateSupportResistance } from "../app/services/supportResistanceService";
 import { buildChartData } from "../app/services/chartDataService";
 import { calculatePriceStructure } from "../app/services/priceStructureService";
+import { calculateEntryContext } from "../app/services/entryContextService";
 
 
 export async function getStockAnalysis(
@@ -168,6 +169,24 @@ analyzeStock(
     "Decision Engine Result:",
     result
   );
+  // =====================================
+  // ENTRY CONTEXT
+  // =====================================
+
+  console.time("⏱ EntryContext");
+
+  const entryContext =
+    calculateEntryContext(
+      result.decision,
+      priceStructure.structure
+    );
+
+  console.timeEnd("⏱ EntryContext");
+
+  console.log(
+    "Entry Context:",
+    entryContext
+  );
 
   // =====================================
   // Risk Plan
@@ -244,7 +263,9 @@ analyzeStock(
   // =====================================
 
     const finalResult = {
-    ...result,
+        ...result,
+
+    entryContext,
 
     entry: quote.price,
 
