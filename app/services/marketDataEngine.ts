@@ -4,6 +4,8 @@ import {
   HistoricalOHLC,
 } from "../providers/historicalProvider";
 
+import { MarketProvider } from "../providers/marketProvider";
+
 import { resolveUniversalSymbol } from "./universalSymbolEngine";
 
 import {
@@ -26,7 +28,8 @@ export type MarketData = {
 };
 
 export async function getMarketData(
-  inputSymbol: string
+  inputSymbol: string,
+  marketProvider: MarketProvider = yahoo
 ): Promise<MarketData> {
 
   const symbol =
@@ -71,7 +74,7 @@ export async function getMarketData(
   try {
 
     quote =
-      await yahoo.getQuote(symbol);
+      await marketProvider.getQuote(symbol);
 
     console.log(
       "MarketData Live Quote OK:",
