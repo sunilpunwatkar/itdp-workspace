@@ -19,6 +19,41 @@ const historicalFetchCache =
 const CACHE_TTL =
   15 * 60 * 1000;
 
+// =====================================
+// TEST SUPPORT
+// =====================================
+
+export function seedHistoricalCacheForTest(
+  symbol: string,
+  data: HistoricalOHLC,
+  timestamp: number = Date.now()
+): void {
+
+  historicalCache.set(
+    symbol,
+    {
+      data,
+      timestamp,
+    }
+  );
+}
+
+export function clearHistoricalCacheForTest(
+  symbol?: string
+): void {
+
+  if (symbol) {
+    historicalCache.delete(symbol);
+    return;
+  }
+
+  historicalCache.clear();
+}
+
+// =====================================
+// MAIN CACHE FUNCTION
+// =====================================
+
 export async function getCachedHistoricalOHLC(
   symbol: string
 ): Promise<HistoricalOHLC> {
