@@ -1,4 +1,5 @@
 import {
+  getCachedHistoricalOHLC,
   seedHistoricalCacheForTest,
   clearHistoricalCacheForTest,
 } from "../app/services/historicalDataCache";
@@ -12,32 +13,32 @@ const symbol = "TEST.STALE";
 
 const testData = {
   timestamps: Array.from(
-    { length: 250 },
+    { length: 201 },
     (_, i) => 1000000000 + i * 86400
   ),
 
   open: Array.from(
-    { length: 250 },
+    { length: 201 },
     (_, i) => 100 + i
   ),
 
   high: Array.from(
-    { length: 250 },
+    { length: 201 },
     (_, i) => 105 + i
   ),
 
   low: Array.from(
-    { length: 250 },
+    { length: 201 },
     (_, i) => 98 + i
   ),
 
   close: Array.from(
-    { length: 250 },
+    { length: 201 },
     (_, i) => 103 + i
   ),
 
   volume: Array.from(
-    { length: 250 },
+    { length: 201 },
     (_, i) => 1000 + i * 10
   ),
 };
@@ -70,28 +71,74 @@ async function runTest() {
   );
 
   // =====================================
-  // TEST 2: Chart loads from stale cache
+  // TEST 2: Verify stale cache fallback
+  // =====================================
+
+  let historicalData;
+
+  try {
+
+    historicalData =
+      await getCachedHistoricalOHLC(symbol);
+
+    const sameData =
+      JSON.stringify(historicalData) ===
+      JSON.stringify(testData);
+
+    console.log(
+      "TEST 2: Historical stale fallback: " +
+      (sameData ? "PASS" : "FAIL")
+    );
+
+    if (!sameData) {
+
+      console.log(
+        "Expected:",
+        testData
+      );
+
+      console.log(
+        "Actual:",
+        historicalData
+      );
+
+      process.exit(1);
+    }
+
+  } catch (error) {
+
+    console.error(
+      "TEST 2: Historical stale fallback: FAIL",
+      error
+    );
+
+    process.exit(1);
+  }
+
+  // =====================================
+  // TEST 3: Chart builds from fallback
   // =====================================
 
   try {
 
+    clearChartCacheForTest(symbol);
+
     const chartData =
       await getChartData(symbol);
 
-    const candlesValid =
-      chartData.length === 250;
+    const candlesAvailable =
+      chartData.length === 201;
 
     console.log(
-      `TEST 2: Chart Data from stale cache: ${
-        candlesValid ? "PASS" : "FAIL"
-      }`
+      "TEST 3: Chart Data from fallback: " +
+      (candlesAvailable ? "PASS" : "FAIL")
     );
 
-    if (!candlesValid) {
+    if (!candlesAvailable) {
 
       console.log(
         "Expected candles:",
-        250
+        201
       );
 
       console.log(
@@ -103,28 +150,27 @@ async function runTest() {
     }
 
     // =================================
-    // TEST 3: OHLC data valid
+    // TEST 4: Latest candle valid
     // =================================
 
     const latest =
       chartData[chartData.length - 1];
 
-    const ohlcValid =
-      latest.open === 349 &&
-      latest.high === 354 &&
-      latest.low === 347 &&
-      latest.close === 352;
+    const latestValid =
+      latest.close === 303 &&
+      latest.open === 300 &&
+      latest.high === 305 &&
+      latest.low === 298;
 
     console.log(
-      `TEST 3: Latest OHLC Valid: ${
-        ohlcValid ? "PASS" : "FAIL"
-      }`
+      "TEST 4: Latest Candle Valid: " +
+      (latestValid ? "PASS" : "FAIL")
     );
 
-    if (!ohlcValid) {
+    if (!latestValid) {
 
       console.log(
-        "Latest candle:",
+        "Latest Candle:",
         latest
       );
 
@@ -132,28 +178,29 @@ async function runTest() {
     }
 
     // =================================
-    // TEST 4: EMA indicators
+    // TEST 5: Indicators available
     // =================================
 
-    const emaValid =
+    const latestIndicators =
       latest.ema20 !== undefined &&
       latest.ema50 !== undefined &&
-      latest.ema200 !== undefined;
+      latest.ema200 !== undefined &&
+      latest.rsi !== undefined;
 
     console.log(
-      `TEST 4: EMA Indicators Available: ${
-        emaValid ? "PASS" : "FAIL"
-      }`
+      "TEST 5: Indicators Pipeline: " +
+      (latestIndicators ? "PASS" : "FAIL")
     );
 
-    if (!emaValid) {
+    if (!latestIndicators) {
 
       console.log(
-        "EMA values:",
+        "Latest Indicators:",
         {
           ema20: latest.ema20,
           ema50: latest.ema50,
           ema200: latest.ema200,
+          rsi: latest.rsi,
         }
       );
 
@@ -161,54 +208,17 @@ async function runTest() {
     }
 
     // =================================
-    // TEST 5: RSI indicator
-    // =================================
-
-    const rsiValid =
-      latest.rsi !== undefined;
-
-    console.log(
-      `TEST 5: RSI Indicator Available: ${
-        rsiValid ? "PASS" : "FAIL"
-      }`
-    );
-
-    if (!rsiValid) {
-
-      console.log(
-        "RSI value:",
-        latest.rsi
-      );
-
-      process.exit(1);
-    }
-
-    // =================================
-    // SUMMARY
+    // FINAL DATA
     // =================================
 
     console.log(
-      "Candles:",
+      "Chart candles:",
       chartData.length
     );
 
     console.log(
-      "Latest Close:",
+      "Latest close:",
       latest.close
-    );
-
-    console.log(
-      "Latest EMA:",
-      {
-        ema20: latest.ema20,
-        ema50: latest.ema50,
-        ema200: latest.ema200,
-      }
-    );
-
-    console.log(
-      "Latest RSI:",
-      latest.rsi
     );
 
   } catch (error) {
@@ -233,6 +243,9 @@ async function runTest() {
   );
 
   console.log({
+    totalTests: 5,
+    passed: 5,
+    failed: 0,
     allPassed: true,
   });
 }
@@ -246,3 +259,4 @@ runTest().catch((error) => {
 
   process.exit(1);
 });
+

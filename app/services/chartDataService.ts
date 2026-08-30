@@ -308,3 +308,25 @@ export async function getChartData(
     );
   }
 }
+// =====================================
+// TEST SUPPORT
+// =====================================
+
+export function clearChartCacheForTest(
+  symbol?: string
+): void {
+
+  if (symbol) {
+
+    const resolvedSymbol =
+      resolveUniversalSymbol(symbol);
+
+    chartCache.delete(
+      resolvedSymbol
+    );
+
+    return;
+  }
+
+  chartCache.clear();
+}
