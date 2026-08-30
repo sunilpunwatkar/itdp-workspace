@@ -2,6 +2,7 @@ import { SupportResistanceResult } from "../services/supportResistanceService";
 import { MarketSignal } from "../types/marketSignal";
 import { AnalysisResult } from "../types/analysis";
 import { PriceStructureResult } from "../services/priceStructureService";
+import { calculateEntryContext } from "../services/entryContextService";
 
 export function analyzeStock(
   symbol: string,
@@ -290,6 +291,11 @@ export function analyzeStock(
       : decision === "SELL"
       ? "Bearish trend structure breaks"
       : "No confirmed directional setup";
+const entryContext =
+  calculateEntryContext(
+    decision,
+    priceStructure.structure
+  );
 
   // =====================================================
   // FINAL RESULT
@@ -300,7 +306,7 @@ export function analyzeStock(
     decision,
     confidence,
     risk,
-
+    entryContext,
     entry,
 
     support1: supportResistance.support1,

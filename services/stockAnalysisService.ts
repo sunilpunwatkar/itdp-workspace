@@ -248,7 +248,8 @@ analyzeStock(
   const tradePlan =
   buildTradePlan(
     result.decision,
-    result.confidence
+    result.confidence,
+    result.entryContext
   );
 
   console.timeEnd("⏱ TradePlan");

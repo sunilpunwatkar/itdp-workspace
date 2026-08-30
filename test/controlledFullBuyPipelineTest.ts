@@ -88,7 +88,8 @@ console.log("Position Size:", position);
 // 4. Trade Plan
 const tradePlan = buildTradePlan(
   decision.decision,
-  decision.confidence
+  decision.confidence,
+  decision.entryContext
 );
 
 console.log("Trade Plan:", tradePlan);

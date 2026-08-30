@@ -24,7 +24,8 @@ const position = calculatePositionSize(
 
 const tradePlan = buildTradePlan(
   "BUY",
-  85
+  85,
+  "FAVORABLE"
 );
 
 console.log("=== FULL BUY PIPELINE TEST ===");

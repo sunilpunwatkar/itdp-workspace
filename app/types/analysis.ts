@@ -8,7 +8,7 @@ export interface AnalysisResult {
   confidence: number;
 
   risk: "LOW" | "MEDIUM" | "HIGH";
-entryContext?: "FAVORABLE" | "CAUTION" | "UNFAVORABLE";
+entryContext: "FAVORABLE" | "CAUTION" | "UNFAVORABLE";
 
   entry: number;
 

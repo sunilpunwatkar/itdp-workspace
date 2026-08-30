@@ -1,3 +1,6 @@
+
+import { EntryContext } from "../types/entryContext";
+
 export interface TradePlan {
   tradeQuality: string;
   holdingPeriod: string;
@@ -6,41 +9,92 @@ export interface TradePlan {
 
 export function buildTradePlan(
   decision: string,
-  confidence: number
+  confidence: number,
+  entryContext: EntryContext
 ): TradePlan {
 
-  if (decision === "BUY") {
+  // =====================================
+  // HOLD = NO TRADE
+  // =====================================
+
+  if (decision === "HOLD") {
+    return {
+      tradeQuality: "NO TRADE",
+      holdingPeriod: "-",
+      aiSummary:
+        "Indicators are mixed. Wait for a better setup.",
+    };
+  }
+
+  // =====================================
+  // UNFAVORABLE = NO TRADE
+  // =====================================
+
+  if (entryContext === "UNFAVORABLE") {
+    return {
+      tradeQuality: "NO TRADE",
+      holdingPeriod: "-",
+      aiSummary:
+        "Entry location is unfavorable. Wait for a better setup.",
+    };
+  }
+
+  // =====================================
+  // FAVORABLE ENTRY
+  // =====================================
+
+  if (entryContext === "FAVORABLE") {
+
     return {
       tradeQuality:
         confidence >= 80 ? "A+" :
         confidence >= 60 ? "A" :
         "B",
 
-      holdingPeriod: "5 - 15 Days",
+      holdingPeriod:
+        decision === "BUY"
+          ? "5 - 15 Days"
+          : "3 - 10 Days",
 
       aiSummary:
-        "Bullish trend supported by technical indicators.",
+        decision === "BUY"
+          ? "Bullish trend supported by technical indicators."
+          : "Bearish trend supported by technical indicators.",
     };
   }
 
-  if (decision === "SELL") {
+  // =====================================
+  // CAUTION ENTRY
+  // =====================================
+
+  if (entryContext === "CAUTION") {
+
     return {
       tradeQuality:
-        confidence >= 80 ? "A+" :
-        confidence >= 60 ? "A" :
+        confidence >= 80 ? "A" :
         "B",
 
-      holdingPeriod: "3 - 10 Days",
+      holdingPeriod:
+        decision === "BUY"
+          ? "5 - 15 Days"
+          : "3 - 10 Days",
 
       aiSummary:
-        "Bearish trend supported by technical indicators.",
+        decision === "BUY"
+          ? "Bullish setup detected, but entry location requires caution."
+          : "Bearish setup detected, but entry location requires caution.",
     };
   }
+
+  // =====================================
+  // SAFETY FALLBACK
+  // =====================================
 
   return {
-    tradeQuality: "No Trade",
+    tradeQuality: "NO TRADE",
     holdingPeriod: "-",
     aiSummary:
-      "Indicators are mixed. Wait for a better setup.",
+      "Entry context could not be confirmed. Wait for a better setup.",
   };
 }
+

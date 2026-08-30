@@ -32,7 +32,8 @@ const position =
 
 const tradePlan = buildTradePlan(
   "HOLD",
-  63
+  63,
+  "UNFAVORABLE"
 );
 
 console.log("=== FULL HOLD PIPELINE TEST ===");
