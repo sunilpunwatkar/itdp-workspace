@@ -10,6 +10,7 @@ import { calculatePositionSize } from "../app/services/positionSizingService";
 import { buildTradePlan } from "../app/services/tradePlannerService";
 import { resolveUniversalSymbol } from "../app/services/universalSymbolEngine";
 import { getMarketData } from "../app/services/marketDataEngine";
+import { MarketProvider } from "../app/providers/marketProvider";
 import { calculateSupportResistance } from "../app/services/supportResistanceService";
 import { buildChartData } from "../app/services/chartDataService";
 import { calculatePriceStructure } from "../app/services/priceStructureService";
@@ -17,7 +18,8 @@ import { calculateEntryContext } from "../app/services/entryContextService";
 
 
 export async function getStockAnalysis(
-  symbol: string
+  symbol: string,
+  marketProvider?: MarketProvider
 ): Promise<AnalysisResult> {
 
   console.time("⏱ TOTAL ANALYSIS");
@@ -36,7 +38,10 @@ export async function getStockAnalysis(
   console.time("⏱ MarketData");
 
   const market =
-    await getMarketData(symbol);
+  await getMarketData(
+    symbol,
+    marketProvider
+  );
 
   console.timeEnd("⏱ MarketData");
 
