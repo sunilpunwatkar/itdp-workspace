@@ -27,6 +27,37 @@ const quoteFetchCache =
 const QUOTE_CACHE_TTL =
   30 * 1000;
 
+  // =====================================================
+// TEST SUPPORT
+// =====================================================
+
+export function seedQuoteCacheForTest(
+  symbol: string,
+  data: MarketData,
+  timestamp: number = Date.now()
+): void {
+
+  quoteCache.set(
+    symbol,
+    {
+      data,
+      timestamp,
+    }
+  );
+}
+
+export function clearQuoteCacheForTest(
+  symbol?: string
+): void {
+
+  if (symbol) {
+    quoteCache.delete(symbol);
+    return;
+  }
+
+  quoteCache.clear();
+}
+
 // =====================================================
 // YAHOO REQUEST TIMEOUT
 // =====================================================
@@ -110,12 +141,36 @@ export class YahooProvider implements MarketProvider {
 
     try {
 
-      return await fetchPromise;
+  return await fetchPromise;
 
-    } finally {
+} catch (error) {
 
-      quoteFetchCache.delete(symbol);
-    }
+  // =================================================
+  // EXPIRED QUOTE FALLBACK
+  // =================================================
+
+  const expiredCache =
+    quoteCache.get(symbol);
+
+  if (expiredCache) {
+
+    console.warn(
+      `🔄 Using Expired Quote Cache Fallback: ${symbol}`
+    );
+
+    return expiredCache.data;
+  }
+
+  // =================================================
+  // NO EXPIRED CACHE AVAILABLE
+  // =================================================
+
+  throw error;
+
+} finally {
+
+  quoteFetchCache.delete(symbol);
+}
   }
 
   // =====================================================
