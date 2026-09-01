@@ -112,3 +112,4 @@ console.log({
   tradeQuality: tradePlan.tradeQuality,
   holdingPeriod: tradePlan.holdingPeriod,
 });
+
