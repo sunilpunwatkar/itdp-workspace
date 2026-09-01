@@ -7,7 +7,7 @@ export interface HistoricalOHLC {
   volume: number[];
 }
 
-const YAHOO_TIMEOUT_MS = 30_000;
+const YAHOO_TIMEOUT_MS = 12_000;
 
 export class HistoricalProvider {
 
