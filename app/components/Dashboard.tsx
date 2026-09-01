@@ -6,12 +6,24 @@ type DashboardProps = {
     decision: string;
     confidence: number;
     risk: string;
+
+    entry: number;
+
     target: number;
+    target1: number;
+    target2: number;
+
     stopLoss: number;
+
     support1: number | null;
     support2: number | null;
+
     resistance1: number | null;
     resistance2: number | null;
+
+    tradeQuality: string;
+    holdingPeriod: string;
+
     reasons: string[];
     invalidIf: string;
   };
@@ -109,8 +121,13 @@ export default function Dashboard({
   decision={analysis.decision}
   confidence={analysis.confidence}
   risk={analysis.risk}
+  entry={analysis.entry}
+  target1={analysis.target1}
+  target2={analysis.target2}
   target={analysis.target}
   stopLoss={analysis.stopLoss}
+  tradeQuality={analysis.tradeQuality}
+  holdingPeriod={analysis.holdingPeriod}
   support1={analysis.support1}
   support2={analysis.support2}
   resistance1={analysis.resistance1}

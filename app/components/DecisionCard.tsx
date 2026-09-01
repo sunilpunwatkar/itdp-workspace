@@ -4,16 +4,29 @@ import { mr } from "../i18n/decisionResult/mr";
 
 type DecisionCardProps = {
   language: "en" | "mr";
+
   symbol: string;
   decision: string;
   confidence: number;
   risk: string;
+
+  entry: number;
+
   target: number;
+  target1: number;
+  target2: number;
+
   stopLoss: number;
-   support1: number | null;
+
+  tradeQuality: string;
+  holdingPeriod: string;
+
+  support1: number | null;
   support2: number | null;
+
   resistance1: number | null;
   resistance2: number | null;
+
   reasons: string[];
   invalidIf: string;
 };
@@ -24,8 +37,13 @@ export default function DecisionCard({
   decision,
   confidence,
   risk,
+  entry,
   target,
+  target1,
+  target2,
   stopLoss,
+  tradeQuality,
+  holdingPeriod,
   support1,
   support2,
   resistance1,
