@@ -271,6 +271,21 @@ analyzeStock(
     const finalResult = {
         ...result,
 
+            riskReward:
+      riskPlan.riskReward,
+
+    capital:
+      position.capital,
+
+    riskPercent:
+      position.riskPercent,
+
+    maxRisk:
+      position.maxRisk,
+
+    quantity:
+      position.quantity,
+
     entryContext,
 
     entry: quote.price,

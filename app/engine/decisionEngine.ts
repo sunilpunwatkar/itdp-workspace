@@ -1,6 +1,6 @@
 import { SupportResistanceResult } from "../services/supportResistanceService";
 import { MarketSignal } from "../types/marketSignal";
-import { AnalysisResult } from "../types/analysis";
+import { DecisionEngineResult } from "../types/analysis";
 import { PriceStructureResult } from "../services/priceStructureService";
 import { calculateEntryContext } from "../services/entryContextService";
 
@@ -9,7 +9,7 @@ export function analyzeStock(
   signal: MarketSignal,
   supportResistance: SupportResistanceResult,
   priceStructure: PriceStructureResult
-): AnalysisResult {
+): DecisionEngineResult {
   // =====================================================
   // INTELLIGENT MULTI-FACTOR SCORING
   // =====================================================
