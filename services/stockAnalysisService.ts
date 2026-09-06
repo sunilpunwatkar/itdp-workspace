@@ -1,3 +1,9 @@
+import { calculateDirectionIntelligence } from "../app/services/directionIntelligenceService";
+import { calculateMomentumIntelligence } from "../app/services/momentumIntelligenceService";
+import { calculatePriceLocationIntelligence } from "../app/services/priceLocationIntelligenceService";
+import { calculateEvidenceSynthesis } from "../app/services/evidenceSynthesisService";
+import { calculateConflictEngine } from "../app/services/conflictEngineService";
+import { calculateFinalDecision } from "../app/services/finalDecisionIntelligenceService";
 import { analyzeStock } from "../app/engine/decisionEngine";
 import { AnalysisResult } from "../app/types/analysis";
 import { CandleData } from "../app/types/chart";
@@ -14,7 +20,9 @@ import { MarketProvider } from "../app/providers/marketProvider";
 import { calculateSupportResistance } from "../app/services/supportResistanceService";
 import { buildChartData } from "../app/services/chartDataService";
 import { calculatePriceStructure } from "../app/services/priceStructureService";
-import { calculateEntryContext } from "../app/services/entryContextService";
+import {
+  calculateEntryContextIntelligence,
+} from "../app/services/entryContextIntelligenceService";
 
 
 export async function getStockAnalysis(
@@ -153,6 +161,134 @@ export async function getStockAnalysis(
     "Market Signal:",
     signal
   );
+    // =====================================
+  // FINAL DECISION INTELLIGENCE PIPELINE
+  // =====================================
+
+  console.time("⏱ Final Decision Intelligence");
+
+  // -------------------------------------
+  // Direction Intelligence
+  // -------------------------------------
+
+  const direction =
+    calculateDirectionIntelligence(
+      ema.ema20,
+      ema.ema50,
+      ema.ema200,
+      atr.atr
+    );
+
+  console.log(
+    "Direction Intelligence:",
+    direction
+  );
+
+  // -------------------------------------
+  // Momentum Intelligence
+  // -------------------------------------
+
+  const momentum =
+    calculateMomentumIntelligence(
+      rsi.rsi,
+      signal.macdSignal,
+      signal.histogram
+    );
+
+  console.log(
+    "Momentum Intelligence:",
+    momentum
+  );
+
+  // -------------------------------------
+  // Price Location Intelligence
+  // -------------------------------------
+
+  const location =
+    calculatePriceLocationIntelligence(
+      quote.price,
+      supportResistance.support1,
+      supportResistance.resistance1,
+      atr.atr
+    );
+
+  console.log(
+    "Price Location Intelligence:",
+    location
+  );
+
+  // -------------------------------------
+  // Evidence Synthesis
+  // -------------------------------------
+
+  const evidence =
+    calculateEvidenceSynthesis(
+      direction.direction,
+      momentum.momentumDirection,
+      momentum.momentumStrength,
+      momentum.agreement,
+      location.location,
+      location.locationQuality
+    );
+
+  console.log(
+    "Evidence Synthesis:",
+    evidence
+  );
+
+  // -------------------------------------
+  // Conflict Engine
+  // -------------------------------------
+
+  const conflict =
+    calculateConflictEngine(
+      direction.direction,
+      direction.evidence,
+      momentum.momentumDirection,
+      momentum.momentumStrength,
+      momentum.agreement,
+      location.location,
+      location.locationQuality,
+      evidence.overallEvidence,
+      evidence.evidenceStrength,
+      evidence.evidenceAlignment
+    );
+
+  console.log(
+    "Conflict Engine:",
+    conflict
+  );
+
+  // -------------------------------------
+  // Final Decision
+  // -------------------------------------
+
+  const finalDecision =
+    calculateFinalDecision({
+      direction: direction.direction,
+      momentumDirection: momentum.momentumDirection,
+      momentumStrength: momentum.momentumStrength,
+      momentumAgreement: momentum.agreement,
+
+      location: location.location,
+      locationQuality: location.locationQuality,
+
+      overallEvidence: evidence.overallEvidence,
+      evidenceStrength: evidence.evidenceStrength,
+      evidenceAlignment: evidence.evidenceAlignment,
+
+      conflictStatus: conflict.conflictStatus,
+      conflictCount: conflict.conflictCount,
+      conflictSeverity: conflict.conflictSeverity,
+      reliabilityImpact: conflict.reliabilityImpact,
+    });
+
+  console.log(
+    "FINAL DECISION INTELLIGENCE:",
+    finalDecision
+  );
+
+  console.timeEnd("⏱ Final Decision Intelligence");
 
   // =====================================
   // Decision Engine
@@ -174,23 +310,31 @@ analyzeStock(
     "Decision Engine Result:",
     result
   );
-  // =====================================
-  // ENTRY CONTEXT
+    // =====================================
+  // ENTRY CONTEXT INTELLIGENCE
   // =====================================
 
-  console.time("⏱ EntryContext");
+  console.time("⏱ EntryContext Intelligence");
+
+  const entryContextResult =
+    calculateEntryContextIntelligence({
+      decision: finalDecision.decision,
+      decisionStrength: finalDecision.decisionStrength,
+      decisionQuality: finalDecision.decisionQuality,
+      location: location.location,
+      locationQuality: location.locationQuality,
+      conflictSeverity: conflict.conflictSeverity,
+      reliability: finalDecision.reliability,
+    });
 
   const entryContext =
-    calculateEntryContext(
-      result.decision,
-      priceStructure.structure
-    );
+    entryContextResult.entryContext;
 
-  console.timeEnd("⏱ EntryContext");
+  console.timeEnd("⏱ EntryContext Intelligence");
 
   console.log(
-    "Entry Context:",
-    entryContext
+    "ENTRY CONTEXT INTELLIGENCE:",
+    entryContextResult
   );
 
   // =====================================
@@ -203,7 +347,7 @@ analyzeStock(
   buildRiskPlan(
     quote.price,
     signal.atr,
-    result.decision,
+    finalDecision.decision,
     supportResistance.support1,
     supportResistance.support2,
     supportResistance.resistance1,
@@ -250,11 +394,11 @@ analyzeStock(
 
   console.time("⏱ TradePlan");
 
-  const tradePlan =
-  buildTradePlan(
-    result.decision,
+    const tradePlan =
+    buildTradePlan(
+    finalDecision.decision,
     result.confidence,
-    result.entryContext
+    entryContext
   );
 
   console.timeEnd("⏱ TradePlan");
@@ -270,6 +414,26 @@ analyzeStock(
 
     const finalResult = {
         ...result,
+            decision:
+      finalDecision.decision,
+
+    finalDecision:
+      finalDecision,
+
+    decisionStrength:
+      finalDecision.decisionStrength,
+
+    decisionQuality:
+      finalDecision.decisionQuality,
+
+    decisionEvidence:
+      finalDecision.evidence,
+
+    decisionConflict:
+      finalDecision.conflict,
+
+    decisionReliability:
+      finalDecision.reliability,
 
             riskReward:
       riskPlan.riskReward,
@@ -335,8 +499,8 @@ analyzeStock(
       `Quantity : ${position.quantity} Shares`,
     ],
 
-    invalidIf:
-      result.invalidIf,
+        invalidIf:
+      finalDecision.invalidIf.join(" | "),
   };
 
   console.timeEnd("⏱ TOTAL ANALYSIS");
