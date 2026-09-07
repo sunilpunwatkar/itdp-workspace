@@ -23,6 +23,9 @@ import { calculatePriceStructure } from "../app/services/priceStructureService";
 import {
   calculateEntryContextIntelligence,
 } from "../app/services/entryContextIntelligenceService";
+import {
+  calculateRiskGateIntelligence,
+} from "../app/services/riskGateIntelligenceService";
 
 
 export async function getStockAnalysis(
@@ -387,6 +390,29 @@ analyzeStock(
     "Position Size:",
     position
   );
+    console.time("⏱ RiskGate");
+
+  const riskGate =
+    calculateRiskGateIntelligence({
+      decision: finalDecision.decision,
+      entryContext,
+      conflictSeverity: conflict.conflictSeverity,
+      reliability: finalDecision.reliability,
+      decisionQuality: finalDecision.decisionQuality,
+
+      entry: quote.price,
+      stopLoss: riskPlan.stopLoss ?? NaN,
+      target1: riskPlan.target1 ?? NaN,
+      riskReward: riskPlan.riskRewardRatio ?? NaN,
+      quantity: position.quantity,
+    });
+
+  console.timeEnd("⏱ RiskGate");
+
+  console.log(
+    "Risk Gate Intelligence:",
+    riskGate
+  );
 
   // =====================================
   // Trade Plan
@@ -434,6 +460,9 @@ analyzeStock(
 
     decisionReliability:
       finalDecision.reliability,
+
+      riskGate:
+  riskGate,
 
             riskReward:
       riskPlan.riskReward,

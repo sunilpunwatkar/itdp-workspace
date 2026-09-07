@@ -1,3 +1,4 @@
+import type { RiskGateIntelligenceResult } from "../services/riskGateIntelligenceService";
 export type DecisionType = "BUY" | "SELL" | "HOLD";
 export interface DecisionEngineResult {
   symbol: string;
@@ -86,4 +87,6 @@ export interface AnalysisResult {
   reasons: string[];
 
   invalidIf: string;
+
+  riskGate: RiskGateIntelligenceResult;
 }

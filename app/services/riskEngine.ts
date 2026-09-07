@@ -3,6 +3,9 @@ export interface RiskResult {
   target1: number | null;
   target2: number | null;
   riskReward: string;
+
+  // V2: Machine-readable Risk/Reward ratio
+  riskRewardRatio: number | null;
 }
 
 // =====================================================
@@ -29,6 +32,7 @@ export function buildRiskPlan(
       target1: null,
       target2: null,
       riskReward: "INVALID ENTRY",
+      riskRewardRatio: null,
     };
   }
 
@@ -38,6 +42,7 @@ export function buildRiskPlan(
       target1: null,
       target2: null,
       riskReward: "INVALID ATR",
+      riskRewardRatio: null,
     };
   }
 
@@ -51,6 +56,7 @@ export function buildRiskPlan(
       target1: null,
       target2: null,
       riskReward: "-",
+      riskRewardRatio: null,
     };
   }
 
@@ -91,6 +97,7 @@ export function buildRiskPlan(
         target1: null,
         target2: null,
         riskReward: "INVALID RISK",
+        riskRewardRatio: null,
       };
     }
 
@@ -154,13 +161,17 @@ export function buildRiskPlan(
     const rewardRiskRatio =
       reward / risk;
 
+    const roundedRewardRiskRatio =
+      Number(rewardRiskRatio.toFixed(2));
+
     if (rewardRiskRatio < 1.5) {
       return {
         stopLoss: null,
         target1: null,
         target2: null,
         riskReward:
-          `BELOW 1:1.5 (${rewardRiskRatio.toFixed(2)})`,
+          `BELOW 1:1.5 (${roundedRewardRiskRatio.toFixed(2)})`,
+        riskRewardRatio: null,
       };
     }
 
@@ -169,7 +180,9 @@ export function buildRiskPlan(
       target1,
       target2,
       riskReward:
-        `1 : ${rewardRiskRatio.toFixed(2)}`,
+        `1 : ${roundedRewardRiskRatio.toFixed(2)}`,
+      riskRewardRatio:
+        roundedRewardRiskRatio,
     };
   }
 
@@ -212,6 +225,7 @@ export function buildRiskPlan(
         target1: null,
         target2: null,
         riskReward: "INVALID RISK",
+        riskRewardRatio: null,
       };
     }
 
@@ -270,23 +284,24 @@ export function buildRiskPlan(
     // ---------------------------------------------------
 
     const reward =
-  entry - target1;
+      entry - target1;
 
-const rewardRiskRatio =
-  reward / risk;
+    const rewardRiskRatio =
+      reward / risk;
 
-const roundedRewardRiskRatio =
-  Number(rewardRiskRatio.toFixed(2));
+    const roundedRewardRiskRatio =
+      Number(rewardRiskRatio.toFixed(2));
 
-if (roundedRewardRiskRatio < 1.5) {
-  return {
-    stopLoss: null,
-    target1: null,
-    target2: null,
-    riskReward:
-      `BELOW 1:1.5 (${roundedRewardRiskRatio.toFixed(2)})`,
-  };
-}
+    if (roundedRewardRiskRatio < 1.5) {
+      return {
+        stopLoss: null,
+        target1: null,
+        target2: null,
+        riskReward:
+          `BELOW 1:1.5 (${roundedRewardRiskRatio.toFixed(2)})`,
+        riskRewardRatio: null,
+      };
+    }
 
     return {
       stopLoss,
@@ -294,6 +309,8 @@ if (roundedRewardRiskRatio < 1.5) {
       target2,
       riskReward:
         `1 : ${roundedRewardRiskRatio.toFixed(2)}`,
+      riskRewardRatio:
+        roundedRewardRiskRatio,
     };
   }
 
@@ -306,5 +323,6 @@ if (roundedRewardRiskRatio < 1.5) {
     target1: null,
     target2: null,
     riskReward: "-",
+    riskRewardRatio: null,
   };
 }
