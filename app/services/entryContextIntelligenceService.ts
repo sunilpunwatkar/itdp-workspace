@@ -119,7 +119,7 @@ export function calculateEntryContextIntelligence(
       location === "NEAR_RESISTANCE"
     ) {
       return {
-        entryContext: "CAUTION",
+        entryContext: "UNFAVORABLE",
         reason:
           "BUY decision is present, but price is close to resistance.",
       };
@@ -194,7 +194,7 @@ export function calculateEntryContextIntelligence(
       location === "NEAR_SUPPORT"
     ) {
       return {
-        entryContext: "CAUTION",
+        entryContext: "UNFAVORABLE",
         reason:
           "SELL decision is present, but price is close to support.",
       };
@@ -221,7 +221,6 @@ export function calculateEntryContextIntelligence(
       location === "NEAR_RESISTANCE"
     ) {
       if (
-        locationQuality === "FAVORABLE" &&
         decisionQuality !== "LOW" &&
         reliability !== "REDUCED_RELIABILITY"
       ) {

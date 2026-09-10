@@ -228,13 +228,6 @@ function isDirectionLocationConflict(
     return true;
   }
 
-  if (
-    locationQuality === "UNFAVORABLE" &&
-    (bullishDirection || bearishDirection)
-  ) {
-    return true;
-  }
-
   return false;
 }
 
