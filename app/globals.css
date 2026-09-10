@@ -364,7 +364,7 @@
     margin: 0;
     padding: 0;
 
-    overflow-x: hidden;
+overflow-x: hidden;
   }
 
   /* ===================================================
@@ -1093,4 +1093,122 @@
 
   white-space: nowrap !important;
   flex-shrink: 0 !important;
+}
+.itdp-founder {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+
+  background: #1e293b !important;
+  padding: 8px 14px !important;
+
+  border: 1px solid #334155 !important;
+  border-radius: 10px !important;
+
+  color: #ffffff !important;
+
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+.itdp-founder-icon {
+  width: 26px !important;
+  height: 26px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #334155 !important;
+  border: 1px solid #475569 !important;
+  border-radius: 50% !important;
+
+  font-size: 15px !important;
+  line-height: 1 !important;
+}
+
+.itdp-founder-text {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+.itdp-language-switcher {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+
+  padding: 3px !important;
+
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 10px !important;
+
+  box-sizing: border-box !important;
+}
+
+.itdp-language-button {
+  border: none !important;
+  background: transparent !important;
+
+  color: #94a3b8 !important;
+
+  padding: 7px 12px !important;
+  border-radius: 7px !important;
+
+  font-size: 13px !important;
+  font-weight: 600 !important;
+
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.itdp-language-button:hover {
+  color: #ffffff !important;
+}
+
+.itdp-language-button.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+.itdp-login-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+
+  padding: 8px 14px !important;
+
+  background: #1e293b !important;
+  color: #ffffff !important;
+
+  border: 1px solid #334155 !important;
+  border-radius: 10px !important;
+
+  font-size: 14px !important;
+  font-weight: 600 !important;
+
+  cursor: pointer !important;
+  white-space: nowrap !important;
+
+  box-sizing: border-box !important;
+  transition: all 0.2s ease !important;
+}
+
+.itdp-login-button:hover {
+  background: #334155 !important;
+  border-color: #475569 !important;
+}
+
+.itdp-login-button:active {
+  transform: translateY(1px);
+}
+.itdp-header-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+
+  height: 100% !important;
+  box-sizing: border-box !important;
 }

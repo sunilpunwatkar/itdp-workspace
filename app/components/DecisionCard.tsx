@@ -165,7 +165,10 @@ export default function DecisionCard({
           HEADER
       ======================================== */}
 
-      <div className="itdp-decision-header">
+      <div
+  className="itdp-decision-header"
+  style={{ transform: "translateY(8px)" }}
+>
         <div>
           <h2 className="itdp-decision-title">
             ◈ AI Decision Engine

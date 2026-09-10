@@ -37,6 +37,7 @@ export default function SearchBar({
         gap: "15px",
         alignItems: "center",
         marginBottom: "25px",
+        background: "#0f172a",
         width: "100%",
         boxSizing: "border-box",
       }}

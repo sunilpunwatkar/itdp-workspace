@@ -456,7 +456,8 @@ console.time("CHART JSON");
 
         overflow: "hidden",
 
-        borderRadius: "12px",
+        borderRadius: "0px",
+        background: "#0f172a",
       }}
     >
       <div
@@ -468,7 +469,7 @@ console.time("CHART JSON");
 
           minWidth: 0,
 
-          height: "450px",
+          height: "400px",
 
           boxSizing: "border-box",
 

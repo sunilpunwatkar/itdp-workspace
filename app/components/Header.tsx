@@ -105,8 +105,9 @@ export default function Header({
         {/* FOUNDER */}
 
         <div className="itdp-founder">
-          {String.fromCharCode(0x1f464)} Founder Sunil
-        </div>
+  <span className="itdp-founder-icon">👤</span>
+  <span className="itdp-founder-text">Founder Sunil</span>
+</div>
 
       </div>
 
