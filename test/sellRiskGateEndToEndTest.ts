@@ -78,7 +78,6 @@ for (const testCase of testCases) {
 
   const finalDecision = calculateFinalDecision({
     direction: direction.direction,
-    directionEvidence: direction.evidence,
     momentumDirection: momentum.momentumDirection,
     momentumStrength: momentum.momentumStrength,
     momentumAgreement: momentum.agreement,
