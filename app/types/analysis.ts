@@ -50,6 +50,12 @@ export interface AnalysisResult {
 
   entryContext: "FAVORABLE" | "CAUTION" | "UNFAVORABLE";
 
+  decisionStrength: string;
+
+  decisionQuality: string;
+
+  decisionReliability: string;
+
   entry: number;
 
   target: number;
