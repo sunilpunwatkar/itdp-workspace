@@ -32,8 +32,18 @@ export async function getStockAnalysis(
   symbol: string,
   marketProvider?: MarketProvider
 ): Promise<AnalysisResult> {
+  const timerScope =
+  `${symbol}-${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2, 8)}`;
 
-  console.time("⏱ TOTAL ANALYSIS");
+const startTimer = (label: string) =>
+  console.time(`${label} [${timerScope}]`);
+
+const endTimer = (label: string) =>
+  console.timeEnd(`${label} [${timerScope}]`);
+
+  startTimer("⏱ TOTAL ANALYSIS");
 
   const resolvedSymbol =
     resolveUniversalSymbol(symbol);
@@ -46,7 +56,7 @@ export async function getStockAnalysis(
   // Market Data
   // =====================================
 
-  console.time("⏱ MarketData");
+  startTimer("⏱ MarketData");
 
   const market =
   await getMarketData(
@@ -54,7 +64,7 @@ export async function getStockAnalysis(
     marketProvider
   );
 
-  console.timeEnd("⏱ MarketData");
+  endTimer("⏱ MarketData");
 
   const quote = market.quote;
   const prices = market.prices;
@@ -83,7 +93,7 @@ export async function getStockAnalysis(
   // Price Structure
   // =====================================
 
-  console.time("⏱ PriceStructure");
+  startTimer("⏱ PriceStructure");
 
   const priceStructure =
     calculatePriceStructure(
@@ -92,7 +102,7 @@ export async function getStockAnalysis(
       supportResistance.resistance1
     );
 
-  console.timeEnd("⏱ PriceStructure");
+  endTimer("⏱ PriceStructure");
 
   console.log(
     "Price Structure:",
@@ -103,12 +113,12 @@ export async function getStockAnalysis(
   // EMA
   // =====================================
 
-  console.time("⏱ EMA");
+  startTimer("⏱ EMA");
 
   const ema =
     calculateEMAValues(prices);
 
-  console.timeEnd("⏱ EMA");
+  endTimer("⏱ EMA");
 
   console.log("EMA Values:", ema);
 
@@ -116,12 +126,12 @@ export async function getStockAnalysis(
   // RSI
   // =====================================
 
-  console.time("⏱ RSI");
+  startTimer("⏱ RSI");
 
   const rsi =
     calculateRSIValues(prices);
 
-  console.timeEnd("⏱ RSI");
+  endTimer("⏱ RSI");
 
   console.log("RSI:", rsi);
 
@@ -129,12 +139,12 @@ export async function getStockAnalysis(
   // ATR
   // =====================================
 
-  console.time("⏱ ATR");
+  startTimer("⏱ ATR");
 
   const atr =
     calculateATRValues(prices);
 
-  console.timeEnd("⏱ ATR");
+  endTimer("⏱ ATR");
 
   console.log("ATR:", atr);
   
@@ -143,7 +153,7 @@ export async function getStockAnalysis(
   // Market Signal
   // =====================================
 
-  console.time("⏱ MarketSignal");
+  startTimer("⏱ MarketSignal");
 
   console.log(
     "Prices Array Length:",
@@ -158,7 +168,7 @@ export async function getStockAnalysis(
     prices
   );
 
-  console.timeEnd("⏱ MarketSignal");
+   endTimer("⏱ MarketSignal");
 
   console.log(
     "Market Signal:",
@@ -168,7 +178,7 @@ export async function getStockAnalysis(
   // FINAL DECISION INTELLIGENCE PIPELINE
   // =====================================
 
-  console.time("⏱ Final Decision Intelligence");
+  startTimer("⏱ Final Decision Intelligence");
 
   // -------------------------------------
   // Direction Intelligence
@@ -287,17 +297,17 @@ export async function getStockAnalysis(
     });
 
   console.log(
-    "FINAL DECISION INTELLIGENCE:",
-    finalDecision
-  );
+  "FINAL DECISION INTELLIGENCE:",
+  finalDecision
+);
 
-  console.timeEnd("⏱ Final Decision Intelligence");
+  endTimer("⏱ Final Decision Intelligence");
 
   // =====================================
   // Decision Engine
   // =====================================
 
-  console.time("⏱ DecisionEngine");
+  startTimer("⏱ DecisionEngine");
 
   const result =
 analyzeStock(
@@ -307,17 +317,17 @@ analyzeStock(
   priceStructure
 );
 
-  console.timeEnd("⏱ DecisionEngine");
+  endTimer("⏱ DecisionEngine");
 
   console.log(
-    "Decision Engine Result:",
-    result
-  );
+  "Decision Engine Result:",
+  result
+);
     // =====================================
   // ENTRY CONTEXT INTELLIGENCE
   // =====================================
 
-  console.time("⏱ EntryContext Intelligence");
+  startTimer("⏱ EntryContext Intelligence");
 
   const entryContextResult =
     calculateEntryContextIntelligence({
@@ -333,18 +343,18 @@ analyzeStock(
   const entryContext =
     entryContextResult.entryContext;
 
-  console.timeEnd("⏱ EntryContext Intelligence");
+  endTimer("⏱ EntryContext Intelligence");
 
   console.log(
-    "ENTRY CONTEXT INTELLIGENCE:",
-    entryContextResult
-  );
+  "ENTRY CONTEXT INTELLIGENCE:",
+  entryContextResult
+);
 
   // =====================================
   // Risk Plan
   // =====================================
 
-  console.time("⏱ RiskPlan");
+  startTimer("⏱ RiskPlan");
 
   const riskPlan =
   buildRiskPlan(
@@ -357,18 +367,18 @@ analyzeStock(
     supportResistance.resistance2
   );
 
-  console.timeEnd("⏱ RiskPlan");
+  endTimer("⏱ RiskPlan");
 
   console.log(
-    "Risk Plan:",
-    riskPlan
-  );
+  "Risk Plan:",
+  riskPlan
+);
 
   // =====================================
   // Position Size
   // =====================================
 
-  console.time("⏱ PositionSize");
+  startTimer("⏱ PositionSize");
 
   const position =
   riskPlan.stopLoss !== null
@@ -384,13 +394,13 @@ analyzeStock(
         maxRisk: 1500,
         quantity: 0,
       };
-  console.timeEnd("⏱ PositionSize");
+  endTimer("⏱ PositionSize");
 
   console.log(
-    "Position Size:",
-    position
-  );
-    console.time("⏱ RiskGate");
+  "Position Size:",
+  position
+);
+    startTimer("⏱ RiskGate");
 
   const riskGate =
     calculateRiskGateIntelligence({
@@ -407,7 +417,7 @@ analyzeStock(
       quantity: position.quantity,
     });
 
-  console.timeEnd("⏱ RiskGate");
+  endTimer("⏱ RiskGate");
 
   console.log(
     "Risk Gate Intelligence:",
@@ -418,7 +428,7 @@ analyzeStock(
   // Trade Plan
   // =====================================
 
-  console.time("⏱ TradePlan");
+  startTimer("⏱ TradePlan");
 
     const tradePlan =
     buildTradePlan(
@@ -427,12 +437,12 @@ analyzeStock(
     entryContext
   );
 
-  console.timeEnd("⏱ TradePlan");
+  endTimer("⏱ TradePlan");
 
   console.log(
-    "Trade Plan:",
-    tradePlan
-  );
+  "Trade Plan:",
+  tradePlan
+);
 
   // =====================================
   // Final Result
@@ -535,7 +545,7 @@ riskGate:
       finalDecision.invalidIf.join(" | "),
   };
 
-  console.timeEnd("⏱ TOTAL ANALYSIS");
+  endTimer("⏱ TOTAL ANALYSIS");
 
   return finalResult;
 }

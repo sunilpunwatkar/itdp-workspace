@@ -31,16 +31,19 @@ async function run() {
     );
 
   const result =
-    await scanOpportunities(
-      sources,
-      {
-        capital: 75000,
-        horizon: "SHORT",
-        riskProfile: "BALANCED",
-        universe: "NIFTY_500",
-        maxResults: 5,
-      }
-    );
+  await scanOpportunities(
+    sources,
+    {
+      capital: 75000,
+      horizon: "SHORT",
+      riskProfile: "BALANCED",
+      universe: "NIFTY_500",
+      maxResults: 5,
+    },
+    {
+      concurrency: 3,
+    }
+  );
 
   console.log("");
   console.log(
