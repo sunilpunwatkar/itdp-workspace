@@ -8,6 +8,7 @@ import {
 
 import {
   buildOpportunityDiscoveryResult,
+  OpportunityCandidate,
   OpportunityDiscoveryInput,
   OpportunityDiscoveryResult,
 } from "./opportunityDiscoveryService";
@@ -39,44 +40,104 @@ export interface OpportunityScannerResult {
   discovery: OpportunityDiscoveryResult;
 }
 
+export interface OpportunityScannerOptions {
+  concurrency?: number;
+}
+
 export async function scanOpportunities(
   sources: OpportunityScannerSource[],
-  input: OpportunityDiscoveryInput
+  input: OpportunityDiscoveryInput,
+  options: OpportunityScannerOptions = {}
 ): Promise<OpportunityScannerResult> {
-  const candidates = [];
+  const candidates: OpportunityCandidate[] = [];
 
   const failures:
     OpportunityScannerFailure[] = [];
 
   let analyzedCount = 0;
 
-  for (const source of sources) {
-    try {
-      const analysis =
-        await source.analyze();
+  const requestedConcurrency =
+    options.concurrency ?? 1;
 
-      analyzedCount += 1;
+  if (
+    !Number.isInteger(requestedConcurrency) ||
+    requestedConcurrency <= 0
+  ) {
+    throw new Error(
+      "Scanner concurrency must be a positive integer."
+    );
+  }
 
-      const candidate =
-        buildOpportunityCandidateFromAnalysis(
-          analysis
-        );
+  const concurrency =
+    Math.min(
+      requestedConcurrency,
+      Math.max(
+        sources.length,
+        1
+      )
+    );
 
-      if (candidate) {
-        candidates.push(candidate);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (true) {
+      const currentIndex =
+        nextIndex;
+
+      nextIndex += 1;
+
+      if (
+        currentIndex >=
+        sources.length
+      ) {
+        return;
       }
-    } catch (error) {
-      failures.push({
-        symbol:
-          source.symbol,
 
-        error:
-          error instanceof Error
-            ? error.message
-            : String(error),
-      });
+      const source =
+        sources[currentIndex];
+
+      try {
+        const analysis =
+          await source.analyze();
+
+        analyzedCount += 1;
+
+        const candidate =
+          buildOpportunityCandidateFromAnalysis(
+            analysis
+          );
+
+        if (candidate) {
+          candidates.push(
+            candidate
+          );
+        }
+      } catch (error) {
+        failures.push({
+          symbol:
+            source.symbol,
+
+          error:
+            error instanceof Error
+              ? error.message
+              : String(error),
+        });
+      }
     }
   }
+
+  const workers =
+    Array.from(
+      {
+        length:
+          concurrency,
+      },
+      () => worker()
+    );
+
+  await Promise.all(
+    workers
+  );
 
   const discovery =
     buildOpportunityDiscoveryResult(
