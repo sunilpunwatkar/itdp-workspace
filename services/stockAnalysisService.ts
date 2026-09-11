@@ -459,9 +459,12 @@ analyzeStock(
       finalDecision.conflict,
 
     decisionReliability:
-      finalDecision.reliability,
+  finalDecision.reliability,
 
-      riskGate:
+conflictSeverity:
+  conflict.conflictSeverity,
+
+riskGate:
   riskGate,
 
             riskReward:

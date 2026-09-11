@@ -56,6 +56,12 @@ export interface AnalysisResult {
 
   decisionReliability: string;
 
+  conflictSeverity:
+  | "NONE"
+  | "LOW"
+  | "MODERATE"
+  | "HIGH";
+
   entry: number;
 
   target: number;
