@@ -16,9 +16,9 @@ async function run() {
   );
 
   const universe =
-    getStockUniverse(
-      "ITDP_REAL_5"
-    );
+  getStockUniverse(
+    "ITDP_REAL_20"
+  );
 
   console.log(
     "Universe:",

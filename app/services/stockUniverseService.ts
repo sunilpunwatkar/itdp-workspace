@@ -1,5 +1,6 @@
 export type StockUniverse =
-  | "ITDP_REAL_5";
+  | "ITDP_REAL_5"
+  | "ITDP_REAL_20";
 
 export interface StockUniverseResult {
   universe: StockUniverse;
@@ -14,6 +15,32 @@ const ITDP_REAL_5_SYMBOLS = [
   "ICICIBANK",
 ] as const;
 
+const ITDP_REAL_20_SYMBOLS = [
+  "RELIANCE.NS",
+  "TCS.NS",
+  "INFY.NS",
+  "HDFCBANK.NS",
+  "ICICIBANK.NS",
+
+  "BHARTIARTL.NS",
+  "LT.NS",
+  "SBIN.NS",
+  "AXISBANK.NS",
+  "KOTAKBANK.NS",
+
+  "ITC.NS",
+  "HCLTECH.NS",
+  "SUNPHARMA.NS",
+  "MARUTI.NS",
+  "NTPC.NS",
+
+  "POWERGRID.NS",
+  "TITAN.NS",
+  "ULTRACEMCO.NS",
+  "BAJFINANCE.NS",
+  "TECHM.NS",
+] as const;
+
 export function getStockUniverse(
   universe: StockUniverse
 ): StockUniverseResult {
@@ -21,6 +48,13 @@ export function getStockUniverse(
     return {
       universe,
       symbols: [...ITDP_REAL_5_SYMBOLS],
+    };
+  }
+
+  if (universe === "ITDP_REAL_20") {
+    return {
+      universe,
+      symbols: [...ITDP_REAL_20_SYMBOLS],
     };
   }
 
