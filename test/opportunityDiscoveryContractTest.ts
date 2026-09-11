@@ -296,6 +296,63 @@ assertEqual(
   ),
   true
 );
+// ==================================================
+// CASE 10
+// PASS MUST RANK ABOVE CAUTION
+// EVEN WHEN CAUTION HAS A SLIGHTLY HIGHER SCORE
+// ==================================================
+
+const safetyPriorityCandidates: OpportunityCandidate[] = [
+  {
+    symbol: "CAUTION.HIGHER",
+    decision: "SELL",
+    entry: 100,
+    stopLoss: 105,
+    target1: 92.5,
+    target2: 90,
+    riskRewardRatio: 1.5,
+    quantity: 100,
+    maxRisk: 500,
+    riskGateStatus: "CAUTION",
+    opportunityScore: 83,
+    classification: "STRONG",
+  },
+  {
+    symbol: "PASS.SAFER",
+    decision: "SELL",
+    entry: 200,
+    stopLoss: 210,
+    target1: 185,
+    target2: 180,
+    riskRewardRatio: 1.5,
+    quantity: 50,
+    maxRisk: 500,
+    riskGateStatus: "PASS",
+    opportunityScore: 82,
+    classification: "STRONG",
+  },
+];
+
+const safetyPriorityResult =
+  buildOpportunityDiscoveryResult(
+    {
+      ...shortInput,
+      maxResults: 5,
+    },
+    safetyPriorityCandidates
+  );
+
+assertEqual(
+  "PASS Ranked Above CAUTION",
+  safetyPriorityResult.opportunities[0]?.symbol,
+  "PASS.SAFER"
+);
+
+assertEqual(
+  "CAUTION Ranked After PASS",
+  safetyPriorityResult.opportunities[1]?.symbol,
+  "CAUTION.HIGHER"
+);
 
 console.log("");
 console.log(

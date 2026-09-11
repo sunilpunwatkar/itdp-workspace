@@ -103,11 +103,26 @@ export function buildOpportunityDiscoveryResult(
         candidate.riskGateStatus !== "BLOCK" &&
         candidate.classification !== "REJECT"
     )
-    .sort(
-      (a, b) =>
-        b.opportunityScore -
-        a.opportunityScore
-    );
+    .sort((a, b) => {
+  const riskGatePriority = {
+    PASS: 2,
+    CAUTION: 1,
+    BLOCK: 0,
+  } as const;
+
+  const safetyDifference =
+    riskGatePriority[b.riskGateStatus] -
+    riskGatePriority[a.riskGateStatus];
+
+  if (safetyDifference !== 0) {
+    return safetyDifference;
+  }
+
+  return (
+    b.opportunityScore -
+    a.opportunityScore
+  );
+});
 
   const opportunities = eligible.slice(
     0,
