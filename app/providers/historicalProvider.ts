@@ -42,11 +42,17 @@ export class HistoricalProvider {
           }
         );
 
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch historical data for ${symbol}`
-        );
-      }
+      if (response.status === 429) {
+  throw new Error(
+    `Yahoo rate limit (HTTP 429) for ${symbol}.`
+  );
+}
+
+if (!response.ok) {
+  throw new Error(
+    `Yahoo historical HTTP ${response.status} for ${symbol}.`
+  );
+}
 
       const data =
         await response.json();
@@ -124,11 +130,17 @@ export class HistoricalProvider {
           }
         );
 
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch OHLC data for ${symbol}`
-        );
-      }
+      if (response.status === 429) {
+  throw new Error(
+    `Yahoo rate limit (HTTP 429) for ${symbol}.`
+  );
+}
+
+if (!response.ok) {
+  throw new Error(
+    `Yahoo historical HTTP ${response.status} for ${symbol}.`
+  );
+}
 
       const data =
         await response.json();
