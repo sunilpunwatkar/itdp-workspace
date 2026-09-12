@@ -1,3 +1,7 @@
+import {
+  executeProviderOperationWithRetry,
+} from "../services/providerRetryExecutor";
+
 export interface HistoricalOHLC {
   timestamps: number[];
   open: number[];
@@ -9,50 +13,107 @@ export interface HistoricalOHLC {
 
 const YAHOO_TIMEOUT_MS = 12_000;
 
+const MAX_RETRY_ATTEMPTS = 3;
+
+type SleepFunction = (
+  delayMs: number
+) => Promise<void>;
+
+const defaultSleep: SleepFunction =
+  async (delayMs) => {
+    await new Promise<void>(
+      (resolve) => {
+        setTimeout(
+          resolve,
+          delayMs
+        );
+      }
+    );
+  };
+
 export class HistoricalProvider {
+  private readonly sleep:
+    SleepFunction;
+
+  constructor(
+    sleep: SleepFunction =
+      defaultSleep
+  ) {
+    this.sleep =
+      sleep;
+  }
 
   // ==========================================
-  // Existing Method (EMA / RSI / MACD साठी)
+  // HISTORICAL PRICES
+  // EMA / RSI / MACD
   // ==========================================
+
   async getHistoricalPrices(
     symbol: string
   ): Promise<number[]> {
+    return executeProviderOperationWithRetry(
+      () =>
+        this.fetchHistoricalPricesOnce(
+          symbol
+        ),
+      {
+        maxAttempts:
+          MAX_RETRY_ATTEMPTS,
 
+        sleep:
+          this.sleep,
+      }
+    );
+  }
+
+  // ==========================================
+  // SINGLE HISTORICAL PRICES ATTEMPT
+  // ==========================================
+
+  private async fetchHistoricalPricesOnce(
+    symbol: string
+  ): Promise<number[]> {
     const url =
       `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=2y&interval=1d`;
 
-    console.log("Yahoo URL:", url);
+    console.log(
+      "Yahoo URL:",
+      url
+    );
 
     const controller =
       new AbortController();
 
     const timeout =
       setTimeout(
-        () => controller.abort(),
+        () =>
+          controller.abort(),
         YAHOO_TIMEOUT_MS
       );
 
     try {
-
       const response =
         await fetch(
           url,
           {
-            signal: controller.signal,
+            signal:
+              controller.signal,
           }
         );
 
-      if (response.status === 429) {
-  throw new Error(
-    `Yahoo rate limit (HTTP 429) for ${symbol}.`
-  );
-}
+      if (
+        response.status === 429
+      ) {
+        throw new Error(
+          `Yahoo rate limit (HTTP 429) for ${symbol}.`
+        );
+      }
 
-if (!response.ok) {
-  throw new Error(
-    `Yahoo historical HTTP ${response.status} for ${symbol}.`
-  );
-}
+      if (!response.ok) {
+        throw new Error(
+          `Yahoo historical HTTP ${response.status} for ${symbol}.`
+        );
+      }
 
       const data =
         await response.json();
@@ -65,7 +126,10 @@ if (!response.ok) {
 
       const validPrices =
         closes?.filter(
-          (price: number | null): price is number =>
+          (
+            price:
+              number | null
+          ): price is number =>
             price !== null
         ) ?? [];
 
@@ -75,12 +139,11 @@ if (!response.ok) {
       );
 
       return validPrices;
-
     } catch (error) {
-
       if (
         error instanceof Error &&
-        error.name === "AbortError"
+        error.name ===
+          "AbortError"
       ) {
         throw new Error(
           `Yahoo historical request timed out after ${YAHOO_TIMEOUT_MS / 1000}s for ${symbol}`
@@ -88,21 +151,43 @@ if (!response.ok) {
       }
 
       throw error;
-
     } finally {
-
-      clearTimeout(timeout);
-
+      clearTimeout(
+        timeout
+      );
     }
   }
 
   // ==========================================
-  // Candlestick Chart साठी
+  // HISTORICAL OHLC
+  // CANDLESTICK / ANALYSIS
   // ==========================================
+
   async getHistoricalOHLC(
     symbol: string
   ): Promise<HistoricalOHLC> {
+    return executeProviderOperationWithRetry(
+      () =>
+        this.fetchHistoricalOHLCOnce(
+          symbol
+        ),
+      {
+        maxAttempts:
+          MAX_RETRY_ATTEMPTS,
 
+        sleep:
+          this.sleep,
+      }
+    );
+  }
+
+  // ==========================================
+  // SINGLE OHLC ATTEMPT
+  // ==========================================
+
+  private async fetchHistoricalOHLCOnce(
+    symbol: string
+  ): Promise<HistoricalOHLC> {
     const url =
       `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=2y&interval=1d`;
 
@@ -116,31 +201,34 @@ if (!response.ok) {
 
     const timeout =
       setTimeout(
-        () => controller.abort(),
+        () =>
+          controller.abort(),
         YAHOO_TIMEOUT_MS
       );
 
     try {
-
       const response =
         await fetch(
           url,
           {
-            signal: controller.signal,
+            signal:
+              controller.signal,
           }
         );
 
-      if (response.status === 429) {
-  throw new Error(
-    `Yahoo rate limit (HTTP 429) for ${symbol}.`
-  );
-}
+      if (
+        response.status === 429
+      ) {
+        throw new Error(
+          `Yahoo rate limit (HTTP 429) for ${symbol}.`
+        );
+      }
 
-if (!response.ok) {
-  throw new Error(
-    `Yahoo historical HTTP ${response.status} for ${symbol}.`
-  );
-}
+      if (!response.ok) {
+        throw new Error(
+          `Yahoo historical HTTP ${response.status} for ${symbol}.`
+        );
+      }
 
       const data =
         await response.json();
@@ -159,26 +247,35 @@ if (!response.ok) {
           result.timestamp ?? [],
 
         open:
-          result.indicators?.quote?.[0]?.open ?? [],
+          result.indicators
+            ?.quote?.[0]
+            ?.open ?? [],
 
         high:
-          result.indicators?.quote?.[0]?.high ?? [],
+          result.indicators
+            ?.quote?.[0]
+            ?.high ?? [],
 
         low:
-          result.indicators?.quote?.[0]?.low ?? [],
+          result.indicators
+            ?.quote?.[0]
+            ?.low ?? [],
 
         close:
-          result.indicators?.quote?.[0]?.close ?? [],
+          result.indicators
+            ?.quote?.[0]
+            ?.close ?? [],
 
         volume:
-          result.indicators?.quote?.[0]?.volume ?? [],
+          result.indicators
+            ?.quote?.[0]
+            ?.volume ?? [],
       };
-
     } catch (error) {
-
       if (
         error instanceof Error &&
-        error.name === "AbortError"
+        error.name ===
+          "AbortError"
       ) {
         throw new Error(
           `Yahoo OHLC request timed out after ${YAHOO_TIMEOUT_MS / 1000}s for ${symbol}`
@@ -186,12 +283,10 @@ if (!response.ok) {
       }
 
       throw error;
-
     } finally {
-
-      clearTimeout(timeout);
-
+      clearTimeout(
+        timeout
+      );
     }
   }
-
 }
