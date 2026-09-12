@@ -6,15 +6,33 @@ import type {
   OpportunityScannerSource,
 } from "./opportunityScannerService";
 
+import {
+  validateStockUniverse,
+} from "./stockUniverseValidationService";
+
 export function buildOpportunityScannerSources(
   symbols: string[]
 ): OpportunityScannerSource[] {
-  return symbols.map(
+  const validation =
+    validateStockUniverse(
+      symbols
+    );
+
+  if (!validation.valid) {
+    throw new Error(
+      validation.error ??
+        "Stock universe validation failed."
+    );
+  }
+
+  return validation.symbols.map(
     (symbol) => ({
       symbol,
 
       analyze: async () =>
-        getStockAnalysis(symbol),
+        getStockAnalysis(
+          symbol
+        ),
     })
   );
 }
