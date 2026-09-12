@@ -3,7 +3,8 @@ import {
   HistoricalOHLC,
 } from "../providers/historicalProvider";
 
-const historical = new HistoricalProvider();
+const historical =
+  new HistoricalProvider();
 
 type HistoricalCacheEntry = {
   data: HistoricalOHLC;
@@ -28,7 +29,6 @@ export function seedHistoricalCacheForTest(
   data: HistoricalOHLC,
   timestamp: number = Date.now()
 ): void {
-
   historicalCache.set(
     symbol,
     {
@@ -41,7 +41,6 @@ export function seedHistoricalCacheForTest(
 export function clearHistoricalCacheForTest(
   symbol?: string
 ): void {
-
   if (symbol) {
     historicalCache.delete(symbol);
     return;
@@ -57,7 +56,6 @@ export function clearHistoricalCacheForTest(
 export async function getCachedHistoricalOHLC(
   symbol: string
 ): Promise<HistoricalOHLC> {
-
   // =====================================
   // 1. NORMAL CACHE
   // =====================================
@@ -66,13 +64,11 @@ export async function getCachedHistoricalOHLC(
     historicalCache.get(symbol);
 
   if (cached) {
-
     const age =
       Date.now() -
       cached.timestamp;
 
     if (age < CACHE_TTL) {
-
       console.log(
         `📦 Historical Cache HIT: ${symbol}`
       );
@@ -93,7 +89,6 @@ export async function getCachedHistoricalOHLC(
     historicalFetchCache.get(symbol);
 
   if (existingFetch) {
-
     console.log(
       `⏳ Historical Fetch IN-FLIGHT: ${symbol}`
     );
@@ -107,15 +102,18 @@ export async function getCachedHistoricalOHLC(
 
   const fetchPromise =
     (async (): Promise<HistoricalOHLC> => {
+      const fetchTimerLabel =
+        `Historical Fetch ${symbol}-${Date.now()}-${Math.random()
+          .toString(36)
+          .slice(2, 8)}`;
 
       try {
-
         console.log(
           `🔄 Historical Yahoo FETCH: ${symbol}`
         );
 
         console.time(
-          `Historical Fetch ${symbol}`
+          fetchTimerLabel
         );
 
         const data =
@@ -124,7 +122,7 @@ export async function getCachedHistoricalOHLC(
           );
 
         console.timeEnd(
-          `Historical Fetch ${symbol}`
+          fetchTimerLabel
         );
 
         historicalCache.set(
@@ -140,9 +138,7 @@ export async function getCachedHistoricalOHLC(
         );
 
         return data;
-
       } catch (error) {
-
         console.error(
           `❌ Historical Yahoo FETCH FAILED: ${symbol}`,
           error
@@ -153,7 +149,6 @@ export async function getCachedHistoricalOHLC(
         // =================================
 
         if (cached) {
-
           console.log(
             `♻️ Historical STALE CACHE FALLBACK: ${symbol}`
           );
@@ -163,7 +158,6 @@ export async function getCachedHistoricalOHLC(
 
         throw error;
       }
-
     })();
 
   historicalFetchCache.set(
@@ -172,11 +166,8 @@ export async function getCachedHistoricalOHLC(
   );
 
   try {
-
     return await fetchPromise;
-
   } finally {
-
     historicalFetchCache.delete(
       symbol
     );
