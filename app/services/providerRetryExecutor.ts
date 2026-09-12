@@ -2,12 +2,27 @@ import {
   classifyProviderRetryDecision,
 } from "./providerRetryPolicy";
 
+import {
+  calculateProviderRetryBackoffMs,
+  RetryBackoffKind,
+} from "./providerRetryBackoff";
+
 export interface RetryExecutorOptions {
   maxAttempts: number;
 
   sleep?: (
     delayMs: number
   ) => Promise<void>;
+}
+
+function getRetryBackoffKind(
+  message: string
+): RetryBackoffKind {
+  return message.includes(
+    "Yahoo rate limit (HTTP 429)"
+  )
+    ? "RATE_LIMIT"
+    : "TRANSIENT";
 }
 
 export async function executeProviderOperationWithRetry<T>(
@@ -56,7 +71,20 @@ export async function executeProviderOperationWithRetry<T>(
         throw error;
       }
 
-      await sleep(0);
+      const backoffKind =
+        getRetryBackoffKind(
+          message
+        );
+
+      const delayMs =
+        calculateProviderRetryBackoffMs(
+          backoffKind,
+          attempt
+        );
+
+      await sleep(
+        delayMs
+      );
     }
   }
 
