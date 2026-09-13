@@ -30,6 +30,11 @@ console.log(
   "=== OPPORTUNITY EXPERIENCE RESPONSE CONTRACT ==="
 );
 
+// ==========================================
+// CONTROLLED TECHNICAL RESULT
+// TRADE + WATCH + AVOID
+// ==========================================
+
 const technicalResult:
   OpportunityScannerResult = {
     scannedCount:
@@ -184,6 +189,7 @@ const technicalResult:
 // ==========================================
 // CASE 1
 // LIVE RESPONSE
+// TRADE PRESENT
 // ==========================================
 
 const liveScan:
@@ -256,6 +262,12 @@ assertEqual(
   "LIVE Failed Count",
   liveResponse.failedCount,
   0
+);
+
+assertEqual(
+  "Trade Available State",
+  liveResponse.state,
+  "OPPORTUNITIES_AVAILABLE"
 );
 
 assertEqual(
@@ -394,6 +406,12 @@ assertEqual(
 );
 
 assertEqual(
+  "CACHE State",
+  cacheResponse.state,
+  "OPPORTUNITIES_AVAILABLE"
+);
+
+assertEqual(
   "CACHE Experience Total",
   cacheResponse.experience.totalOpportunities,
   3
@@ -404,6 +422,273 @@ assertEqual(
   cacheResponse.experience.opportunities[0]
     .action,
   "TRADE"
+);
+
+// ==========================================
+// CASE 4
+// WATCHLIST ONLY
+// NO TRADE AVAILABLE
+// ==========================================
+
+const watchOnlyResult:
+  OpportunityScannerResult = {
+    scannedCount:
+      1,
+
+    analyzedCount:
+      1,
+
+    failedCount:
+      0,
+
+    candidateCount:
+      1,
+
+    failures:
+      [],
+
+    discovery: {
+      universe:
+        "NIFTY_500",
+
+      horizon:
+        "SHORT",
+
+      scannedCount:
+        1,
+
+      analyzedCount:
+        1,
+
+      eligibleCount:
+        1,
+
+      opportunities: [
+        {
+          symbol:
+            "WATCH.ONLY",
+
+          decision:
+            "BUY",
+
+          entry:
+            500,
+
+          stopLoss:
+            480,
+
+          target1:
+            540,
+
+          target2:
+            560,
+
+          riskRewardRatio:
+            2,
+
+          quantity:
+            5,
+
+          maxRisk:
+            100,
+
+          riskGateStatus:
+            "CAUTION",
+
+          opportunityScore:
+            80,
+
+          classification:
+            "STRONG",
+        },
+      ],
+    },
+  };
+
+const watchOnlyScan:
+  OrchestratedScanResult<
+    OpportunityScannerResult
+  > = {
+    source:
+      "LIVE",
+
+    metadata: {
+      scanId:
+        "WATCH-ONLY-1",
+
+      universe:
+        "WATCH-ONLY",
+
+      startedAt:
+        3000,
+
+      completedAt:
+        4000,
+
+      durationMs:
+        1000,
+
+      scannedCount:
+        1,
+
+      analyzedCount:
+        1,
+
+      failedCount:
+        0,
+    },
+
+    result:
+      watchOnlyResult,
+  };
+
+const watchOnlyResponse =
+  buildOpportunityExperienceResponse(
+    watchOnlyScan
+  );
+
+assertEqual(
+  "Watchlist Only State",
+  watchOnlyResponse.state,
+  "WATCHLIST_ONLY"
+);
+
+assertEqual(
+  "Watchlist Trade Count",
+  watchOnlyResponse.experience.tradeCount,
+  0
+);
+
+assertEqual(
+  "Watchlist Watch Count",
+  watchOnlyResponse.experience.watchCount,
+  1
+);
+
+assertEqual(
+  "Watchlist Action",
+  watchOnlyResponse.experience.opportunities[0]
+    .action,
+  "WATCH"
+);
+
+// ==========================================
+// CASE 5
+// NO OPPORTUNITY
+// ==========================================
+
+const noOpportunityResult:
+  OpportunityScannerResult = {
+    scannedCount:
+      5,
+
+    analyzedCount:
+      5,
+
+    failedCount:
+      0,
+
+    candidateCount:
+      0,
+
+    failures:
+      [],
+
+    discovery: {
+      universe:
+        "NIFTY_500",
+
+      horizon:
+        "SHORT",
+
+      scannedCount:
+        5,
+
+      analyzedCount:
+        5,
+
+      eligibleCount:
+        0,
+
+      opportunities:
+        [],
+    },
+  };
+
+const noOpportunityScan:
+  OrchestratedScanResult<
+    OpportunityScannerResult
+  > = {
+    source:
+      "LIVE",
+
+    metadata: {
+      scanId:
+        "NO-OPPORTUNITY-1",
+
+      universe:
+        "NO-OPPORTUNITY",
+
+      startedAt:
+        5000,
+
+      completedAt:
+        6000,
+
+      durationMs:
+        1000,
+
+      scannedCount:
+        5,
+
+      analyzedCount:
+        5,
+
+      failedCount:
+        0,
+    },
+
+    result:
+      noOpportunityResult,
+  };
+
+const noOpportunityResponse =
+  buildOpportunityExperienceResponse(
+    noOpportunityScan
+  );
+
+assertEqual(
+  "No Opportunity State",
+  noOpportunityResponse.state,
+  "NO_OPPORTUNITY"
+);
+
+assertEqual(
+  "No Opportunity Total",
+  noOpportunityResponse.experience
+    .totalOpportunities,
+  0
+);
+
+assertEqual(
+  "No Opportunity Trade Count",
+  noOpportunityResponse.experience
+    .tradeCount,
+  0
+);
+
+assertEqual(
+  "No Opportunity Watch Count",
+  noOpportunityResponse.experience
+    .watchCount,
+  0
+);
+
+assertEqual(
+  "No Opportunity Item Count",
+  noOpportunityResponse.experience
+    .opportunities.length,
+  0
 );
 
 console.log("");

@@ -10,6 +10,14 @@ import {
   buildOpportunityExperienceResult,
 } from "./opportunityExperienceService";
 
+import {
+  resolveOpportunityExperienceState,
+} from "./opportunityExperienceStateService";
+
+import type {
+  OpportunityExperienceState,
+} from "./opportunityExperienceStateService";
+
 export interface OpportunityExperienceResponse {
   source:
     | "LIVE"
@@ -26,6 +34,9 @@ export interface OpportunityExperienceResponse {
 
   failedCount:
     number;
+
+  state:
+    OpportunityExperienceState;
 
   experience:
     ReturnType<
@@ -44,6 +55,15 @@ export function buildOpportunityExperienceResponse(
       scan.result.discovery.opportunities
     );
 
+  const state =
+    resolveOpportunityExperienceState({
+      tradeCount:
+        experience.tradeCount,
+
+      watchCount:
+        experience.watchCount,
+    });
+
   return {
     source:
       scan.source,
@@ -59,6 +79,8 @@ export function buildOpportunityExperienceResponse(
 
     failedCount:
       scan.metadata.failedCount,
+
+    state,
 
     experience,
   };
