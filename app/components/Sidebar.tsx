@@ -28,6 +28,10 @@ export default function Sidebar({
       page: "stock",
     },
     {
+  name: "Opportunities",
+  page: "opportunities",
+},
+    {
       name: "📰 Market News",
       page: "marketnews",
     },

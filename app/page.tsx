@@ -9,6 +9,7 @@ import ChartSection from "./components/ChartSection";
 import MarketNews from "./components/MarketNews";
 import StockAnalysis from "./components/StockAnalysis";
 import SearchBar from "./components/SearchBar";
+import OpportunityExperiencePage from "./components/OpportunityExperiencePage";
 
 export default function Home() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -146,6 +147,13 @@ const handleMenuToggle = () => {
               )}
             </>
           )}
+          {/* ==========================
+    OPPORTUNITIES
+========================== */}
+
+{activePage === "opportunities" && (
+  <OpportunityExperiencePage />
+)}
 
           {/* ==========================
               MARKET NEWS
