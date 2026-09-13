@@ -22,6 +22,10 @@ import {
   OrchestratedScanResult,
 } from "./scanOrchestratorService";
 
+import {
+  buildOpportunityScanCacheKey,
+} from "./opportunityScanCacheKeyService";
+
 export interface OpportunityScanAccessInput {
   stockUniverse:
     StockUniverse;
@@ -64,15 +68,27 @@ export async function scanOpportunityUniverse(
     OpportunityScannerResult
   >
 > {
+  // ==========================================
+  // RESOLVE STOCK UNIVERSE
+  // ==========================================
+
   const universe =
     getStockUniverse(
       input.stockUniverse
     );
 
+  // ==========================================
+  // BUILD SCANNER SOURCES
+  // ==========================================
+
   const sources =
     buildOpportunityScannerSources(
       universe.symbols
     );
+
+  // ==========================================
+  // RUNTIME DEPENDENCIES
+  // ==========================================
 
   const now =
     dependencies.now ??
@@ -82,11 +98,28 @@ export async function scanOpportunityUniverse(
     dependencies.createScanId ??
     defaultCreateScanId;
 
+  // ==========================================
+  // BUILD FULL CACHE / ORCHESTRATION KEY
+  // ==========================================
+
+  const cacheKey =
+    buildOpportunityScanCacheKey({
+      stockUniverse:
+        input.stockUniverse,
+
+      discovery:
+        input.discovery,
+    });
+
+  // ==========================================
+  // ORCHESTRATED SCAN
+  // ==========================================
+
   return orchestrateScan<
     OpportunityScannerResult
   >({
     universe:
-      input.stockUniverse,
+      cacheKey,
 
     freshnessTtlMs:
       input.freshnessTtlMs,

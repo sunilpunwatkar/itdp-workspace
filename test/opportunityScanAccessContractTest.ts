@@ -35,6 +35,17 @@ async function run() {
   let scanSequence =
     0;
 
+  function createScanId() {
+    scanSequence += 1;
+
+    return `ACCESS-${scanSequence}`;
+  }
+
+  // ==========================================
+  // CASE 1
+  // FIRST REQUEST = LIVE
+  // ==========================================
+
   const first =
     await scanOpportunityUniverse(
       {
@@ -76,12 +87,7 @@ async function run() {
         now:
           () => currentTime,
 
-        createScanId:
-          () => {
-            scanSequence += 1;
-
-            return `ACCESS-${scanSequence}`;
-          },
+        createScanId,
       }
     );
 
@@ -122,9 +128,8 @@ async function run() {
   );
 
   // ==========================================
-  // SECOND REQUEST
-  // SAME UNIVERSE + SAME TTL
-  // MUST COME FROM CACHE
+  // CASE 2
+  // SAME INPUT = CACHE
   // ==========================================
 
   currentTime =
@@ -171,12 +176,7 @@ async function run() {
         now:
           () => currentTime,
 
-        createScanId:
-          () => {
-            scanSequence += 1;
-
-            return `ACCESS-${scanSequence}`;
-          },
+        createScanId,
       }
     );
 
@@ -211,6 +211,80 @@ async function run() {
   );
 
   // ==========================================
+  // CASE 3
+  // SAME STOCK UNIVERSE
+  // DIFFERENT CAPITAL
+  // MUST NOT REUSE CACHE
+  // ==========================================
+
+  currentTime =
+    11_500;
+
+  const differentCapital =
+    await scanOpportunityUniverse(
+      {
+        stockUniverse:
+          "ITDP_REAL_5",
+
+        discovery: {
+          capital:
+            500_000,
+
+          horizon:
+            "SHORT",
+
+          riskProfile:
+            "BALANCED",
+
+          universe:
+            "NIFTY_500",
+
+          maxResults:
+            5,
+        },
+
+        freshnessTtlMs:
+          60_000,
+
+        scannerOptions: {
+          concurrency:
+            1,
+
+          batchSize:
+            5,
+
+          batchDelayMs:
+            0,
+        },
+      },
+      {
+        now:
+          () => currentTime,
+
+        createScanId,
+      }
+    );
+
+  assertEqual(
+    "Different Capital Source",
+    differentCapital.source,
+    "LIVE"
+  );
+
+  assertEqual(
+    "Different Capital Scan ID",
+    differentCapital.metadata.scanId,
+    "ACCESS-2"
+  );
+
+  assertEqual(
+    "Different Capital Scanned Count",
+    differentCapital.metadata.scannedCount,
+    5
+  );
+
+  // ==========================================
+  // CASE 4
   // DIFFERENT STOCK UNIVERSE
   // MUST RUN INDEPENDENTLY
   // ==========================================
@@ -218,7 +292,7 @@ async function run() {
   currentTime =
     12_000;
 
-  const different =
+  const differentUniverse =
     await scanOpportunityUniverse(
       {
         stockUniverse:
@@ -259,30 +333,25 @@ async function run() {
         now:
           () => currentTime,
 
-        createScanId:
-          () => {
-            scanSequence += 1;
-
-            return `ACCESS-${scanSequence}`;
-          },
+        createScanId,
       }
     );
 
   assertEqual(
     "Different Universe Source",
-    different.source,
+    differentUniverse.source,
     "LIVE"
   );
 
   assertEqual(
     "Different Universe Scan ID",
-    different.metadata.scanId,
-    "ACCESS-2"
+    differentUniverse.metadata.scanId,
+    "ACCESS-3"
   );
 
   assertEqual(
     "Different Universe Scanned Count",
-    different.metadata.scannedCount,
+    differentUniverse.metadata.scannedCount,
     20
   );
 
