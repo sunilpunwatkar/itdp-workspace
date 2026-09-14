@@ -301,7 +301,7 @@ export default function OpportunityExperiencePage() {
                 "block",
 
               fontSize:
-                "12px",
+                "13px",
 
               marginBottom:
                 "6px",
@@ -355,7 +355,7 @@ export default function OpportunityExperiencePage() {
                 "block",
 
               fontSize:
-                "12px",
+                 "13px",
 
               marginBottom:
                 "6px",
@@ -413,7 +413,7 @@ export default function OpportunityExperiencePage() {
                 "block",
 
               fontSize:
-                "12px",
+                "13px",
 
               marginBottom:
                 "6px",
@@ -513,7 +513,184 @@ export default function OpportunityExperiencePage() {
           </button>
         </div>
       </div>
+      {
+        !result &&
+        !loading &&
+        !error && (
+          <div
+            style={{
+              marginTop: "28px",
+              padding: "28px",
+              border: "1px solid #334155",
+              borderRadius: "16px",
+              background: "#0f172a",
+              color: "#f8fafc",
+            }}
+          >
+            <div
+              style={{
+                maxWidth: "760px",
+                marginBottom: "24px",
+              }}
+            >
+              <div
+                style={{
+                 fontSize:
+                  "13px",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  color: "#60a5fa",
+                  marginBottom: "10px",
+                }}
+              >
+                ITDP MARKET OPPORTUNITY SCAN
+              </div>
 
+              <h3
+                style={{
+                  margin: "0 0 10px",
+                  fontSize: "22px",
+                  lineHeight: "1.3",
+                }}
+              >
+                Let the decision engine search
+                before you choose a stock.
+              </h3>
+
+              <p
+                style={{
+                  margin: 0,
+                  color: "#94a3b8",
+                  fontSize: "15px",
+                  lineHeight: "1.7",
+                }}
+              >
+                ITDP scans the selected market
+                universe and filters opportunities
+                using decision quality, risk
+                conditions and your selected
+                capital profile.
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(3, minmax(0, 1fr))",
+                gap: "14px",
+              }}
+            >
+              <div
+                style={{
+                  padding: "16px",
+                  borderRadius: "12px",
+                  background: "#111c2f",
+                  border: "1px solid #263449",
+                }}
+              >
+                <div
+                  style={{
+                    color: "#f8fafc",
+                    fontWeight: 700,
+                    marginBottom: "7px",
+                  }}
+                >
+                  Market Scan
+                </div>
+
+                <div
+                  style={{
+                    color: "#94a3b8",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Screens the ITDP market universe
+                  instead of relying on one manually
+                  selected stock.
+                </div>
+              </div>
+
+              <div
+                style={{
+                  padding: "16px",
+                  borderRadius: "12px",
+                  background: "#111c2f",
+                  border: "1px solid #263449",
+                }}
+              >
+                <div
+                  style={{
+                    color: "#f8fafc",
+                    fontWeight: 700,
+                    marginBottom: "7px",
+                  }}
+                >
+                  Decision Validation
+                </div>
+
+                <div
+                  style={{
+                    color: "#94a3b8",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Separates validated trade setups
+                  from stocks that should only be
+                  watched or avoided.
+                </div>
+              </div>
+
+              <div
+                style={{
+                  padding: "16px",
+                  borderRadius: "12px",
+                  background: "#111c2f",
+                  border: "1px solid #263449",
+                }}
+              >
+                <div
+                  style={{
+                    color: "#f8fafc",
+                    fontWeight: 700,
+                    marginBottom: "7px",
+                  }}
+                >
+                  Risk First
+                </div>
+
+                <div
+                  style={{
+                    color: "#94a3b8",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Trade results include Entry,
+                  Stop Loss, T1, T2, quantity and
+                  maximum planned risk.
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: "20px",
+                paddingTop: "16px",
+                borderTop: "1px solid #263449",
+                color: "#64748b",
+                fontSize: "13px",
+              }}
+            >
+              Set your capital, horizon and risk
+              profile above, then select
+              Find Opportunities.
+            </div>
+          </div>
+        )
+      }
       {
         error && (
           <div
@@ -547,7 +724,7 @@ export default function OpportunityExperiencePage() {
                   "18px",
 
                 fontSize:
-                  "13px",
+                  "14px",
 
                 color:
                   "#94a3b8",
@@ -757,7 +934,7 @@ export default function OpportunityExperiencePage() {
                                       "#f8fafc",
 
                                     fontSize:
-                                      "16px",
+                                      "17px",
 
                                     letterSpacing:
                                       "0.2px",
@@ -778,7 +955,7 @@ export default function OpportunityExperiencePage() {
                                       "999px",
 
                                     fontSize:
-                                      "11px",
+                                      "12px",
 
                                     fontWeight:
                                       700,
@@ -823,7 +1000,7 @@ export default function OpportunityExperiencePage() {
                                 <span
                                     style={{
                                 fontWeight: 700,
-                                    fontSize: "15px",
+                                    fontSize: "16px",
                                 color: isBuy
                                      ? "#22c55e"
                                     : "#ef4444",
@@ -845,7 +1022,7 @@ export default function OpportunityExperiencePage() {
                                     style={{
                                         color: "#cbd5e1",
                                      fontWeight: 600,
-                                 fontSize: "14px",
+                                 fontSize: "15px",
                                              }}
                                     >
                                     {opportunity.classification}
@@ -858,7 +1035,7 @@ export default function OpportunityExperiencePage() {
                                     "#cbd5e1",
 
                                   fontSize:
-                                    "13px",
+                                    "14px",
 
                                   lineHeight:
                                     "1.6",
@@ -894,7 +1071,7 @@ export default function OpportunityExperiencePage() {
                                     "1.9",
 
                                   fontSize:
-                                    "13px",
+                                    "14px",
 
                                   marginBottom:
                                     "12px",
@@ -985,7 +1162,7 @@ export default function OpportunityExperiencePage() {
                                     "#94a3b8",
 
                                   fontSize:
-                                    "12px",
+                                    "13px",
 
                                   lineHeight:
                                     "1.5",
