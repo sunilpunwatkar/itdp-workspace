@@ -1,8 +1,8 @@
 import { CandleData } from "../types/chart";
 
 import {
-  getCachedHistoricalOHLC,
-} from "./historicalDataCache";
+  getChartHistoricalRuntime,
+} from "./chartHistoricalRuntimeService";
 
 import { resolveUniversalSymbol } from "./universalSymbolEngine";
 
@@ -154,10 +154,17 @@ export async function getChartData(
         historicalLabel
       );
 
-      const ohlc =
-  await getCachedHistoricalOHLC(
+     const historical =
+  await getChartHistoricalRuntime(
     resolvedSymbol
   );
+
+const ohlc =
+  historical.data;
+
+console.log(
+  `Chart Historical Source: ${historical.source}`
+);
 
       console.timeEnd(
         historicalLabel
