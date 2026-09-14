@@ -12,33 +12,53 @@ type OpportunityExperienceState =
 
 type OpportunityExperienceItem = {
   symbol: string;
-  decision: "BUY" | "SELL";
+
+  decision:
+    | "BUY"
+    | "SELL";
+
   action:
     | "TRADE"
     | "WATCH"
     | "AVOID";
 
-  classification: string;
+  classification:
+    string;
 
-  score: number;
+  score:
+    number;
 
-  entry: number;
-  stopLoss: number;
-  target1: number;
-  target2: number;
+  entry:
+    number;
 
-  quantity: number;
-  maxRisk: number;
+  stopLoss:
+    number;
 
-  riskRewardRatio: number;
+  target1:
+    number;
+
+  target2:
+    number;
+
+  quantity:
+    number;
+
+  maxRisk:
+    number;
+
+  riskRewardRatio:
+    number;
 
   riskGateStatus:
     | "PASS"
     | "CAUTION"
     | "BLOCK";
 
-  headline: string;
-  riskMessage: string;
+  headline:
+    string;
+
+  riskMessage:
+    string;
 };
 
 type OpportunityExperienceApiResponse = {
@@ -46,27 +66,44 @@ type OpportunityExperienceApiResponse = {
     | "LIVE"
     | "CACHE";
 
-  scanId: string;
+  scanId:
+    string;
 
-  scannedCount: number;
-  analyzedCount: number;
-  failedCount: number;
+  scannedCount:
+    number;
+
+  analyzedCount:
+    number;
+
+  failedCount:
+    number;
 
   state:
     OpportunityExperienceState;
 
   experience: {
-    totalOpportunities: number;
-    tradeCount: number;
-    watchCount: number;
+    totalOpportunities:
+      number;
+
+    tradeCount:
+      number;
+
+    watchCount:
+      number;
+
     opportunities:
       OpportunityExperienceItem[];
   };
 };
 
 export default function OpportunityExperiencePage() {
-  const [capital, setCapital] =
-    useState(75000);
+  const [
+    capital,
+    setCapital,
+  ] =
+    useState(
+      75000
+    );
 
   const [
     riskProfile,
@@ -76,7 +113,9 @@ export default function OpportunityExperiencePage() {
       | "CONSERVATIVE"
       | "BALANCED"
       | "AGGRESSIVE"
-    >("BALANCED");
+    >(
+      "BALANCED"
+    );
 
   const [
     horizon,
@@ -85,7 +124,9 @@ export default function OpportunityExperiencePage() {
     useState<
       | "SHORT"
       | "MEDIUM"
-    >("SHORT");
+    >(
+      "SHORT"
+    );
 
   const [
     result,
@@ -93,13 +134,25 @@ export default function OpportunityExperiencePage() {
   ] =
     useState<
       OpportunityExperienceApiResponse | null
-    >(null);
+    >(
+      null
+    );
 
-  const [loading, setLoading] =
-    useState(false);
+  const [
+    loading,
+    setLoading,
+  ] =
+    useState(
+      false
+    );
 
-  const [error, setError] =
-    useState<string | null>(
+  const [
+    error,
+    setError,
+  ] =
+    useState<
+      string | null
+    >(
       null
     );
 
@@ -107,8 +160,13 @@ export default function OpportunityExperiencePage() {
     useCallback(
       async () => {
         try {
-          setLoading(true);
-          setError(null);
+          setLoading(
+            true
+          );
+
+          setError(
+            null
+          );
 
           const response =
             await fetch(
@@ -148,22 +206,30 @@ export default function OpportunityExperiencePage() {
           const data =
             await response.json();
 
-          if (!response.ok) {
+          if (
+            !response.ok
+          ) {
             throw new Error(
               data?.error ??
                 "OPPORTUNITY_REQUEST_FAILED"
             );
           }
 
-          setResult(data);
-        } catch (error) {
+          setResult(
+            data
+          );
+        } catch (
+          error
+        ) {
           setError(
             error instanceof Error
               ? error.message
               : "UNKNOWN_ERROR"
           );
         } finally {
-          setLoading(false);
+          setLoading(
+            false
+          );
         }
       },
       [
@@ -175,11 +241,10 @@ export default function OpportunityExperiencePage() {
 
   return (
     <div
-      style={{
-        padding:
-          "20px",
-      }}
-    >
+  style={{
+    padding: "28px 20px 40px",
+  }}
+>
       <div
         style={{
           marginBottom:
@@ -247,14 +312,19 @@ export default function OpportunityExperiencePage() {
 
           <input
             type="number"
-            value={capital}
-            min={1}
+            value={
+              capital
+            }
+            min={
+              1
+            }
             onChange={(
               event
             ) =>
               setCapital(
                 Number(
-                  event.target
+                  event
+                    .target
                     .value
                 )
               )
@@ -295,12 +365,15 @@ export default function OpportunityExperiencePage() {
           </label>
 
           <select
-            value={horizon}
+            value={
+              horizon
+            }
             onChange={(
               event
             ) =>
               setHorizon(
-                event.target
+                event
+                  .target
                   .value as
                   | "SHORT"
                   | "MEDIUM"
@@ -357,7 +430,8 @@ export default function OpportunityExperiencePage() {
               event
             ) =>
               setRiskProfile(
-                event.target
+                event
+                  .target
                   .value as
                   | "CONSERVATIVE"
                   | "BALANCED"
@@ -431,317 +505,508 @@ export default function OpportunityExperiencePage() {
                 600,
             }}
           >
-            {loading
-              ? "Scanning..."
-              : "Find Opportunities"}
+            {
+              loading
+                ? "Scanning..."
+                : "Find Opportunities"
+            }
           </button>
         </div>
       </div>
 
-      {error && (
-        <div
-          style={{
-            marginBottom:
-              "20px",
-
-            padding:
-              "12px",
-
-            border:
-              "1px solid #ef4444",
-
-            borderRadius:
-              "8px",
-          }}
-        >
-          {error}
-        </div>
-      )}
-
-      {result && (
-        <>
+      {
+        error && (
           <div
             style={{
               marginBottom:
-                "18px",
+                "20px",
 
-              fontSize:
-                "13px",
+              padding:
+                "12px",
 
-              color:
-                "#94a3b8",
+              border:
+                "1px solid #ef4444",
+
+              borderRadius:
+                "8px",
             }}
           >
-            Source:{" "}
-            {result.source}
-            {" • "}
-            Scanned:{" "}
             {
-              result.scannedCount
-            }
-            {" • "}
-            Analyzed:{" "}
-            {
-              result.analyzedCount
+              error
             }
           </div>
+        )
+      }
 
-          {result.state ===
-            "NO_OPPORTUNITY" && (
-            <div
-              style={{
-                padding:
-                  "20px",
-
-                border:
-                  "1px solid #334155",
-
-                borderRadius:
-                  "12px",
-              }}
-            >
-              <h3
-                style={{
-                  marginTop:
-                    0,
-                }}
-              >
-                No suitable opportunity
-                right now
-              </h3>
-
-              <p
-                style={{
-                  marginBottom:
-                    0,
-
-                  color:
-                    "#94a3b8",
-                }}
-              >
-                ITDP did not find a
-                trade that currently
-                meets your selected
-                conditions. Waiting is
-                also a valid decision.
-              </p>
-            </div>
-          )}
-
-          {result.state ===
-            "WATCHLIST_ONLY" && (
+      {
+        result && (
+          <>
             <div
               style={{
                 marginBottom:
                   "18px",
 
-                padding:
-                  "16px",
+                fontSize:
+                  "13px",
 
-                border:
-                  "1px solid #f59e0b",
-
-                borderRadius:
-                  "12px",
+                color:
+                  "#94a3b8",
               }}
             >
-              No validated trade is
-              ready yet. ITDP found
-              stocks worth watching.
+              Source:{" "}
+              {
+                result.source
+              }
+              {" | "}
+              Scanned:{" "}
+              {
+                result.scannedCount
+              }
+              {" | "}
+              Analyzed:{" "}
+              {
+                result.analyzedCount
+              }
             </div>
-          )}
 
-          {result.state ===
-            "OPPORTUNITIES_AVAILABLE" && (
-            <div
-              style={{
-                marginBottom:
-                  "18px",
-              }}
-            >
-              <strong>
-                {
-                  result.experience
-                    .tradeCount
-                }{" "}
-                validated opportunity
-                {result.experience
-                  .tradeCount === 1
-                  ? ""
-                  : "ies"}{" "}
-                found.
-              </strong>
-            </div>
-          )}
+            {
+              result.state ===
+                "NO_OPPORTUNITY" && (
+                <div
+                  style={{
+                    padding:
+                      "20px",
 
-          {result.experience
-            .opportunities.length >
-            0 && (
-            <div
-              style={{
-                display:
-                  "grid",
+                    border:
+                      "1px solid #334155",
 
-                gridTemplateColumns:
-                  "repeat(auto-fit, minmax(280px, 1fr))",
-
-                gap:
-                  "16px",
-              }}
-            >
-              {result.experience.opportunities.map(
-                (
-                  opportunity
-                ) => (
-                  <div
-                    key={
-                      opportunity.symbol
-                    }
+                    borderRadius:
+                      "12px",
+                  }}
+                >
+                  <h3
                     style={{
-                      padding:
-                        "16px",
-
-                      border:
-                        "1px solid #334155",
-
-                      borderRadius:
-                        "12px",
-
-                      background:
-                        "#0f172a",
+                      marginTop:
+                        0,
                     }}
                   >
-                    <div
-                      style={{
-                        display:
-                          "flex",
+                    No suitable opportunity
+                    right now
+                  </h3>
 
-                        justifyContent:
-                          "space-between",
+                  <p
+                    style={{
+                      marginBottom:
+                        0,
 
-                        marginBottom:
-                          "12px",
-                      }}
-                    >
-                      <strong>
-                        {
-                          opportunity.symbol
+                      color:
+                        "#94a3b8",
+                    }}
+                  >
+                    ITDP did not find a
+                    trade that currently
+                    meets your selected
+                    conditions. Waiting is
+                    also a valid decision.
+                  </p>
+                </div>
+              )
+            }
+
+            {
+              result.state ===
+                "WATCHLIST_ONLY" && (
+                <div
+                  style={{
+                    marginBottom:
+                      "18px",
+
+                    padding:
+                      "16px",
+
+                    border:
+                      "1px solid #f59e0b",
+
+                    borderRadius:
+                      "12px",
+                  }}
+                >
+                  No validated trade is
+                  ready yet. ITDP found
+                  stocks worth watching.
+                </div>
+              )
+            }
+
+            {
+              result.state ===
+                "OPPORTUNITIES_AVAILABLE" && (
+                <div
+                  style={{
+                    marginBottom:
+                      "18px",
+                  }}
+                >
+                  <strong>
+                    {
+                      result
+                        .experience
+                        .tradeCount
+                    }{" "}
+                    validated opportunity
+                    {
+                      result
+                        .experience
+                        .tradeCount ===
+                      1
+                        ? ""
+                        : "ies"
+                    }{" "}
+                    found.
+                  </strong>
+                </div>
+              )
+            }
+
+            {
+              result
+                .experience
+                .opportunities
+                .length >
+                0 && (
+                <div
+  style={{
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(3, minmax(0, 1fr))",
+    gap: "18px",
+    width: "100%",
+  }}
+>
+                  {
+                    result
+                      .experience
+                      .opportunities
+                      .map(
+                        (
+                          opportunity
+                        ) => {
+                          const isTrade =
+                            opportunity
+                              .action ===
+                            "TRADE";
+
+                          const isWatch =
+                            opportunity
+                              .action ===
+                            "WATCH";
+
+                          const isBuy =
+                            opportunity
+                              .decision ===
+                            "BUY";
+
+                          return (
+                            <div
+                              key={
+                                opportunity
+                                  .symbol
+                              }
+                              style={{
+                                padding:
+                                  "18px",
+
+                                border:
+                                  isTrade
+                                    ? "1px solid #22c55e"
+                                    : isWatch
+                                    ? "1px solid #f59e0b"
+                                    : "1px solid #475569",
+
+                                borderRadius:
+                                  "12px",
+
+                                background:
+                                  "#0f172a",
+
+                                color:
+                                  "#f8fafc",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display:
+                                    "flex",
+
+                                  justifyContent:
+                                    "space-between",
+
+                                  alignItems:
+                                    "center",
+
+                                  gap:
+                                    "12px",
+
+                                  marginBottom:
+                                    "12px",
+                                }}
+                              >
+                                <strong
+                                  style={{
+                                    color:
+                                      "#f8fafc",
+
+                                    fontSize:
+                                      "16px",
+
+                                    letterSpacing:
+                                      "0.2px",
+                                  }}
+                                >
+                                  {
+                                    opportunity
+                                      .symbol
+                                  }
+                                </strong>
+
+                                <span
+                                  style={{
+                                    padding:
+                                      "4px 9px",
+
+                                    borderRadius:
+                                      "999px",
+
+                                    fontSize:
+                                      "11px",
+
+                                    fontWeight:
+                                      700,
+
+                                    color:
+                                      isTrade
+                                        ? "#22c55e"
+                                        : isWatch
+                                        ? "#f59e0b"
+                                        : "#cbd5e1",
+
+                                    border:
+                                      isTrade
+                                        ? "1px solid #22c55e"
+                                        : isWatch
+                                        ? "1px solid #f59e0b"
+                                        : "1px solid #64748b",
+                                  }}
+                                >
+                                  {
+                                    opportunity
+                                      .action
+                                  }
+                                </span>
+                              </div>
+
+                              <div
+                                style={{
+                                  display:
+                                    "flex",
+
+                                  alignItems:
+                                    "center",
+
+                                  gap:
+                                    "8px",
+
+                                  marginBottom:
+                                    "12px",
+                                }}
+                              >
+                                <span
+                                    style={{
+                                fontWeight: 700,
+                                    fontSize: "15px",
+                                color: isBuy
+                                     ? "#22c55e"
+                                    : "#ef4444",
+                                            }}
+                                    >
+                                    {opportunity.decision}
+                                    </span>
+
+                                <span
+                                  style={{
+                                    color:
+                                      "#64748b",
+                                  }}
+                                >
+                                  |
+                                </span>
+
+                                <span
+                                    style={{
+                                        color: "#cbd5e1",
+                                     fontWeight: 600,
+                                 fontSize: "14px",
+                                             }}
+                                    >
+                                    {opportunity.classification}
+                                </span>
+                              </div>
+
+                              <p
+                                style={{
+                                  color:
+                                    "#cbd5e1",
+
+                                  fontSize:
+                                    "13px",
+
+                                  lineHeight:
+                                    "1.6",
+
+                                  marginTop:
+                                    0,
+
+                                  marginBottom:
+                                    "14px",
+                                }}
+                              >
+                                {
+                                  opportunity
+                                    .headline
+                                }
+                              </p>
+
+                              <div
+                                style={{
+                                  padding:
+                                    "12px",
+
+                                  borderRadius:
+                                    "8px",
+
+                                  background:
+                                    "#111c2f",
+
+                                  color:
+                                    "#e2e8f0",
+
+                                  lineHeight:
+                                    "1.9",
+
+                                  fontSize:
+                                    "13px",
+
+                                  marginBottom:
+                                    "12px",
+                                }}
+                              >
+                                <div>
+                                  Entry:{" "}
+                                  <strong>
+                                    Rs.{" "}
+                                    {
+                                      opportunity
+                                        .entry
+                                    }
+                                  </strong>
+                                </div>
+
+                                <div>
+                                  Stop Loss:{" "}
+                                  <strong>
+                                    Rs.{" "}
+                                    {
+                                      opportunity
+                                        .stopLoss
+                                    }
+                                  </strong>
+                                </div>
+
+                                <div>
+                                  T1:{" "}
+                                  <strong>
+                                    Rs.{" "}
+                                    {
+                                      opportunity
+                                        .target1
+                                    }
+                                  </strong>
+                                </div>
+
+                                <div>
+                                  T2:{" "}
+                                  <strong>
+                                    Rs.{" "}
+                                    {
+                                      opportunity
+                                        .target2
+                                    }
+                                  </strong>
+                                </div>
+
+                                <div>
+                                  Quantity:{" "}
+                                  <strong>
+                                    {
+                                      opportunity
+                                        .quantity
+                                    }
+                                  </strong>
+                                </div>
+
+                                <div>
+                                  Max Risk:{" "}
+                                  <strong>
+                                    Rs.{" "}
+                                    {
+                                      opportunity
+                                        .maxRisk
+                                    }
+                                  </strong>
+                                </div>
+
+                                <div>
+                                  R:R:{" "}
+                                  <strong>
+                                    {
+                                      opportunity
+                                        .riskRewardRatio
+                                    }
+                                  </strong>
+                                </div>
+                              </div>
+
+                              <p
+                                style={{
+                                  margin:
+                                    0,
+
+                                  color:
+                                    "#94a3b8",
+
+                                  fontSize:
+                                    "12px",
+
+                                  lineHeight:
+                                    "1.5",
+                                }}
+                              >
+                                {
+                                  opportunity
+                                    .riskMessage
+                                }
+                              </p>
+                            </div>
+                          );
                         }
-                      </strong>
-
-                      <span>
-                        {
-                          opportunity.action
-                        }
-                      </span>
-                    </div>
-
-                    <div
-                      style={{
-                        marginBottom:
-                          "10px",
-
-                        fontWeight:
-                          600,
-                      }}
-                    >
-                      {
-                        opportunity.decision
-                      }{" "}
-                      •{" "}
-                      {
-                        opportunity.classification
-                      }
-                    </div>
-
-                    <p
-                      style={{
-                        color:
-                          "#cbd5e1",
-
-                        fontSize:
-                          "13px",
-                      }}
-                    >
-                      {
-                        opportunity.headline
-                      }
-                    </p>
-
-                    <div
-                      style={{
-                        lineHeight:
-                          "1.8",
-
-                        fontSize:
-                          "13px",
-                      }}
-                    >
-                      Entry: ₹
-                      {
-                        opportunity.entry
-                      }
-                      <br />
-
-                      Stop Loss: ₹
-                      {
-                        opportunity.stopLoss
-                      }
-                      <br />
-
-                      T1: ₹
-                      {
-                        opportunity.target1
-                      }
-                      <br />
-
-                      T2: ₹
-                      {
-                        opportunity.target2
-                      }
-                      <br />
-
-                      Quantity:{" "}
-                      {
-                        opportunity.quantity
-                      }
-                      <br />
-
-                      Max Risk: ₹
-                      {
-                        opportunity.maxRisk
-                      }
-                      <br />
-
-                      R:R:{" "}
-                      {
-                        opportunity.riskRewardRatio
-                      }
-                    </div>
-
-                    <p
-                      style={{
-                        marginBottom:
-                          0,
-
-                        color:
-                          "#94a3b8",
-
-                        fontSize:
-                          "12px",
-                      }}
-                    >
-                      {
-                        opportunity.riskMessage
-                      }
-                    </p>
-                  </div>
-                )
-              )}
-            </div>
-          )}
-        </>
-      )}
+                      )
+                  }
+                </div>
+              )
+            }
+          </>
+        )
+      }
     </div>
   );
 }
