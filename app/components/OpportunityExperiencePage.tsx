@@ -5,6 +5,8 @@ import {
   useState,
 } from "react";
 
+import OpportunitySignalChart from "./chart/OpportunitySignalChart";
+
 type OpportunityExperienceState =
   | "OPPORTUNITIES_AVAILABLE"
   | "WATCHLIST_ONLY"
@@ -156,6 +158,16 @@ export default function OpportunityExperiencePage() {
       null
     );
 
+  const [
+    selectedOpportunity,
+    setSelectedOpportunity,
+  ] =
+    useState<
+      OpportunityExperienceItem | null
+    >(
+      null
+    );
+
   const findOpportunities =
     useCallback(
       async () => {
@@ -165,6 +177,10 @@ export default function OpportunityExperiencePage() {
           );
 
           setError(
+            null
+          );
+
+          setSelectedOpportunity(
             null
           );
 
@@ -846,6 +862,76 @@ export default function OpportunityExperiencePage() {
             }
 
             {
+              selectedOpportunity && (
+                <div
+                  style={{
+                    marginBottom: "22px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: "12px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <strong
+                      style={{
+                       color: "#0f172a",
+                        fontSize: "16px",
+                      }}
+                    >
+                      ITDP Signal Detail
+                    </strong>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSelectedOpportunity(
+                          null
+                        )
+                      }
+                      style={{
+                        padding: "7px 12px",
+                        borderRadius: "8px",
+                        border: "1px solid #475569",
+                        background: "#111827",
+                        color: "#cbd5e1",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Close Chart
+                    </button>
+                  </div>
+
+                  <OpportunitySignalChart
+                    symbol={
+                      selectedOpportunity.symbol
+                    }
+                    decision={
+                      selectedOpportunity.decision
+                    }
+                    entry={
+                      selectedOpportunity.entry
+                    }
+                    stopLoss={
+                      selectedOpportunity.stopLoss
+                    }
+                    target1={
+                      selectedOpportunity.target1
+                    }
+                    target2={
+                      selectedOpportunity.target2
+                    }
+                  />
+                </div>
+              )
+            }
+
+            {
               result
                 .experience
                 .opportunities
@@ -889,12 +975,36 @@ export default function OpportunityExperiencePage() {
                                 opportunity
                                   .symbol
                               }
+                              role="button"
+                              tabIndex={0}
+                              onClick={() =>
+                                setSelectedOpportunity(
+                                  opportunity
+                                )
+                              }
+                              onKeyDown={(
+                                event
+                              ) => {
+                                if (
+                                  event.key ===
+                                    "Enter" ||
+                                  event.key ===
+                                    " "
+                                ) {
+                                  setSelectedOpportunity(
+                                    opportunity
+                                  );
+                                }
+                              }}
                               style={{
                                 padding:
                                   "18px",
 
                                 border:
-                                  isTrade
+                                  selectedOpportunity?.symbol ===
+                                  opportunity.symbol
+                                    ? "2px solid #38bdf8"
+                                    : isTrade
                                     ? "1px solid #22c55e"
                                     : isWatch
                                     ? "1px solid #f59e0b"
@@ -908,6 +1018,9 @@ export default function OpportunityExperiencePage() {
 
                                 color:
                                   "#f8fafc",
+
+                                cursor:
+                                  "pointer",
                               }}
                             >
                               <div
