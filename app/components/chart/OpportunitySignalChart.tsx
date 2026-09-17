@@ -11,6 +11,7 @@ import {
   LineStyle,
   createChart,
 } from "lightweight-charts";
+
 import {
   buildOpportunitySignalLevels,
 } from "../../services/opportunitySignalLevelsService";
@@ -29,6 +30,14 @@ type Props = {
   target1: number;
 
   target2: number;
+};
+
+type SignalChartCandle = {
+  time: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
 };
 
 export default function OpportunitySignalChart({
@@ -50,7 +59,8 @@ export default function OpportunitySignalChart({
     ) {
       return;
     }
-        const signalLevels =
+
+    const signalLevels =
       buildOpportunitySignalLevels(
         {
           decision,
@@ -229,7 +239,8 @@ export default function OpportunitySignalChart({
           );
         }
 
-        const rawData =
+        const rawData:
+          unknown =
           await response.json();
 
         if (
@@ -244,39 +255,42 @@ export default function OpportunitySignalChart({
 
         const chartData =
           rawData.map(
-            (
-              candle: any
-            ) => ({
-              time:
-                candle.time as any,
+            (candle) => {
+              const item =
+                candle as SignalChartCandle;
 
-              open:
-                Number(
-                  candle.open
-                ),
+              return {
+                time:
+                  item.time,
 
-              high:
-                Number(
-                  candle.high
-                ),
+                open:
+                  Number(
+                    item.open
+                  ),
 
-              low:
-                Number(
-                  candle.low
-                ),
+                high:
+                  Number(
+                    item.high
+                  ),
 
-              close:
-                Number(
-                  candle.close
-                ),
-            })
+                low:
+                  Number(
+                    item.low
+                  ),
+
+                close:
+                  Number(
+                    item.close
+                  ),
+              };
+            }
           );
 
         candleSeries.setData(
           chartData
         );
 
-                createSignalPriceLine(
+        createSignalPriceLine(
           signalLevels.entry,
           "ENTRY",
           "#38bdf8",
@@ -357,6 +371,7 @@ export default function OpportunitySignalChart({
     };
   }, [
     symbol,
+    decision,
     entry,
     stopLoss,
     target1,
