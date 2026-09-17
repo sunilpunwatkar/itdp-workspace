@@ -68,6 +68,13 @@ assertEqual(
   ),
   "RETRY"
 );
+assertEqual(
+  "Live Quote Timeout Retryable",
+  classifyProviderRetryDecision(
+    "Yahoo request timeout after 12s for RELIANCE.NS"
+  ),
+  "RETRY"
+);
 
 // ==================================================
 // DO NOT RETRY

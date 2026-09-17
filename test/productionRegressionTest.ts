@@ -67,6 +67,10 @@ const tests: RegressionTest[] = [
     file: "test/opportunityScannerScalingContractTest.ts",
   },
   {
+    name: "Yahoo Quote Retry Integration",
+    file: "test/yahooQuoteRetryIntegrationContractTest.ts",
+  },
+  {
     name: "Provider Retry Policy",
     file: "test/providerRetryPolicyContractTest.ts",
   },

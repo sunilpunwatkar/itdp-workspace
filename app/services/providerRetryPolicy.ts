@@ -14,9 +14,9 @@ export function classifyProviderRetryDecision(
   }
 
   const httpMatch =
-    message.match(
-      /Yahoo historical HTTP (\d{3})/
-    );
+  message.match(
+    /Yahoo(?: historical)? HTTP (\d{3})/
+  );
 
   if (httpMatch) {
     const status =
@@ -33,12 +33,11 @@ export function classifyProviderRetryDecision(
   }
 
   if (
-    message.includes(
-      "timed out"
-    )
-  ) {
-    return "RETRY";
-  }
+  message.includes("timed out") ||
+  message.includes("timeout after")
+) {
+  return "RETRY";
+}
 
   return "DO_NOT_RETRY";
 }

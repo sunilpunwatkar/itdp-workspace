@@ -1,4 +1,7 @@
 import { MarketProvider, MarketData } from "./marketProvider";
+import {
+  executeProviderOperationWithRetry,
+} from "../services/providerRetryExecutor";
 
 // =====================================================
 // QUOTE CACHE
@@ -65,6 +68,7 @@ export function clearQuoteCacheForTest(
 // Never allow Yahoo request to hang indefinitely.
 const YAHOO_TIMEOUT =
   12 * 1000;
+const MAX_RETRY_ATTEMPTS = 3;
 
 // =====================================================
 // YAHOO PROVIDER
@@ -128,12 +132,26 @@ export class YahooProvider implements MarketProvider {
     // ===================================================
 
     const fetchPromise =
-      this.fetchQuoteFromYahoo(symbol);
+  executeProviderOperationWithRetry(
+    () =>
+      this.fetchQuoteFromYahoo(symbol),
+    {
+      maxAttempts:
+        MAX_RETRY_ATTEMPTS,
 
-    quoteFetchCache.set(
-      symbol,
-      fetchPromise
-    );
+      sleep:
+        async (delayMs) => {
+          await new Promise<void>(
+            (resolve) => {
+              setTimeout(
+                resolve,
+                delayMs
+              );
+            }
+          );
+        },
+    }
+  );
 
     // ===================================================
     // 4. WAIT FOR FETCH
