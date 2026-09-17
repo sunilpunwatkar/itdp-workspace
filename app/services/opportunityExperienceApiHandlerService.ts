@@ -120,16 +120,27 @@ export async function handleOpportunityExperienceApiRequest(
 
   try {
     const scanResult =
-      await scan({
-        stockUniverse:
-          parsed.stockUniverse,
+  await scan({
+    stockUniverse:
+      parsed.stockUniverse,
 
-        discovery:
-          parsed.discovery,
+    discovery:
+      parsed.discovery,
 
-        freshnessTtlMs:
-          parsed.freshnessTtlMs,
-      });
+    freshnessTtlMs:
+      parsed.freshnessTtlMs,
+
+    scannerOptions: {
+      concurrency:
+        2,
+
+      batchSize:
+        10,
+
+      batchDelayMs:
+        500,
+    },
+  });
 
     const experience =
       buildOpportunityExperienceResponse(

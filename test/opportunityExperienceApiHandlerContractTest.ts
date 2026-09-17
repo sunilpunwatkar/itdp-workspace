@@ -195,6 +195,17 @@ async function run() {
 
   let receivedCapital =
     0;
+    let receivedConcurrency:
+  number | undefined;
+
+let receivedBatchSize:
+  number | undefined;
+
+let receivedBatchDelayMs:
+  number | undefined;
+
+let receivedAnalysisTimeoutMs:
+  number | undefined;
 
   const liveResponse =
     await handleOpportunityExperienceApiRequest({
@@ -230,6 +241,18 @@ async function run() {
           receivedCapital =
             input.discovery.capital;
 
+            receivedConcurrency =
+  input.scannerOptions?.concurrency;
+
+receivedBatchSize =
+  input.scannerOptions?.batchSize;
+
+receivedBatchDelayMs =
+  input.scannerOptions?.batchDelayMs;
+
+receivedAnalysisTimeoutMs =
+  input.scannerOptions?.analysisTimeoutMs;
+
           return buildControlledScanResult(
             "LIVE",
             "EXPERIENCE-API-LIVE-1"
@@ -254,6 +277,25 @@ async function run() {
     receivedCapital,
     75_000
   );
+  assertEqual(
+  "Production Scanner Concurrency",
+  receivedConcurrency,
+  2
+);
+
+assertEqual(
+  "Production Scanner Batch Size",
+  receivedBatchSize,
+  10
+);
+
+assertEqual(
+  "Production Scanner Batch Delay",
+  receivedBatchDelayMs,
+  500
+);
+
+
 
   const liveBody =
     liveResponse.body as {

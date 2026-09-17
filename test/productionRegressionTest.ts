@@ -70,6 +70,12 @@ const tests: RegressionTest[] = [
     name: "Opportunity Scanner Scaling",
     file: "test/opportunityScannerScalingContractTest.ts",
   },
+{
+  file:
+    "test/opportunityScannerTimeoutContractTest.ts",
+  name:
+    "Opportunity Scanner Timeout",
+},
   {
     name: "Yahoo Quote Retry Integration",
     file: "test/yahooQuoteRetryIntegrationContractTest.ts",

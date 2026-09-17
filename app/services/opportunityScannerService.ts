@@ -49,6 +49,8 @@ export interface OpportunityScannerOptions {
 
   batchDelayMs?: number;
 
+  analysisTimeoutMs?: number;
+
   sleep?: (
     delayMs: number
   ) => Promise<void>;
@@ -71,6 +73,46 @@ const defaultSleep =
       }
     );
   };
+
+async function analyzeWithTimeout(
+  source: OpportunityScannerSource,
+  timeoutMs: number | undefined
+): Promise<AnalysisResult> {
+  if (timeoutMs === undefined) {
+    return source.analyze();
+  }
+
+  let timeout:
+    ReturnType<typeof setTimeout>;
+
+  const timeoutPromise =
+    new Promise<never>(
+      (_, reject) => {
+        timeout =
+          setTimeout(
+            () => {
+              reject(
+                new Error(
+                  "ANALYSIS_TIMEOUT"
+                )
+              );
+            },
+            timeoutMs
+          );
+      }
+    );
+
+  try {
+    return await Promise.race([
+      source.analyze(),
+      timeoutPromise,
+    ]);
+  } finally {
+    clearTimeout(
+      timeout!
+    );
+  }
+}
 
 export async function scanOpportunities(
   sources:
@@ -146,6 +188,27 @@ export async function scanOpportunities(
     );
   }
 
+  // =====================================
+  // PER-ANALYSIS TIMEOUT
+  // =====================================
+
+  const analysisTimeoutMs =
+    options.analysisTimeoutMs;
+
+  if (
+    analysisTimeoutMs !== undefined &&
+    (
+      !Number.isFinite(
+        analysisTimeoutMs
+      ) ||
+      analysisTimeoutMs <= 0
+    )
+  ) {
+    throw new Error(
+      "Scanner analysis timeout must be a positive number."
+    );
+  }
+
   const sleep =
     options.sleep ??
     defaultSleep;
@@ -188,7 +251,10 @@ export async function scanOpportunities(
 
         try {
           const analysis =
-            await source.analyze();
+            await analyzeWithTimeout(
+              source,
+              analysisTimeoutMs
+            );
 
           analyzedCount += 1;
 
