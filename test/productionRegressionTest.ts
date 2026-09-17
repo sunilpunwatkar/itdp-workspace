@@ -43,6 +43,10 @@ const tests: RegressionTest[] = [
     file: "test/chartHistoricalRuntimeContractTest.ts",
   },
   {
+    name: "Historical Data Cache Bounded Fallback",
+    file: "test/historicalDataCacheBoundedFallbackContractTest.ts",
+  },
+  {
     name: "Opportunity Discovery",
     file: "test/opportunityDiscoveryContractTest.ts",
   },

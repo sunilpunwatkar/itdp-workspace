@@ -21,6 +21,53 @@ const CACHE_TTL =
   15 * 60 * 1000;
 
 // =====================================
+// MAXIMUM STALE FALLBACK AGE
+// =====================================
+//
+// Historical data uses 1-day candles.
+// During a temporary provider outage,
+// stale in-memory data may be used only
+// within this bounded safety window.
+//
+// This matches the existing chart
+// historical fallback maximum age.
+//
+// =====================================
+
+export const HISTORICAL_STALE_FALLBACK_MAX_AGE_MS =
+  7 * 24 * 60 * 60 * 1000;
+
+// =====================================
+// CACHE AGE VALIDATION
+// =====================================
+
+function getCacheAge(
+  timestamp: number
+): number | null {
+  if (
+    !Number.isFinite(timestamp) ||
+    timestamp < 0
+  ) {
+    return null;
+  }
+
+  const age =
+    Date.now() -
+    timestamp;
+
+  // Future-dated cache entries are
+  // invalid and must never be treated
+  // as fresh or stale fallback data.
+  if (
+    age < 0
+  ) {
+    return null;
+  }
+
+  return age;
+}
+
+// =====================================
 // TEST SUPPORT
 // =====================================
 
@@ -63,12 +110,21 @@ export async function getCachedHistoricalOHLC(
   const cached =
     historicalCache.get(symbol);
 
-  if (cached) {
-    const age =
-      Date.now() -
-      cached.timestamp;
+  const cachedAge =
+    cached
+      ? getCacheAge(
+          cached.timestamp
+        )
+      : null;
 
-    if (age < CACHE_TTL) {
+  if (
+    cached &&
+    cachedAge !== null
+  ) {
+    if (
+      cachedAge <
+      CACHE_TTL
+    ) {
       console.log(
         `📦 Historical Cache HIT: ${symbol}`
       );
@@ -78,6 +134,10 @@ export async function getCachedHistoricalOHLC(
 
     console.log(
       `♻️ Historical Cache EXPIRED: ${symbol}`
+    );
+  } else if (cached) {
+    console.log(
+      `⚠️ Historical Cache INVALID AGE: ${symbol}`
     );
   }
 
@@ -129,7 +189,8 @@ export async function getCachedHistoricalOHLC(
           symbol,
           {
             data,
-            timestamp: Date.now(),
+            timestamp:
+              Date.now(),
           }
         );
 
@@ -145,15 +206,31 @@ export async function getCachedHistoricalOHLC(
         );
 
         // =================================
-        // STALE CACHE FALLBACK
+        // BOUNDED STALE CACHE FALLBACK
         // =================================
 
-        if (cached) {
+        if (
+          cached &&
+          cachedAge !== null &&
+          cachedAge <=
+            HISTORICAL_STALE_FALLBACK_MAX_AGE_MS
+        ) {
           console.log(
             `♻️ Historical STALE CACHE FALLBACK: ${symbol}`
           );
 
           return cached.data;
+        }
+
+        if (
+          cached &&
+          cachedAge !== null &&
+          cachedAge >
+            HISTORICAL_STALE_FALLBACK_MAX_AGE_MS
+        ) {
+          console.warn(
+            `⚠️ Historical STALE CACHE TOO OLD: ${symbol}`
+          );
         }
 
         throw error;
