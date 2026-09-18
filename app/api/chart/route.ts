@@ -1,51 +1,69 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getChartData } from "../../services/chartDataService";
+import {
+  NextRequest,
+  NextResponse,
+} from "next/server";
+
+import {
+  getChartData,
+} from "../../services/chartDataService";
+
+import {
+  handleChartApiRequest,
+} from "../../services/chartApiHandlerService";
+
+const NO_CACHE_HEADERS = {
+  "Cache-Control":
+    "no-store, no-cache, must-revalidate",
+  Pragma:
+    "no-cache",
+  Expires:
+    "0",
+};
 
 let chartApiCallCount = 0;
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest
+) {
   chartApiCallCount++;
 
   console.log(
-    `🎯 CHART API CALL #${chartApiCallCount}`
+    `CHART API CALL #${chartApiCallCount}`
   );
 
-  try {
-    const { searchParams } = new URL(request.url);
+  const { searchParams } =
+    new URL(request.url);
 
-    const symbol = searchParams.get("symbol");
+  const symbol =
+    searchParams.get("symbol");
 
-    if (!symbol) {
-      return NextResponse.json(
-        { error: "Symbol is required" },
-        { status: 400 }
-      );
-    }
+  const response =
+    await handleChartApiRequest({
+      symbol,
 
-    console.log("Chart API Symbol:", symbol);
+      getChartData:
+        async (
+          normalizedSymbol
+        ) => {
+          console.log(
+            "Chart API Symbol:",
+            normalizedSymbol
+          );
 
-    const data = await getChartData(symbol);
-
-    return NextResponse.json(data, {
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate",
-      },
+          return getChartData(
+            normalizedSymbol
+          );
+        },
     });
 
-  } catch (error) {
+  return NextResponse.json(
+    response.body,
+    {
+      status:
+        response.status,
 
-    console.error("Chart API Error:", error);
-
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unknown Error",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
+      headers:
+        NO_CACHE_HEADERS,
+    }
+  );
 }
