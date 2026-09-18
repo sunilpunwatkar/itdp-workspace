@@ -14,6 +14,10 @@ import {
   buildOpportunityExperienceResponse,
 } from "./opportunityExperienceResponseService";
 
+import {
+  OPPORTUNITY_PRODUCTION_SCANNER_OPTIONS,
+} from "./opportunityProductionScannerPolicy";
+
 export interface OpportunityExperienceApiResponse {
   status: number;
   body: unknown;
@@ -130,16 +134,8 @@ export async function handleOpportunityExperienceApiRequest(
     freshnessTtlMs:
       parsed.freshnessTtlMs,
 
-    scannerOptions: {
-      concurrency:
-        2,
-
-      batchSize:
-        10,
-
-      batchDelayMs:
-        500,
-    },
+    scannerOptions:
+  OPPORTUNITY_PRODUCTION_SCANNER_OPTIONS,
   });
 
     const experience =

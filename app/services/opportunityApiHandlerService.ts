@@ -10,6 +10,10 @@ import type {
   OpportunityScanAccessInput,
 } from "./opportunityScanAccessService";
 
+import {
+  OPPORTUNITY_PRODUCTION_SCANNER_OPTIONS,
+} from "./opportunityProductionScannerPolicy";
+
 export interface OpportunityApiResponse {
   status: number;
   body: unknown;
@@ -110,15 +114,18 @@ export async function handleOpportunityApiRequest(
     const result =
       await scan(
         {
-          stockUniverse:
-            parsed.stockUniverse,
+  stockUniverse:
+    parsed.stockUniverse,
 
-          discovery:
-            parsed.discovery,
+  discovery:
+    parsed.discovery,
 
-          freshnessTtlMs:
-            parsed.freshnessTtlMs,
-        }
+  freshnessTtlMs:
+    parsed.freshnessTtlMs,
+
+  scannerOptions:
+    OPPORTUNITY_PRODUCTION_SCANNER_OPTIONS,
+}
       );
 
     return {

@@ -105,13 +105,17 @@ const tests: RegressionTest[] = [
     file: "test/opportunityExperienceResponseContractTest.ts",
   },
   {
-    name: "Opportunity Experience API Handler",
-    file: "test/opportunityExperienceApiHandlerContractTest.ts",
-  },
-  {
-    name: "Opportunity Signal Levels",
-    file: "test/opportunitySignalLevelsContractTest.ts",
-  },
+  name: "Opportunity Experience API Handler",
+  file: "test/opportunityExperienceApiHandlerContractTest.ts",
+},
+{
+  name: "Opportunity API Production Scanner Policy",
+  file: "test/opportunityApiHandlerProductionPolicyContractTest.ts",
+},
+{
+  name: "Opportunity Signal Levels",
+  file: "test/opportunitySignalLevelsContractTest.ts",
+},
   {
     name: "Opportunity Pipeline Integration",
     file: "test/opportunityPipelineIntegrationTest.ts",
