@@ -26,6 +26,10 @@ const tests: RegressionTest[] = [
     name: "Directional Entry Location",
     file: "test/directionalEntryLocationContractTest.ts",
   },
+    {
+    name: "Analysis API Handler",
+    file: "test/analysisApiHandlerContractTest.ts",
+  },
   {
     name: "Chart Historical Snapshot",
     file: "test/chartHistoricalSnapshotContractTest.ts",

@@ -1,50 +1,69 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getStockAnalysis } from "../../../services/stockAnalysisService";
+import {
+  NextRequest,
+  NextResponse,
+} from "next/server";
 
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
+import {
+  getStockAnalysis,
+} from "../../../services/stockAnalysisService";
 
-    const symbol = searchParams.get("symbol");
+import {
+  handleAnalysisApiRequest,
+} from "../../services/analysisApiHandlerService";
 
-    if (!symbol) {
-      return NextResponse.json(
-        {
-          error: "Symbol is required",
+const NO_CACHE_HEADERS = {
+  "Cache-Control":
+    "no-store, no-cache, must-revalidate",
+  Pragma:
+    "no-cache",
+  Expires:
+    "0",
+};
+
+export async function GET(
+  request: NextRequest
+) {
+  const { searchParams } =
+    new URL(request.url);
+
+  const symbol =
+    searchParams.get("symbol");
+
+  const response =
+    await handleAnalysisApiRequest({
+      symbol,
+
+      analyze:
+        async (
+          normalizedSymbol
+        ) => {
+          console.log(
+            "API Symbol Received:",
+            normalizedSymbol
+          );
+
+          const result =
+            await getStockAnalysis(
+              normalizedSymbol
+            );
+
+          console.log(
+            "API Result Symbol:",
+            result.symbol
+          );
+
+          return result;
         },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    console.log("API Symbol Received:", symbol);
-
-    const result = await getStockAnalysis(symbol);
-
-    console.log("API Result Symbol:", result.symbol);
-
-    return NextResponse.json(result, {
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
-      },
     });
 
-  } catch (error) {
-    console.error("API Error:", error);
+  return NextResponse.json(
+    response.body,
+    {
+      status:
+        response.status,
 
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unknown Error",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
+      headers:
+        NO_CACHE_HEADERS,
+    }
+  );
 }

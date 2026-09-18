@@ -262,38 +262,49 @@ async function runTest() {
       SYMBOL
     );
 
-    seedHistoricalCacheForTest(
-      SYMBOL,
-      historicalData,
-      Date.now() -
-        MAX_STALE_AGE
+    const realDateNow =
+  Date.now;
+
+const boundaryNow =
+  realDateNow();
+
+Date.now =
+  () => boundaryNow;
+
+try {
+  seedHistoricalCacheForTest(
+    SYMBOL,
+    historicalData,
+    boundaryNow -
+      MAX_STALE_AGE
+  );
+
+  const result =
+    await getCachedHistoricalOHLC(
+      SYMBOL
     );
 
-    try {
-      const result =
-        await getCachedHistoricalOHLC(
-          SYMBOL
-        );
+  assert(
+    sameHistoricalData(result),
+    "7-day boundary cache must remain available during provider failure"
+  );
 
-      assert(
-        sameHistoricalData(result),
-        "7-day boundary cache must remain available during provider failure"
-      );
+  console.log(
+    "TEST 4: 7-day boundary fallback accepted: PASS"
+  );
 
-      console.log(
-        "TEST 4: 7-day boundary fallback accepted: PASS"
-      );
+  passed++;
+} catch (error) {
+  console.error(
+    "TEST 4: 7-day boundary fallback accepted: FAIL",
+    error
+  );
 
-      passed++;
-    } catch (error) {
-      console.error(
-        "TEST 4: 7-day boundary fallback accepted: FAIL",
-        error
-      );
-
-      failed++;
-    }
-
+  failed++;
+} finally {
+  Date.now =
+    realDateNow;
+}
     // ======================================
     // TEST 5
     // OLDER THAN 7 DAYS MUST BE REJECTED
