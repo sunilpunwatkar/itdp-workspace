@@ -1,61 +1,222 @@
 "use client";
 
+import {
+  useEffect,
+  useState,
+} from "react";
+
+// =====================================================
+// MARKET INDEX TYPES
+// =====================================================
+
+type MarketIndex = {
+  name: string;
+  symbol: string;
+  price: number;
+  previousClose: number;
+  change: number;
+  changePercent: number;
+};
+
+type MarketIndicesResponse = {
+  indices: MarketIndex[];
+  updatedAt: string;
+};
+
+// =====================================================
+// SIDEBAR PROPS
+// =====================================================
+
 type SidebarProps = {
   onMenuClick: (page: string) => void;
-  analysis: {
-    symbol: string;
-    decision: string;
-    confidence: number;
-    risk: string;
-  } | null;
   mobileOpen: boolean;
   onClose: () => void;
 };
 
+// =====================================================
+// SIDEBAR
+// =====================================================
+
 export default function Sidebar({
   onMenuClick,
-  analysis,
   mobileOpen,
   onClose,
 }: SidebarProps) {
+  const [marketIndices, setMarketIndices] =
+    useState<MarketIndex[]>([]);
+
+  const [marketUpdatedAt, setMarketUpdatedAt] =
+    useState<string | null>(null);
+
+  // ===================================================
+  // MENU ITEMS
+  // ===================================================
+
   const menuItems = [
     {
-      name: "🏠 Dashboard",
+      name: "Dashboard",
       page: "dashboard",
     },
     {
-      name: "📈 Stock Analysis",
+      name: "Stock Analysis",
       page: "stock",
     },
     {
-  name: "Opportunities",
-  page: "opportunities",
-},
+      name: "Opportunities",
+      page: "opportunities",
+    },
     {
-      name: "📰 Market News",
+      name: "Market News",
       page: "marketnews",
     },
     {
-      name: "🤖 AI Decision Engine",
+      name: "AI Decision Engine",
       page: "ai-engine",
     },
     {
-      name: "💼 Portfolio",
+      name: "Portfolio",
       page: "portfolio",
     },
     {
-      name: "📊 Analytics",
+      name: "Analytics",
       page: "analytics",
     },
     {
-      name: "⚙️ Settings",
+      name: "Settings",
       page: "settings",
     },
   ];
 
-  const handleMenuClick = (page: string) => {
+  // ===================================================
+  // MARKET INDICES FETCH
+  // ===================================================
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadMarketIndices() {
+      try {
+        const response = await fetch(
+          "/api/market-indices",
+          {
+            cache: "no-store",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            "Failed to fetch market indices"
+          );
+        }
+
+        const data =
+          (await response.json()) as MarketIndicesResponse;
+
+        if (cancelled) {
+          return;
+        }
+
+        setMarketIndices(data.indices);
+        setMarketUpdatedAt(
+          data.updatedAt
+        );
+      } catch (error) {
+        console.error(
+          "Market Indices Error:",
+          error
+        );
+      }
+    }
+
+    loadMarketIndices();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // ===================================================
+  // MENU CLICK
+  // ===================================================
+
+  const handleMenuClick = (
+    page: string
+  ) => {
     onMenuClick(page);
     onClose();
+  };
+
+  // ===================================================
+  // FORMAT INDEX VALUE
+  // ===================================================
+
+  const formatIndexValue = (
+    value: number
+  ) => {
+    return value.toLocaleString(
+      "en-IN",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }
+    );
+  };
+
+  // ===================================================
+  // FORMAT CHANGE
+  // ===================================================
+
+  const formatChange = (
+    value: number
+  ) => {
+    const sign =
+      value > 0
+        ? "+"
+        : "";
+
+    return `${sign}${value.toFixed(2)}`;
+  };
+
+  // ===================================================
+  // FORMAT CHANGE PERCENT
+  // ===================================================
+
+  const formatChangePercent = (
+    value: number
+  ) => {
+    const sign =
+      value > 0
+        ? "+"
+        : "";
+
+    return `${sign}${value.toFixed(2)}%`;
+  };
+
+  // ===================================================
+  // FORMAT UPDATED TIME
+  // ===================================================
+
+  const formatUpdatedTime = (
+    value: string
+  ) => {
+    const date =
+      new Date(value);
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return "—";
+    }
+
+    return date.toLocaleTimeString(
+      "en-IN",
+      {
+        hour: "2-digit",
+        minute: "2-digit",
+      }
+    );
   };
 
   return (
@@ -77,10 +238,14 @@ export default function Sidebar({
 
       <aside
         className={`itdp-sidebar ${
-          mobileOpen ? "itdp-sidebar-open" : ""
+          mobileOpen
+            ? "itdp-sidebar-open"
+            : ""
         }`}
       >
-        {/* Sidebar Heading */}
+        {/* ===================================
+            SIDEBAR HEADING
+        =================================== */}
 
         <h3
           style={{
@@ -92,99 +257,225 @@ export default function Sidebar({
           Dashboard
         </h3>
 
-        {/* Menu Items */}
+        {/* ===================================
+            MENU ITEMS
+        =================================== */}
 
-        {menuItems.map((item) => (
-          <button
-            type="button"
-            key={item.page}
-            onClick={() =>
-              handleMenuClick(item.page)
-            }
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "12px",
-              marginBottom: "10px",
-              background: "#1e293b",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              textAlign: "left",
-              fontSize: "14px",
-              transition: "0.2s",
-              boxSizing: "border-box",
-            }}
-          >
-            {item.name}
-          </button>
-        ))}
+        {menuItems.map(
+          (item) => (
+            <button
+              type="button"
+              key={item.page}
+              onClick={() =>
+                handleMenuClick(
+                  item.page
+                )
+              }
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "12px",
+                marginBottom: "10px",
+                background:
+                  "#1e293b",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                textAlign: "left",
+                fontSize: "14px",
+                transition: "0.2s",
+                boxSizing:
+                  "border-box",
+              }}
+            >
+              {item.name}
+            </button>
+          )
+        )}
 
-        {/* =====================================
-            QUICK AI DECISION
-        ===================================== */}
+        {/* ===================================
+            MARKET INDICES
+        =================================== */}
 
-        {analysis && (
+        <div
+          style={{
+            marginTop: "18px",
+            paddingTop: "16px",
+            borderTop:
+              "1px solid #334155",
+          }}
+        >
           <div
             style={{
-              marginTop: "18px",
-              padding: "14px",
-              background: "#0f172a",
-              border: "1px solid #334155",
-              borderRadius: "10px",
-              color: "white",
+              fontSize: "11px",
+              color: "#94a3b8",
+              marginBottom: "10px",
+              letterSpacing:
+                "0.06em",
             }}
           >
-            <div
-              style={{
-                fontSize: "12px",
-                color: "#94a3b8",
-                marginBottom: "8px",
-              }}
-            >
-              🤖 QUICK AI DECISION
-            </div>
-
-            <div
-              style={{
-                fontSize: "15px",
-                fontWeight: "600",
-                marginBottom: "8px",
-              }}
-            >
-              {analysis.symbol}
-            </div>
-
-            <div
-              style={{
-                fontSize: "20px",
-                fontWeight: "700",
-                marginBottom: "8px",
-                color:
-                  analysis.decision === "BUY"
-                    ? "#22c55e"
-                    : analysis.decision === "SELL"
-                    ? "#ef4444"
-                    : "#f59e0b",
-              }}
-            >
-              {analysis.decision}
-            </div>
-
-            <div
-              style={{
-                fontSize: "12px",
-                color: "#cbd5e1",
-                lineHeight: "1.7",
-              }}
-            >
-              Confidence: {analysis.confidence}%
-              <br />
-              Risk: {analysis.risk}
-            </div>
+            MARKET INDICES
           </div>
-        )}
+
+          {/* ===============================
+              LOADING STATE
+          =============================== */}
+
+          {marketIndices.length ===
+            0 && (
+            <div
+              style={{
+                padding:
+                  "10px 0",
+                color:
+                  "#64748b",
+                fontSize:
+                  "11px",
+              }}
+            >
+              Loading market data...
+            </div>
+          )}
+
+          {/* ===============================
+              LIVE INDEX CARDS
+          =============================== */}
+
+          {marketIndices.map(
+            (index) => {
+              const isPositive =
+                index.change > 0;
+
+              const isNegative =
+                index.change < 0;
+
+              const changeColor =
+                isPositive
+                  ? "#22c55e"
+                  : isNegative
+                  ? "#ef4444"
+                  : "#94a3b8";
+
+              return (
+                <div
+                  key={
+                    index.symbol
+                  }
+                  style={{
+                    padding:
+                      "10px 0",
+                    borderBottom:
+                      "1px solid #1e293b",
+                  }}
+                >
+                  {/* INDEX NAME */}
+
+                  <div
+                    style={{
+                      display:
+                        "flex",
+                      alignItems:
+                        "center",
+                      justifyContent:
+                        "space-between",
+                      gap: "8px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize:
+                          "12px",
+                        fontWeight:
+                          "600",
+                        color:
+                          "#cbd5e1",
+                      }}
+                    >
+                      {index.name}
+                    </span>
+
+                    <span
+                      style={{
+                        fontSize:
+                          "13px",
+                        fontWeight:
+                          "700",
+                        color:
+                          "#f8fafc",
+                        whiteSpace:
+                          "nowrap",
+                      }}
+                    >
+                      {formatIndexValue(
+                        index.price
+                      )}
+                    </span>
+                  </div>
+
+                  {/* CHANGE */}
+
+                  <div
+                    style={{
+                      display:
+                        "flex",
+                      justifyContent:
+                        "flex-end",
+                      marginTop:
+                        "4px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color:
+                          changeColor,
+                        fontSize:
+                          "10px",
+                        fontWeight:
+                          "600",
+                        whiteSpace:
+                          "nowrap",
+                      }}
+                    >
+                      {formatChange(
+                        index.change
+                      )}
+
+                      {"  "}
+
+                      {formatChangePercent(
+                        index.changePercent
+                      )}
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+          )}
+
+          {/* ===============================
+              LAST UPDATED
+          =============================== */}
+
+          {marketUpdatedAt && (
+            <div
+              style={{
+                marginTop: "10px",
+                color:
+                  "#64748b",
+                fontSize:
+                  "9px",
+                textAlign:
+                  "right",
+              }}
+            >
+              Last Updated{" "}
+              {formatUpdatedTime(
+                marketUpdatedAt
+              )}
+            </div>
+          )}
+        </div>
       </aside>
     </>
   );

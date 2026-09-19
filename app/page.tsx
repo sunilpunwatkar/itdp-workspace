@@ -102,7 +102,6 @@ const handleMenuToggle = () => {
 
   <Sidebar
     onMenuClick={setActivePage}
-    analysis={analysis}
     mobileOpen={mobileOpen}
     onClose={() => setMobileOpen(false)}
   />
