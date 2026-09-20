@@ -42,7 +42,7 @@ export default function Header({
 
       <div className="itdp-header-brand">
         <span className="itdp-header-logo">
-          {String.fromCharCode(0x1f680)}
+          {String.fromCodePoint(0x1f680)}
         </span>
 
         <div>
