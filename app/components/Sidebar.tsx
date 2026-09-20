@@ -16,6 +16,7 @@ type MarketIndex = {
   previousClose: number;
   change: number;
   changePercent: number;
+  sparkline: number[];
 };
 
 type MarketIndicesResponse = {
@@ -32,6 +33,54 @@ type SidebarProps = {
   mobileOpen: boolean;
   onClose: () => void;
 };
+// =====================================================
+// SPARKLINE POINTS
+// =====================================================
+
+function buildSparklinePoints(
+  values: number[],
+  width: number,
+  height: number
+): string {
+  const validValues =
+    values.filter(
+      (value) =>
+        Number.isFinite(value)
+    );
+
+  if (validValues.length < 2) {
+    return "";
+  }
+
+  const min =
+    Math.min(...validValues);
+
+  const max =
+    Math.max(...validValues);
+
+  const range =
+    max - min;
+
+  return validValues
+    .map((value, index) => {
+      const x =
+        (index /
+          (validValues.length - 1)) *
+        width;
+
+      const y =
+        range === 0
+          ? height / 2
+          : height -
+            ((value - min) / range) *
+              height;
+
+      return `${x.toFixed(2)},${y.toFixed(
+        2
+      )}`;
+    })
+    .join(" ");
+}
 
 // =====================================================
 // SIDEBAR
@@ -362,6 +411,13 @@ export default function Sidebar({
                   ? "#ef4444"
                   : "#94a3b8";
 
+                  const sparklinePoints =
+                    buildSparklinePoints(
+                      index.sparkline ?? [],
+                      72,
+                      24
+          );
+
               return (
                 <div
                   key={
@@ -424,41 +480,69 @@ export default function Sidebar({
                     </span>
                   </div>
 
-                  {/* CHANGE */}
+                  {/* CHANGE + SPARKLINE */}
 
-                  <div
-                    style={{
-                      display:
-                        "flex",
-                      justifyContent:
-                        "flex-end",
-                      marginTop:
-                        "6px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        color:
-                          changeColor,
-                        fontSize:
-                          "12px",
-                        fontWeight:
-                          "600",
-                        whiteSpace:
-                          "nowrap",
-                      }}
-                    >
-                      {formatChange(
-                        index.change
-                      )}
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent:
+      "space-between",
+    gap: "8px",
+    marginTop: "6px",
+  }}
+>
+  <div
+    style={{
+      width: "72px",
+      height: "24px",
+      flexShrink: 0,
+    }}
+  >
+    {sparklinePoints && (
+      <svg
+        width="72"
+        height="24"
+        viewBox="0 0 72 24"
+        aria-hidden="true"
+        style={{
+          display: "block",
+          overflow: "visible",
+        }}
+      >
+        <polyline
+          points={sparklinePoints}
+          fill="none"
+          stroke={changeColor}
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    )}
+  </div>
 
-                      {"  "}
+  <span
+    style={{
+      color: changeColor,
+      fontSize: "12px",
+      fontWeight: "600",
+      whiteSpace: "nowrap",
+      textAlign: "right",
+    }}
+  >
+    {formatChange(
+      index.change
+    )}
 
-                      {formatChangePercent(
-                        index.changePercent
-                      )}
-                    </span>
-                  </div>
+    {"  "}
+
+    {formatChangePercent(
+      index.changePercent
+    )}
+  </span>
+</div>
                 </div>
               );
             }

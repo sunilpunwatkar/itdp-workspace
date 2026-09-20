@@ -10,6 +10,7 @@ export type MarketIndex = {
   previousClose: number;
   change: number;
   changePercent: number;
+  sparkline: number[];
 };
 
 // =====================================================
@@ -31,7 +32,23 @@ export const MARKET_INDEX_DEFINITIONS:
       symbol: "^NSEBANK",
     },
   ];
+// =====================================================
+// EXTRACT SPARKLINE
+// =====================================================
 
+export function extractSparkline(
+  values: unknown
+): number[] {
+  if (!Array.isArray(values)) {
+    return [];
+  }
+
+  return values.filter(
+    (value): value is number =>
+      typeof value === "number" &&
+      Number.isFinite(value)
+  );
+}
 // =====================================================
 // BUILD MARKET INDEX
 // =====================================================
@@ -39,7 +56,8 @@ export const MARKET_INDEX_DEFINITIONS:
 export function buildMarketIndex(
   definition: MarketIndexDefinition,
   price: number,
-  previousClose: number
+  previousClose: number,
+  sparkline: number[] = []
 ): MarketIndex {
   const change =
     price - previousClose;
@@ -49,6 +67,12 @@ export function buildMarketIndex(
       ? (change / previousClose) * 100
       : 0;
 
+  const validSparkline =
+    sparkline.filter(
+      (value) =>
+        Number.isFinite(value)
+    );
+
   return {
     name: definition.name,
     symbol: definition.symbol,
@@ -56,6 +80,7 @@ export function buildMarketIndex(
     previousClose,
     change,
     changePercent,
+    sparkline: validSparkline,
   };
 }
 // =====================================================
@@ -78,7 +103,7 @@ export async function fetchMarketIndex(
     encodeURIComponent(definition.symbol);
 
   const url =
-    `https://query1.finance.yahoo.com/v8/finance/chart/${encodedSymbol}?range=1d&interval=1d`;
+  `https://query1.finance.yahoo.com/v8/finance/chart/${encodedSymbol}?range=1d&interval=5m`;
 
   const response = await fetch(
     url,
@@ -123,12 +148,17 @@ export async function fetchMarketIndex(
       `Yahoo returned invalid index data for ${definition.symbol}`
     );
   }
+  const sparkline =
+  extractSparkline(
+    result?.indicators?.quote?.[0]?.close
+  );
 
   return buildMarketIndex(
-    definition,
-    price,
-    previousClose
-  );
+  definition,
+  price,
+  previousClose,
+  sparkline
+);
 }
 
 // =====================================================

@@ -17,6 +17,7 @@ async function run() {
       previousClose: 23270.6,
       change: 75.8,
       changePercent: 0.3257,
+      sparkline: [],
     },
     {
       name: "SENSEX",
@@ -25,6 +26,7 @@ async function run() {
       previousClose: 74336.5,
       change: -41.54,
       changePercent: -0.0559,
+      sparkline: [],
     },
     {
       name: "BANK NIFTY",
@@ -33,6 +35,7 @@ async function run() {
       previousClose: 56055.75,
       change: 302.95,
       changePercent: 0.5404,
+      sparkline: [],
     },
   ];
 
