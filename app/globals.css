@@ -1451,3 +1451,377 @@ overflow-x: hidden;
     cursor: pointer;
   }
 }
+
+/* =====================================================
+   DESKTOP READABILITY PASS
+   Typography only — no layout restructuring
+===================================================== */
+
+@media (min-width: 1001px) {
+
+  /* Sidebar navigation */
+  .itdp-sidebar-item {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  /* Chart identity */
+  .itdp-chart-symbol {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .itdp-chart-market {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  /* Indicator legend */
+  .itdp-chart-legend {
+    font-size: 12px;
+  }
+
+  /* AI Decision heading */
+  .itdp-summary-title {
+    font-size: 17px;
+  }
+
+  .itdp-summary-symbol {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  /* Decision information */
+  .itdp-summary-label {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .itdp-summary-value {
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  /* Primary action */
+  .itdp-summary-action {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+}
+/* =====================================================
+   DESKTOP APPLICATION BACKGROUND
+   Keep the workspace visually continuous
+===================================================== */
+
+@media (min-width: 1001px) {
+
+  html,
+  body {
+    min-height: 100%;
+    background: #0b1220;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .itdp-app-layout {
+    min-height: calc(100vh - 70px);
+    background: #0b1220;
+  }
+
+  .itdp-main-content {
+    min-height: calc(100vh - 70px);
+    background: #0b1220;
+  }
+
+  .itdp-dashboard,
+  .itdp-dashboard-main {
+    min-height: calc(100vh - 70px);
+    background: #0b1220;
+  }
+}
+/* =====================================================
+   DESKTOP VISUAL HIERARCHY PASS
+   Search → Chart → AI Decision → Action
+===================================================== */
+
+@media (min-width: 1001px) {
+
+  /* -----------------------------------------------
+     SEARCH — clear entry point without dominating
+  ------------------------------------------------ */
+
+  .itdp-search-wrapper {
+    padding: 10px 12px 8px !important;
+    background: #0b1220;
+  }
+
+  .itdp-search-bar {
+    gap: 10px !important;
+  }
+
+  .itdp-search-bar input {
+    min-height: 44px;
+    padding: 11px 14px !important;
+
+    background: #172033 !important;
+    border: 1px solid #334155 !important;
+    border-radius: 9px !important;
+
+    font-size: 15px !important;
+    line-height: 1.4;
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .itdp-search-bar input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow:
+      0 0 0 3px rgba(59, 130, 246, 0.12);
+  }
+
+  .itdp-search-bar button {
+    min-height: 44px;
+
+    padding: 11px 24px !important;
+
+    border-radius: 9px !important;
+
+    font-size: 14px !important;
+    font-weight: 700 !important;
+
+    box-shadow:
+      0 4px 12px rgba(37, 99, 235, 0.18);
+  }
+
+  /* -----------------------------------------------
+     CHART — primary market workspace
+  ------------------------------------------------ */
+
+  .itdp-chart-card {
+    margin: 0 12px !important;
+
+    width: calc(100% - 24px) !important;
+
+    border-color: #263449 !important;
+    border-radius: 12px !important;
+
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.16);
+  }
+
+  .itdp-chart-header {
+    min-height: 58px;
+
+    padding: 12px 16px !important;
+
+    background: #10192b;
+  }
+
+  /* -----------------------------------------------
+     DECISION — make ITDP's answer visually important
+  ------------------------------------------------ */
+
+  .itdp-decision-container {
+    margin-top: 12px !important;
+    padding: 0 12px 18px !important;
+  }
+
+  .itdp-summary-card {
+    padding: 18px !important;
+
+    background: #10192b !important;
+
+    border-color: #334155 !important;
+    border-radius: 12px !important;
+
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  .itdp-summary-header {
+    margin-bottom: 16px !important;
+  }
+
+  .itdp-summary-title {
+    font-size: 18px !important;
+    letter-spacing: -0.01em;
+  }
+
+  .itdp-summary-symbol {
+    margin-top: 6px !important;
+
+    color: #a8b4c7 !important;
+  }
+
+  .itdp-summary-grid {
+    gap: 12px !important;
+  }
+
+  .itdp-summary-item {
+    min-height: 68px;
+
+    padding: 11px 13px !important;
+
+    background: #172033 !important;
+
+    border-color: #334155 !important;
+    border-radius: 9px !important;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .itdp-summary-label {
+    margin-bottom: 6px !important;
+  }
+
+  .itdp-summary-value {
+    font-size: 16px !important;
+  }
+
+  /* -----------------------------------------------
+     ACTION — obvious next step
+  ------------------------------------------------ */
+
+  .itdp-summary-action {
+    min-height: 68px;
+
+    border-radius: 9px !important;
+
+    font-size: 13px !important;
+    font-weight: 700 !important;
+
+    box-shadow:
+      0 6px 16px rgba(37, 99, 235, 0.22);
+
+    transition:
+      transform 0.15s ease,
+      background 0.2s ease;
+  }
+
+  .itdp-summary-action:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+}
+/* =====================================================
+   DESKTOP FINAL ALIGNMENT PASS
+   Proportion + spacing only
+===================================================== */
+
+@media (min-width: 1001px) {
+
+  /* -----------------------------------------------
+     HEADER — slightly stronger product presence
+  ------------------------------------------------ */
+
+  .itdp-header {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+
+    border-bottom:
+      1px solid #1e293b;
+  }
+
+  .itdp-header-brand {
+    gap: 11px !important;
+  }
+
+  .itdp-header-title {
+    font-size: 21px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.015em;
+  }
+
+  .itdp-header-subtitle {
+    font-size: 12px !important;
+    line-height: 1.4;
+  }
+
+  /* -----------------------------------------------
+     MAIN HORIZONTAL RHYTHM
+     Search / Chart / Decision share same edges
+  ------------------------------------------------ */
+
+  .itdp-search-wrapper {
+    padding:
+      10px 12px 8px !important;
+  }
+
+  .itdp-chart-card {
+    margin:
+      0 12px !important;
+
+    width:
+      calc(100% - 24px) !important;
+  }
+
+  .itdp-decision-container {
+    padding:
+      0 12px 20px !important;
+  }
+
+  /* -----------------------------------------------
+     DECISION GRID — metrics get priority
+  ------------------------------------------------ */
+
+  .itdp-summary-grid {
+    grid-template-columns:
+      1fr
+      1.15fr
+      0.8fr
+      1fr
+      1fr
+      1.15fr !important;
+
+    gap: 10px !important;
+  }
+
+  .itdp-summary-item {
+    min-height: 66px;
+
+    padding:
+      10px 12px !important;
+  }
+
+  /* -----------------------------------------------
+     ACTION — important, but not louder than decision
+  ------------------------------------------------ */
+
+  .itdp-summary-action {
+    min-height: 66px;
+
+    padding:
+      10px 14px !important;
+
+    background:
+      #2563eb;
+
+    box-shadow:
+      0 4px 12px
+      rgba(37, 99, 235, 0.16);
+
+    font-size:
+      12px !important;
+  }
+
+  /* -----------------------------------------------
+     SIDEBAR / MAIN SEPARATION
+  ------------------------------------------------ */
+
+  .itdp-sidebar {
+    border-right:
+      1px solid #263449;
+
+    box-shadow:
+      4px 0 18px
+      rgba(0, 0, 0, 0.10);
+  }
+}

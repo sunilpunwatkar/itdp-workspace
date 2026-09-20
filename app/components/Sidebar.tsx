@@ -250,8 +250,10 @@ export default function Sidebar({
         <h3
           style={{
             marginTop: 0,
-            marginBottom: "25px",
+            marginBottom: "18px",
             color: "white",
+            fontSize: "18px",
+            fontWeight: "700",
           }}
         >
           Dashboard
@@ -274,8 +276,8 @@ export default function Sidebar({
               style={{
                 display: "block",
                 width: "100%",
-                padding: "12px",
-                marginBottom: "10px",
+                padding: "11px 12px",
+                marginBottom: "8px",
                 background:
                   "#1e293b",
                 color: "white",
@@ -283,7 +285,9 @@ export default function Sidebar({
                 borderRadius: "8px",
                 cursor: "pointer",
                 textAlign: "left",
-                fontSize: "14px",
+                fontSize: "15px",
+                fontWeight: "500",
+                lineHeight: "1.35",
                 transition: "0.2s",
                 boxSizing:
                   "border-box",
@@ -300,7 +304,7 @@ export default function Sidebar({
 
         <div
           style={{
-            marginTop: "18px",
+            marginTop: "14px",
             paddingTop: "16px",
             borderTop:
               "1px solid #334155",
@@ -308,9 +312,10 @@ export default function Sidebar({
         >
           <div
             style={{
-              fontSize: "11px",
+              fontSize: "12px",
+              fontWeight: "700",
               color: "#94a3b8",
-              marginBottom: "10px",
+              marginBottom: "12px",
               letterSpacing:
                 "0.06em",
             }}
@@ -364,9 +369,15 @@ export default function Sidebar({
                   }
                   style={{
                     padding:
-                      "10px 0",
-                    borderBottom:
-                      "1px solid #1e293b",
+                      "11px 12px",
+                    marginBottom:
+                      "8px",
+                    background:
+                      "#172033",
+                    border:
+                      "1px solid #263449",
+                    borderRadius:
+                      "9px",
                   }}
                 >
                   {/* INDEX NAME */}
@@ -385,7 +396,7 @@ export default function Sidebar({
                     <span
                       style={{
                         fontSize:
-                          "12px",
+                          "15px",
                         fontWeight:
                           "600",
                         color:
@@ -422,7 +433,7 @@ export default function Sidebar({
                       justifyContent:
                         "flex-end",
                       marginTop:
-                        "4px",
+                        "6px",
                     }}
                   >
                     <span
@@ -430,7 +441,7 @@ export default function Sidebar({
                         color:
                           changeColor,
                         fontSize:
-                          "10px",
+                          "12px",
                         fontWeight:
                           "600",
                         whiteSpace:
@@ -462,9 +473,9 @@ export default function Sidebar({
               style={{
                 marginTop: "10px",
                 color:
-                  "#64748b",
+                  "#94a3b8",
                 fontSize:
-                  "9px",
+                  "11px",
                 textAlign:
                   "right",
               }}
