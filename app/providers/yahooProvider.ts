@@ -2,6 +2,10 @@ import { MarketProvider, MarketData } from "./marketProvider";
 import {
   executeProviderOperationWithRetry,
 } from "../services/providerRetryExecutor";
+import {
+  extractStockMetadata,
+  saveStockMetadata,
+} from "../services/stockMetadataService";
 
 // =====================================================
 // QUOTE CACHE
@@ -330,6 +334,17 @@ export class YahooProvider implements MarketProvider {
 
       const quote =
         result?.indicators?.quote?.[0];
+
+              if (meta) {
+        const metadata =
+          extractStockMetadata(meta);
+
+        if (metadata.symbol) {
+          saveStockMetadata(
+            metadata
+          );
+        }
+      }
 
       if (!quote) {
 
