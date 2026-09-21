@@ -1825,3 +1825,115 @@ overflow-x: hidden;
       rgba(0, 0, 0, 0.10);
   }
 }
+/* =====================================================
+   CONSUMER EXPERIENCE — PHASE 1C
+   Decision Clarity Visual Hierarchy
+===================================================== */
+
+@media (min-width: 1001px) {
+  .itdp-summary-grid {
+    grid-template-columns:
+      1.05fr
+      1.15fr
+      0.9fr
+      1.45fr
+      1fr
+      1fr !important;
+
+    gap: 10px !important;
+  }
+
+  /*
+   Primary decision row:
+   Decision | Confidence | Risk | Actionability
+   | Entry Context | Entry
+  */
+
+  .itdp-summary-item:nth-child(1) {
+    order: 1;
+  }
+
+  .itdp-summary-item:nth-child(2) {
+    order: 3;
+  }
+
+  .itdp-summary-item:nth-child(3) {
+    order: 4;
+  }
+
+  .itdp-summary-item:nth-child(4) {
+    order: 2;
+  }
+
+  .itdp-summary-item:nth-child(5) {
+    order: 5;
+  }
+
+  .itdp-summary-item:nth-child(6) {
+    order: 6;
+  }
+
+  /*
+   Trade plan row:
+   Target | Stop Loss | R:R | Max Risk | Quantity
+   | Full Analysis
+  */
+
+  .itdp-summary-item:nth-child(7) {
+    order: 7;
+  }
+
+  .itdp-summary-item:nth-child(8) {
+    order: 8;
+  }
+
+  .itdp-summary-item:nth-child(9) {
+    order: 9;
+  }
+
+  .itdp-summary-item:nth-child(10) {
+    order: 10;
+  }
+
+  .itdp-summary-item:nth-child(11) {
+    order: 11;
+  }
+
+  .itdp-summary-action {
+    order: 12;
+  }
+
+  /*
+   Actionability deserves stronger hierarchy
+   without overpowering the actual decision.
+  */
+
+  .itdp-summary-item:nth-child(4) {
+    background: #19243a !important;
+    border-color: #475569 !important;
+  }
+
+  /*
+   Decision remains the primary signal.
+  */
+
+  .itdp-summary-item:nth-child(1)
+    .itdp-summary-value {
+    font-size: 18px !important;
+  }
+}
+  /*
+   Primary row — larger and easier to read
+  */
+
+  .itdp-summary-item:nth-child(-n + 6)
+    .itdp-summary-label {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+
+  .itdp-summary-item:nth-child(-n + 6)
+    .itdp-summary-value {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+  }

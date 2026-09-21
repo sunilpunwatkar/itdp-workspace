@@ -5,8 +5,30 @@ type DecisionSummaryCardProps = {
   decision: string;
   confidence: number;
   risk: string;
+
+  entryContext:
+    | "FAVORABLE"
+    | "CAUTION"
+    | "UNFAVORABLE";
+
+  riskGate: {
+    status:
+      | "PASS"
+      | "CAUTION"
+      | "BLOCK";
+    reason: string;
+    failures: string[];
+    warnings: string[];
+  };
+
+  entry: number;
+  riskReward: string;
+  maxRisk: number;
+  quantity: number;
+
   target: number;
   stopLoss: number;
+
   language: "en" | "mr";
 };
 
@@ -15,6 +37,12 @@ export default function DecisionSummaryCard({
   decision,
   confidence,
   risk,
+  entryContext,
+  riskGate,
+  entry,
+  riskReward,
+  maxRisk,
+  quantity,
   target,
   stopLoss,
   language,
@@ -33,8 +61,18 @@ export default function DecisionSummaryCard({
       ? "#ef4444"
       : "#f59e0b";
 
+  const gateColor =
+    riskGate.status === "PASS"
+      ? "#22c55e"
+      : riskGate.status === "BLOCK"
+      ? "#ef4444"
+      : "#f59e0b";
+
   const formatMoney = (value: number) => {
-    if (!value || value === 0) {
+    if (
+      !Number.isFinite(value) ||
+      value === 0
+    ) {
       return "-";
     }
 
@@ -52,12 +90,38 @@ export default function DecisionSummaryCard({
       : english;
   };
 
+  const actionMessage =
+    riskGate.status === "PASS"
+      ? label(
+          "Trade conditions are acceptable",
+          "ट्रेडच्या अटी अनुकूल आहेत"
+        )
+      : riskGate.status === "CAUTION"
+      ? label(
+          "Proceed with caution",
+          "सावधगिरीने पुढे जा"
+        )
+      : label(
+          "Do not execute this trade",
+          "हा ट्रेड सध्या करू नका"
+        );
+
+  const entryContextLabel =
+    entryContext === "FAVORABLE"
+      ? label("Favorable", "अनुकूल")
+      : entryContext === "CAUTION"
+      ? label("Caution", "सावधगिरी")
+      : label("Unfavorable", "प्रतिकूल");
+
   return (
     <section className="itdp-summary-card">
       <div className="itdp-summary-header">
         <div>
           <h2 className="itdp-summary-title">
-            ◈ {label("AI Decision", "AI निर्णय")}
+            ◈ {label(
+              "AI Decision",
+              "AI निर्णय"
+            )}
           </h2>
 
           <div className="itdp-summary-symbol">
@@ -69,7 +133,10 @@ export default function DecisionSummaryCard({
       <div className="itdp-summary-grid">
         <div className="itdp-summary-item">
           <span className="itdp-summary-label">
-            {label("Decision", "निर्णय")}
+            {label(
+              "Decision",
+              "निर्णय"
+            )}
           </span>
 
           <strong
@@ -109,7 +176,10 @@ export default function DecisionSummaryCard({
 
         <div className="itdp-summary-item">
           <span className="itdp-summary-label">
-            {label("Risk", "जोखीम")}
+            {label(
+              "Risk",
+              "जोखीम"
+            )}
           </span>
 
           <strong
@@ -124,7 +194,65 @@ export default function DecisionSummaryCard({
 
         <div className="itdp-summary-item">
           <span className="itdp-summary-label">
-            {label("Target", "लक्ष्य")}
+            {label(
+              "Can I act now?",
+              "आत्ता ट्रेड करता येईल?"
+            )}
+          </span>
+
+          <strong
+            className="itdp-summary-value"
+            style={{
+              color: gateColor,
+            }}
+          >
+            {riskGate.status}
+          </strong>
+
+          <div
+            style={{
+              marginTop: "4px",
+              color: "#cbd5e1",
+              fontSize: "11px",
+              lineHeight: 1.35,
+            }}
+          >
+            {actionMessage}
+          </div>
+        </div>
+
+        <div className="itdp-summary-item">
+          <span className="itdp-summary-label">
+            {label(
+              "Entry Context",
+              "एंट्री स्थिती"
+            )}
+          </span>
+
+          <strong className="itdp-summary-value">
+            {entryContextLabel}
+          </strong>
+        </div>
+
+        <div className="itdp-summary-item">
+          <span className="itdp-summary-label">
+            {label(
+              "Entry",
+              "एंट्री"
+            )}
+          </span>
+
+          <strong className="itdp-summary-value">
+            {formatMoney(entry)}
+          </strong>
+        </div>
+
+        <div className="itdp-summary-item">
+          <span className="itdp-summary-label">
+            {label(
+              "Target",
+              "लक्ष्य"
+            )}
           </span>
 
           <strong
@@ -152,6 +280,50 @@ export default function DecisionSummaryCard({
             }}
           >
             {formatMoney(stopLoss)}
+          </strong>
+        </div>
+
+        <div className="itdp-summary-item">
+          <span className="itdp-summary-label">
+            {label(
+              "Risk : Reward",
+              "जोखीम : परतावा"
+            )}
+          </span>
+
+          <strong className="itdp-summary-value">
+            {riskReward || "-"}
+          </strong>
+        </div>
+
+        <div className="itdp-summary-item">
+          <span className="itdp-summary-label">
+            {label(
+              "Maximum Risk",
+              "कमाल जोखीम"
+            )}
+          </span>
+
+          <strong className="itdp-summary-value">
+            {formatMoney(maxRisk)}
+          </strong>
+        </div>
+
+        <div className="itdp-summary-item">
+          <span className="itdp-summary-label">
+            {label(
+              "Quantity",
+              "शेअर्सची संख्या"
+            )}
+          </span>
+
+          <strong className="itdp-summary-value">
+            {quantity > 0
+              ? `${quantity} ${label(
+                  "shares",
+                  "शेअर्स"
+                )}`
+              : "-"}
           </strong>
         </div>
 
