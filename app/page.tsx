@@ -10,6 +10,18 @@ import MarketNews from "./components/MarketNews";
 import StockAnalysis from "./components/StockAnalysis";
 import SearchBar from "./components/SearchBar";
 import OpportunityExperiencePage from "./components/OpportunityExperiencePage";
+import type {
+  AnalysisResult,
+} from "./types/analysis";
+
+import type {
+  StockMetadata,
+} from "./services/stockMetadataService";
+
+type AnalysisApiResponse =
+  AnalysisResult & {
+    metadata?: StockMetadata;
+  };
 
 export default function Home() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -24,7 +36,10 @@ const handleMenuToggle = () => {
 
   const [symbol, setSymbol] = useState("RELIANCE");
 
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysis, setAnalysis] =
+    useState<AnalysisApiResponse | null>(
+      null
+    );
 
   const [loading, setLoading] = useState(false);
 
@@ -58,7 +73,7 @@ const handleMenuToggle = () => {
           );
         }
 
-        const data =
+        const data: AnalysisApiResponse =
           await response.json();
 
           console.timeEnd("ANALYSIS JSON");
@@ -130,7 +145,15 @@ const handleMenuToggle = () => {
                   Analyzing...
                 </p>
               )}
-              <ChartSection symbol={symbol} />
+              <ChartSection
+                symbol={symbol}
+                resolvedSymbol={
+                  analysis?.symbol
+                }
+                metadata={
+                  analysis?.metadata
+                }
+              />
 
               {/* ==========================
                   DASHBOARD

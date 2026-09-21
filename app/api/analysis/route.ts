@@ -11,6 +11,14 @@ import {
   handleAnalysisApiRequest,
 } from "../../services/analysisApiHandlerService";
 
+import {
+  getCachedStockMetadata,
+} from "../../services/stockMetadataService";
+
+import {
+  buildAnalysisApiResponse,
+} from "../../services/analysisResponseService";
+
 const NO_CACHE_HEADERS = {
   "Cache-Control":
     "no-store, no-cache, must-revalidate",
@@ -52,7 +60,15 @@ export async function GET(
             result.symbol
           );
 
-          return result;
+          const metadata =
+            getCachedStockMetadata(
+              result.symbol
+            );
+
+          return buildAnalysisApiResponse(
+            result,
+            metadata
+          );
         },
     });
 
