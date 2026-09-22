@@ -51,11 +51,13 @@ type DashboardProps = {
   };
 
   language: "en" | "mr";
+  onViewFullAnalysis: () => void;
 };
 
 export default function Dashboard({
   analysis,
   language,
+  onViewFullAnalysis,
 }: DashboardProps) {
   return (
     <main className="itdp-dashboard">
@@ -87,6 +89,9 @@ export default function Dashboard({
           target={analysis.target}
           stopLoss={analysis.stopLoss}
           language={language}
+          onViewFullAnalysis={
+            onViewFullAnalysis
+          }
         />
       </div>
     </main>

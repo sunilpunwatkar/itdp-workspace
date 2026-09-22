@@ -17,6 +17,8 @@ import type {
 import type {
   StockMetadata,
 } from "./services/stockMetadataService";
+import FullAnalysisPage from "./components/FullAnalysisPage";
+
 
 type AnalysisApiResponse =
   AnalysisResult & {
@@ -155,27 +157,52 @@ const handleMenuToggle = () => {
                 }
               />
 
-              {/* ==========================
+                            {/* ==========================
                   DASHBOARD
               ========================== */}
 
               {analysis && (
                 <Dashboard
-  key={analysis.symbol}
-  analysis={analysis}
-  language={language}
-/>
-
+                  key={analysis.symbol}
+                  analysis={analysis}
+                  language={language}
+                  onViewFullAnalysis={() =>
+                    setActivePage(
+                      "full-analysis"
+                    )
+                  }
+                />
               )}
             </>
           )}
-          {/* ==========================
-    OPPORTUNITIES
-========================== */}
 
-{activePage === "opportunities" && (
-  <OpportunityExperiencePage />
-)}
+          {/* ==========================
+              FULL ANALYSIS
+          ========================== */}
+
+          {activePage ===
+            "full-analysis" &&
+            analysis && (
+              <FullAnalysisPage
+                analysis={analysis}
+                language={language}
+                onBack={() =>
+                  setActivePage(
+                    "dashboard"
+                  )
+                }
+              />
+            )}
+
+          {/* ==========================
+              OPPORTUNITIES
+          ========================== */}
+
+          {activePage ===
+            "opportunities" && (
+              <OpportunityExperiencePage />
+            )}
+
 
           {/* ==========================
               MARKET NEWS

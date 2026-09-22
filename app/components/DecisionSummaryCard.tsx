@@ -29,7 +29,8 @@ type DecisionSummaryCardProps = {
   target: number;
   stopLoss: number;
 
-  language: "en" | "mr";
+    language: "en" | "mr";
+  onViewFullAnalysis: () => void;
 };
 
 export default function DecisionSummaryCard({
@@ -46,6 +47,7 @@ export default function DecisionSummaryCard({
   target,
   stopLoss,
   language,
+  onViewFullAnalysis,
 }: DecisionSummaryCardProps) {
   const decisionColor =
     decision === "BUY"
@@ -81,7 +83,7 @@ export default function DecisionSummaryCard({
     )}${value.toFixed(2)}`;
   };
 
-  const label = (
+    const label = (
     english: string,
     marathi: string
   ) => {
@@ -330,6 +332,7 @@ export default function DecisionSummaryCard({
         <button
           type="button"
           className="itdp-summary-action"
+          onClick={onViewFullAnalysis}
         >
           {label(
             "View Full Analysis →",
