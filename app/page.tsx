@@ -1,6 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -36,9 +41,11 @@ const handleMenuToggle = () => {
   setMobileOpen((prev) => !prev);
 };
 
-  const [symbol, setSymbol] = useState("RELIANCE");
+const [symbol, setSymbol] = useState("RELIANCE");
 
-  const [analysis, setAnalysis] =
+const skipNextAnalysisRef = useRef(false);
+
+const [analysis, setAnalysis] =
     useState<AnalysisApiResponse | null>(
       null
     );
@@ -78,13 +85,13 @@ const handleMenuToggle = () => {
         const data: AnalysisApiResponse =
           await response.json();
 
-          console.timeEnd("ANALYSIS JSON");
-          console.time("ANALYSIS SET STATE");
+skipNextAnalysisRef.current = true;
+setSymbol(finalSymbol);
+setAnalysis(data);
 
-        console.log(
-          "Analysis :",
-          data
-        );
+setActivePage(
+  "full-analysis"
+);
 
         setAnalysis(data);
         console.timeEnd("ANALYSIS SET STATE");
@@ -101,10 +108,62 @@ const handleMenuToggle = () => {
     },
     []
   );
+      const handleOpportunityFullAnalysis =
+    useCallback(
+      async (opportunitySymbol: string) => {
+        try {
+          const finalSymbol =
+            opportunitySymbol
+              .trim()
+              .toUpperCase();
+
+          if (!finalSymbol) {
+            return;
+          }
+
+          setLoading(true);
+
+          const response = await fetch(
+            `/api/analysis?symbol=${finalSymbol}&ts=${Date.now()}`,
+            {
+              cache: "no-store",
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              "Failed to fetch opportunity analysis"
+            );
+          }
+
+          const data: AnalysisApiResponse =
+            await response.json();
+
+          setAnalysis(data);
+
+          setActivePage(
+            "full-analysis"
+          );
+        } catch (error) {
+          console.error(
+            "Opportunity Analysis Error :",
+            error
+          );
+        } finally {
+          setLoading(false);
+        }
+      },
+      []
+    );
 
   useEffect(() => {
-    handleAnalyze(symbol);
-  }, [handleAnalyze, symbol]);
+  if (skipNextAnalysisRef.current) {
+    skipNextAnalysisRef.current = false;
+    return;
+  }
+
+  handleAnalyze(symbol);
+}, [handleAnalyze, symbol]);
 
   return (
     <>
@@ -194,15 +253,19 @@ const handleMenuToggle = () => {
               />
             )}
 
-          {/* ==========================
+                    {/* ==========================
               OPPORTUNITIES
           ========================== */}
 
           {activePage ===
             "opportunities" && (
-              <OpportunityExperiencePage />
+              <OpportunityExperiencePage
+                language={language}
+                onViewFullAnalysis={
+                  handleOpportunityFullAnalysis
+                }
+              />
             )}
-
 
           {/* ==========================
               MARKET NEWS
