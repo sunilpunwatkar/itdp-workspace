@@ -15,6 +15,9 @@ type Props = {
   symbol: string;
 };
 
+import { runSharedClientRequest } from "../../services/clientRequestCoordinator";
+import type { CandleData } from "../../types/chart";
+
 export default function LiveChart({ symbol }: Props) {
   const chartContainerRef =
     useRef<HTMLDivElement | null>(null);
@@ -24,12 +27,13 @@ export default function LiveChart({ symbol }: Props) {
 
     const container = chartContainerRef.current;
 
-    const isMobile = window.innerWidth <= 768;
+    let disposed = false;
+
+   const isMobile = window.innerWidth <= 768;
 
     const getChartHeight = () =>
   isMobile ? 500 : 400;
-    console.time("CHART TOTAL");
-console.time("CHART FETCH");
+    const chartStartedAt = performance.now();
 
     // =========================================
     // CREATE CHART
@@ -204,41 +208,31 @@ console.time("CHART FETCH");
 
     async function loadChart() {
       try {
-        const response = await fetch(
-          `/api/chart?symbol=${symbol}&ts=${Date.now()}`,
-          {
-            cache: "no-store",
-          }
-        );
-        console.timeEnd("CHART FETCH");
-console.time("CHART JSON");
+        const rawData = await runSharedClientRequest<CandleData[]>(
+  `chart:${symbol.trim().toUpperCase()}`,
+  async () => {
+    const response = await fetch(
+      `/api/chart?symbol=${encodeURIComponent(symbol.trim().toUpperCase())}`,
+      { cache: "no-store" }
+    );
 
-        if (!response.ok) {
-          throw new Error("Chart API Failed");
+    if (!response.ok) {
+      throw new Error(`Chart API failed: ${response.status}`);
+    }
+
+    return response.json() as Promise<CandleData[]>;
+  }
+);
+if (disposed) {
+         return;
         }
+console.log(
+  `CHART FETCH ${symbol}:`,
+  `${(performance.now() - chartStartedAt).toFixed(2)} ms`
+);
 
-        const rawData = await response.json();
+const setDataStartedAt = performance.now();
 
-        console.timeEnd("CHART JSON");
-        console.time("CHART SET DATA");
-
-        if (!Array.isArray(rawData)) {
-          throw new Error("Invalid chart data");
-        }
-
-        console.log(
-          "First Candle:",
-          rawData[0]
-        );
-
-        console.log(
-          "Last Candle JSON:",
-          JSON.stringify(
-            rawData[rawData.length - 1],
-            null,
-            2
-          )
-        );
 
         // =====================================
         // CANDLE DATA
@@ -383,15 +377,24 @@ console.time("CHART JSON");
         // FIT CONTENT
         // =====================================
 
-        console.timeEnd("CHART SET DATA");
+        console.log(
+  `CHART SET DATA ${symbol}:`,
+  `${(performance.now() - setDataStartedAt).toFixed(2)} ms`
+);
 
-        console.time("CHART FIT CONTENT");
+        const fitContentStartedAt = performance.now();
 
         chart.timeScale().fitContent();
 
-        console.timeEnd("CHART FIT CONTENT");
+        console.log(
+  `CHART FIT CONTENT ${symbol}:`,
+  `${(performance.now() - fitContentStartedAt).toFixed(2)} ms`
+);
 
-        console.timeEnd("CHART TOTAL");
+console.log(
+  `CHART TOTAL ${symbol}:`,
+  `${(performance.now() - chartStartedAt).toFixed(2)} ms`
+);
 
       } catch (error) {
         console.error(
@@ -436,8 +439,8 @@ console.time("CHART JSON");
         "resize",
         handleResize
       );
-
-      chart.remove();
+      disposed = true;
+  chart.remove();
     };
   }, [symbol]);
 

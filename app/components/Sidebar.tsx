@@ -4,6 +4,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { runSharedClientRequest } from "../services/clientRequestCoordinator";
 
 // =====================================================
 // MARKET INDEX TYPES
@@ -144,32 +145,35 @@ export default function Sidebar({
     let cancelled = false;
 
     async function loadMarketIndices() {
-      try {
+     try {
+  const data =
+    await runSharedClientRequest<MarketIndicesResponse>(
+      "market-indices",
+      async () => {
         const response = await fetch(
           "/api/market-indices",
-          {
-            cache: "no-store",
-          }
+          { cache: "no-store" }
         );
 
         if (!response.ok) {
           throw new Error(
-            "Failed to fetch market indices"
+            `Market Indices API failed: ${response.status}`
           );
         }
 
-        const data =
-          (await response.json()) as MarketIndicesResponse;
+        return response.json() as Promise<MarketIndicesResponse>;
+      }
+    );
 
-        if (cancelled) {
-          return;
-        }
+  if (cancelled) {
+    return;
+  }
 
-        setMarketIndices(data.indices);
-        setMarketUpdatedAt(
-          data.updatedAt
-        );
-      } catch (error) {
+  setMarketIndices(data.indices);
+  setMarketUpdatedAt(data.updatedAt);
+}
+
+       catch (error) {
         console.error(
           "Market Indices Error:",
           error

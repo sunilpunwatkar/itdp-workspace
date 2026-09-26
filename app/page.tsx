@@ -23,13 +23,14 @@ import type {
   StockMetadata,
 } from "./services/stockMetadataService";
 import FullAnalysisPage from "./components/FullAnalysisPage";
+import { runSharedClientRequest } from "./services/clientRequestCoordinator";
+
 
 
 type AnalysisApiResponse =
   AnalysisResult & {
     metadata?: StockMetadata;
   };
-
 export default function Home() {
   const [activePage, setActivePage] = useState("dashboard");
 
@@ -52,62 +53,54 @@ const [analysis, setAnalysis] =
 
   const [loading, setLoading] = useState(false);
 
-  const handleAnalyze = useCallback(
-    async (inputSymbol: string) => {
-      try {
-        const finalSymbol =
-          inputSymbol.trim().toUpperCase();
+      const handleAnalyze = useCallback(
+  async (inputSymbol: string) => {
+    const finalSymbol =
+      inputSymbol.trim().toUpperCase();
 
-        setLoading(true);
+    if (!finalSymbol) return;
 
-        console.log(
-          "Analyzing :",
-          finalSymbol
-        );
-        console.time("ANALYSIS TOTAL");
-        console.time("ANALYSIS FETCH");
+    const startedAt = performance.now();
 
-        const response = await fetch(
-          `/api/analysis?symbol=${finalSymbol}&ts=${Date.now()}`,
-          {
-            cache: "no-store",
+    try {
+      setLoading(true);
+
+      console.log("Analyzing :", finalSymbol);
+
+      const data =
+        await runSharedClientRequest<AnalysisApiResponse>(
+          `analysis:${finalSymbol}`,
+          async () => {
+            const response = await fetch(
+              `/api/analysis?symbol=${encodeURIComponent(finalSymbol)}`,
+              { cache: "no-store" }
+            );
+
+            if (!response.ok) {
+              throw new Error(
+                `Analysis API failed: ${response.status}`
+              );
+            }
+
+            return response.json() as Promise<AnalysisApiResponse>;
           }
         );
-        console.timeEnd("ANALYSIS FETCH");
-        console.time("ANALYSIS JSON");
 
-        if (!response.ok) {
-          throw new Error(
-            "Failed to fetch analysis"
-          );
-        }
+      setAnalysis(data);
 
-        const data: AnalysisApiResponse =
-          await response.json();
-
-skipNextAnalysisRef.current = true;
-setSymbol(finalSymbol);
-setAnalysis(data);
-
-setActivePage(
-  "full-analysis"
+      console.log(
+        `ANALYSIS TOTAL ${finalSymbol}:`,
+        `${(performance.now() - startedAt).toFixed(2)} ms`
+      );
+    } catch (error) {
+      console.error("Analysis Error :", error);
+    } finally {
+      setLoading(false);
+    }
+  },
+  []
 );
 
-        setAnalysis(data);
-        console.timeEnd("ANALYSIS SET STATE");
-        console.timeEnd("ANALYSIS TOTAL");
-        
-      } catch (error) {
-        console.error(
-          "Analysis Error :",
-          error
-        );
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
       const handleOpportunityFullAnalysis =
     useCallback(
       async (opportunitySymbol: string) => {
@@ -137,13 +130,15 @@ setActivePage(
           }
 
           const data: AnalysisApiResponse =
-            await response.json();
+  await response.json();
 
-          setAnalysis(data);
+skipNextAnalysisRef.current = true;
+setSymbol(finalSymbol);
+setAnalysis(data);
 
-          setActivePage(
-            "full-analysis"
-          );
+setActivePage(
+  "full-analysis"
+);
         } catch (error) {
           console.error(
             "Opportunity Analysis Error :",
