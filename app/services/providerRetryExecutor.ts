@@ -44,12 +44,16 @@ export async function executeProviderOperationWithRetry<T>(
     );
   }
 
+  const retryStartedAt = performance.now();
+
   let attempt = 0;
 
   while (
     attempt < maxAttempts
   ) {
     attempt += 1;
+
+    const attemptStartedAt = performance.now();
 
     try {
       return await operation();
@@ -84,6 +88,12 @@ export async function executeProviderOperationWithRetry<T>(
 
       await sleep(
         delayMs
+      );
+    } finally {
+      console.log(
+        `PROVIDER RETRY ATTEMPT ${attempt}/${maxAttempts}:`,
+        `${(performance.now() - attemptStartedAt).toFixed(2)} ms`,
+        `TOTAL ${(performance.now() - retryStartedAt).toFixed(2)} ms`
       );
     }
   }
