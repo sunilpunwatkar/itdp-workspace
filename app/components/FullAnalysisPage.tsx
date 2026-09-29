@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type {
   AnalysisResult,
@@ -85,43 +85,43 @@ export default function FullAnalysisPage({
     analysis.riskGate.status === "PASS"
       ? label(
           "Trade conditions are acceptable",
-          "ट्रेडच्या अटी अनुकूल आहेत"
+          "à¤Ÿà¥à¤°à¥‡à¤¡à¤šà¥à¤¯à¤¾ à¤…à¤Ÿà¥€ à¤…à¤¨à¥à¤•à¥‚à¤² à¤†à¤¹à¥‡à¤¤"
         )
       : analysis.riskGate.status ===
         "CAUTION"
       ? label(
           "Proceed with caution",
-          "सावधगिरीने पुढे जा"
+          "à¤¸à¤¾à¤µà¤§à¤—à¤¿à¤°à¥€à¤¨à¥‡ à¤ªà¥à¤¢à¥‡ à¤œà¤¾"
         )
       : label(
           "Do not execute this trade",
-          "हा ट्रेड सध्या करू नका"
+          "à¤¹à¤¾ à¤Ÿà¥à¤°à¥‡à¤¡ à¤¸à¤§à¥à¤¯à¤¾ à¤•à¤°à¥‚ à¤¨à¤•à¤¾"
         );
           const consumerExplanation =
     analysis.decision === "HOLD" &&
     analysis.entryContext === "UNFAVORABLE"
       ? label(
           "Market evidence may point in a direction, but a safe executable entry is not available right now. The entry context is unfavorable, so the system is keeping the decision at HOLD.",
-          "मार्केटचे संकेत एका दिशेकडे असले तरी सध्या सुरक्षितपणे ट्रेड घेण्यासाठी योग्य एंट्री उपलब्ध नाही. एंट्रीची स्थिती प्रतिकूल असल्यामुळे सिस्टीमने निर्णय HOLD ठेवला आहे."
+          "à¤®à¤¾à¤°à¥à¤•à¥‡à¤Ÿà¤šà¥‡ à¤¸à¤‚à¤•à¥‡à¤¤ à¤à¤•à¤¾ à¤¦à¤¿à¤¶à¥‡à¤•à¤¡à¥‡ à¤…à¤¸à¤²à¥‡ à¤¤à¤°à¥€ à¤¸à¤§à¥à¤¯à¤¾ à¤¸à¥à¤°à¤•à¥à¤·à¤¿à¤¤à¤ªà¤£à¥‡ à¤Ÿà¥à¤°à¥‡à¤¡ à¤˜à¥‡à¤£à¥à¤¯à¤¾à¤¸à¤¾à¤ à¥€ à¤¯à¥‹à¤—à¥à¤¯ à¤à¤‚à¤Ÿà¥à¤°à¥€ à¤‰à¤ªà¤²à¤¬à¥à¤§ à¤¨à¤¾à¤¹à¥€. à¤à¤‚à¤Ÿà¥à¤°à¥€à¤šà¥€ à¤¸à¥à¤¥à¤¿à¤¤à¥€ à¤ªà¥à¤°à¤¤à¤¿à¤•à¥‚à¤² à¤…à¤¸à¤²à¥à¤¯à¤¾à¤®à¥à¤³à¥‡ à¤¸à¤¿à¤¸à¥à¤Ÿà¥€à¤®à¤¨à¥‡ à¤¨à¤¿à¤°à¥à¤£à¤¯ HOLD à¤ à¥‡à¤µà¤²à¤¾ à¤†à¤¹à¥‡."
         )
       : analysis.decision === "HOLD"
       ? label(
           "The available evidence is not strong enough for a safe executable trade. Waiting is the current decision.",
-          "सुरक्षितपणे ट्रेड घेण्यासाठी उपलब्ध पुरावे पुरेसे मजबूत नाहीत. त्यामुळे सध्या प्रतीक्षा करणे हा निर्णय आहे."
+          "à¤¸à¥à¤°à¤•à¥à¤·à¤¿à¤¤à¤ªà¤£à¥‡ à¤Ÿà¥à¤°à¥‡à¤¡ à¤˜à¥‡à¤£à¥à¤¯à¤¾à¤¸à¤¾à¤ à¥€ à¤‰à¤ªà¤²à¤¬à¥à¤§ à¤ªà¥à¤°à¤¾à¤µà¥‡ à¤ªà¥à¤°à¥‡à¤¸à¥‡ à¤®à¤œà¤¬à¥‚à¤¤ à¤¨à¤¾à¤¹à¥€à¤¤. à¤¤à¥à¤¯à¤¾à¤®à¥à¤³à¥‡ à¤¸à¤§à¥à¤¯à¤¾ à¤ªà¥à¤°à¤¤à¥€à¤•à¥à¤·à¤¾ à¤•à¤°à¤£à¥‡ à¤¹à¤¾ à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤†à¤¹à¥‡."
         )
       : analysis.riskGate.status === "BLOCK"
       ? label(
           "A directional decision exists, but one or more critical execution conditions have failed. The trade should not be executed.",
-          "दिशात्मक निर्णय उपलब्ध आहे, पण ट्रेड करण्यासाठी आवश्यक एक किंवा अधिक महत्त्वाच्या अटी पूर्ण झालेल्या नाहीत. त्यामुळे ट्रेड करू नये."
+          "à¤¦à¤¿à¤¶à¤¾à¤¤à¥à¤®à¤• à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤‰à¤ªà¤²à¤¬à¥à¤§ à¤†à¤¹à¥‡, à¤ªà¤£ à¤Ÿà¥à¤°à¥‡à¤¡ à¤•à¤°à¤£à¥à¤¯à¤¾à¤¸à¤¾à¤ à¥€ à¤†à¤µà¤¶à¥à¤¯à¤• à¤à¤• à¤•à¤¿à¤‚à¤µà¤¾ à¤…à¤§à¤¿à¤• à¤®à¤¹à¤¤à¥à¤¤à¥à¤µà¤¾à¤šà¥à¤¯à¤¾ à¤…à¤Ÿà¥€ à¤ªà¥‚à¤°à¥à¤£ à¤à¤¾à¤²à¥‡à¤²à¥à¤¯à¤¾ à¤¨à¤¾à¤¹à¥€à¤¤. à¤¤à¥à¤¯à¤¾à¤®à¥à¤³à¥‡ à¤Ÿà¥à¤°à¥‡à¤¡ à¤•à¤°à¥‚ à¤¨à¤¯à¥‡."
         )
       : analysis.riskGate.status === "CAUTION"
       ? label(
           "A trade setup exists, but the system has detected conditions that require additional caution before execution.",
-          "ट्रेडची संधी उपलब्ध आहे, पण ट्रेड करण्यापूर्वी अधिक सावधगिरी आवश्यक असलेल्या अटी सिस्टीमने ओळखल्या आहेत."
+          "à¤Ÿà¥à¤°à¥‡à¤¡à¤šà¥€ à¤¸à¤‚à¤§à¥€ à¤‰à¤ªà¤²à¤¬à¥à¤§ à¤†à¤¹à¥‡, à¤ªà¤£ à¤Ÿà¥à¤°à¥‡à¤¡ à¤•à¤°à¤£à¥à¤¯à¤¾à¤ªà¥‚à¤°à¥à¤µà¥€ à¤…à¤§à¤¿à¤• à¤¸à¤¾à¤µà¤§à¤—à¤¿à¤°à¥€ à¤†à¤µà¤¶à¥à¤¯à¤• à¤…à¤¸à¤²à¥‡à¤²à¥à¤¯à¤¾ à¤…à¤Ÿà¥€ à¤¸à¤¿à¤¸à¥à¤Ÿà¥€à¤®à¤¨à¥‡ à¤“à¤³à¤–à¤²à¥à¤¯à¤¾ à¤†à¤¹à¥‡à¤¤."
         )
       : label(
           "The directional decision and critical execution conditions are currently aligned.",
-          "दिशात्मक निर्णय आणि ट्रेड करण्यासाठी आवश्यक महत्त्वाच्या अटी सध्या एकमेकांशी सुसंगत आहेत."
+          "à¤¦à¤¿à¤¶à¤¾à¤¤à¥à¤®à¤• à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤†à¤£à¤¿ à¤Ÿà¥à¤°à¥‡à¤¡ à¤•à¤°à¤£à¥à¤¯à¤¾à¤¸à¤¾à¤ à¥€ à¤†à¤µà¤¶à¥à¤¯à¤• à¤®à¤¹à¤¤à¥à¤¤à¥à¤µà¤¾à¤šà¥à¤¯à¤¾ à¤…à¤Ÿà¥€ à¤¸à¤§à¥à¤¯à¤¾ à¤à¤•à¤®à¥‡à¤•à¤¾à¤‚à¤¶à¥€ à¤¸à¥à¤¸à¤‚à¤—à¤¤ à¤†à¤¹à¥‡à¤¤."
         );
           const primaryFailures =
     analysis.riskGate.failures.filter(
@@ -160,7 +160,7 @@ export default function FullAnalysisPage({
         {"\u2190"}{" "}
         {label(
           "Back to Dashboard",
-          "डॅशबोर्डवर परत जा"
+          "à¤¡à¥…à¤¶à¤¬à¥‹à¤°à¥à¤¡à¤µà¤° à¤ªà¤°à¤¤ à¤œà¤¾"
         )}
       </button>
 
@@ -174,14 +174,14 @@ export default function FullAnalysisPage({
           <h1 className="itdp-full-title">
             {label(
               "AI Full Analysis",
-              "AI संपूर्ण विश्लेषण"
+              "AI à¤¸à¤‚à¤ªà¥‚à¤°à¥à¤£ à¤µà¤¿à¤¶à¥à¤²à¥‡à¤·à¤£"
             )}
           </h1>
 
           <p className="itdp-full-subtitle">
             {label(
               "Decision intelligence, trade levels and risk controls in one view.",
-              "निर्णय, ट्रेड पातळ्या आणि जोखीम नियंत्रण एकाच ठिकाणी."
+              "à¤¨à¤¿à¤°à¥à¤£à¤¯, à¤Ÿà¥à¤°à¥‡à¤¡ à¤ªà¤¾à¤¤à¤³à¥à¤¯à¤¾ à¤†à¤£à¤¿ à¤œà¥‹à¤–à¥€à¤® à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤£ à¤à¤•à¤¾à¤š à¤ à¤¿à¤•à¤¾à¤£à¥€."
             )}
           </p>
         </div>
@@ -193,7 +193,7 @@ export default function FullAnalysisPage({
           <span className="itdp-full-section-label">
             {label(
               "Final Decision",
-              "अंतिम निर्णय"
+              "à¤…à¤‚à¤¤à¤¿à¤® à¤¨à¤¿à¤°à¥à¤£à¤¯"
             )}
           </span>
 
@@ -210,7 +210,7 @@ export default function FullAnalysisPage({
         <Metric
           label={label(
             "Confidence",
-            "विश्वास"
+            "à¤µà¤¿à¤¶à¥à¤µà¤¾à¤¸"
           )}
           value={`${analysis.confidence}%`}
         />
@@ -218,7 +218,7 @@ export default function FullAnalysisPage({
         <Metric
           label={label(
             "Risk",
-            "जोखीम"
+            "à¤œà¥‹à¤–à¥€à¤®"
           )}
           value={analysis.risk}
           color={riskColor}
@@ -227,7 +227,7 @@ export default function FullAnalysisPage({
         <Metric
           label={label(
             "Entry Context",
-            "एंट्री स्थिती"
+            "à¤à¤‚à¤Ÿà¥à¤°à¥€ à¤¸à¥à¤¥à¤¿à¤¤à¥€"
           )}
           value={formatText(
             analysis.entryContext
@@ -247,7 +247,7 @@ export default function FullAnalysisPage({
           <span className="itdp-full-section-label">
             {label(
               "Can I act now?",
-              "आत्ता ट्रेड करता येईल?"
+              "à¤†à¤¤à¥à¤¤à¤¾ à¤Ÿà¥à¤°à¥‡à¤¡ à¤•à¤°à¤¤à¤¾ à¤¯à¥‡à¤ˆà¤²?"
             )}
           </span>
 
@@ -271,17 +271,59 @@ export default function FullAnalysisPage({
           <strong>
             {label(
               "Why?",
-              "का?"
+              "à¤•à¤¾?"
             )}
           </strong>
+<p>
+  {consumerExplanation}
+</p>
 
-          <p>
-            {consumerExplanation}
-          </p>
+{analysis.riskGate.warnings.length > 0 && (
+  <div className="itdp-full-gate-list">
+    <strong>
+      {label(
+        "Specific risk warnings",
+        "à¤µà¤¿à¤¶à¤¿à¤·à¥à¤Ÿ à¤œà¥‹à¤–à¥€à¤® à¤¸à¥‚à¤šà¤¨à¤¾"
+      )}
+    </strong>
 
-          <span>
-            {analysis.riskGate.reason}
-          </span>
+    <ul>
+      {analysis.riskGate.warnings.map(
+        (warning, index) => (
+          <li key={`${warning}-${index}`}>
+            {warning}
+          </li>
+        )
+      )}
+    </ul>
+  </div>
+)}
+
+{analysis.riskGate.failures.length > 0 && (
+  <div className="itdp-full-gate-list">
+    <strong>
+      {label(
+        "Critical failures",
+        "à¤—à¤‚à¤­à¥€à¤° à¤…à¤¡à¤¥à¤³à¥‡"
+      )}
+    </strong>
+
+    <ul>
+      {analysis.riskGate.failures.map(
+        (failure, index) => (
+          <li key={`${failure}-${index}`}>
+            {failure}
+          </li>
+        )
+      )}
+    </ul>
+  </div>
+)}
+
+<span>
+  {analysis.riskGate.reason}
+</span>
+
         </div>
       </div>
 
@@ -289,18 +331,18 @@ export default function FullAnalysisPage({
       <Section
         title={label(
           "Decision Intelligence",
-          "निर्णय बुद्धिमत्ता"
+          "à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤¬à¥à¤¦à¥à¤§à¤¿à¤®à¤¤à¥à¤¤à¤¾"
         )}
         subtitle={label(
           "How strong and dependable is the current decision?",
-          "सध्याचा निर्णय किती मजबूत आणि विश्वासार्ह आहे?"
+          "à¤¸à¤§à¥à¤¯à¤¾à¤šà¤¾ à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤•à¤¿à¤¤à¥€ à¤®à¤œà¤¬à¥‚à¤¤ à¤†à¤£à¤¿ à¤µà¤¿à¤¶à¥à¤µà¤¾à¤¸à¤¾à¤°à¥à¤¹ à¤†à¤¹à¥‡?"
         )}
       >
         <div className="itdp-full-grid itdp-full-grid-4">
           <MetricCard
             label={label(
               "Strength",
-              "निर्णयाची ताकद"
+              "à¤¨à¤¿à¤°à¥à¤£à¤¯à¤¾à¤šà¥€ à¤¤à¤¾à¤•à¤¦"
             )}
             value={formatText(
               analysis.decisionStrength
@@ -310,7 +352,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Quality",
-              "निर्णयाची गुणवत्ता"
+              "à¤¨à¤¿à¤°à¥à¤£à¤¯à¤¾à¤šà¥€ à¤—à¥à¤£à¤µà¤¤à¥à¤¤à¤¾"
             )}
             value={formatText(
               analysis.decisionQuality
@@ -320,7 +362,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Reliability",
-              "विश्वासार्हता"
+              "à¤µà¤¿à¤¶à¥à¤µà¤¾à¤¸à¤¾à¤°à¥à¤¹à¤¤à¤¾"
             )}
             value={formatText(
               analysis.decisionReliability
@@ -330,7 +372,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Evidence Conflict",
-              "पुराव्यातील संघर्ष"
+              "à¤ªà¥à¤°à¤¾à¤µà¥à¤¯à¤¾à¤¤à¥€à¤² à¤¸à¤‚à¤˜à¤°à¥à¤·"
             )}
             value={formatText(
               analysis.conflictSeverity
@@ -343,18 +385,18 @@ export default function FullAnalysisPage({
       <Section
         title={label(
           "Trade Levels",
-          "ट्रेड पातळ्या"
+          "à¤Ÿà¥à¤°à¥‡à¤¡ à¤ªà¤¾à¤¤à¤³à¥à¤¯à¤¾"
         )}
         subtitle={label(
           "Price levels produced by the current analysis.",
-          "सध्याच्या विश्लेषणातून मिळालेल्या किंमत पातळ्या."
+          "à¤¸à¤§à¥à¤¯à¤¾à¤šà¥à¤¯à¤¾ à¤µà¤¿à¤¶à¥à¤²à¥‡à¤·à¤£à¤¾à¤¤à¥‚à¤¨ à¤®à¤¿à¤³à¤¾à¤²à¥‡à¤²à¥à¤¯à¤¾ à¤•à¤¿à¤‚à¤®à¤¤ à¤ªà¤¾à¤¤à¤³à¥à¤¯à¤¾."
         )}
       >
         <div className="itdp-full-grid itdp-full-grid-4">
           <MetricCard
             label={label(
               "Entry",
-              "एंट्री"
+              "à¤à¤‚à¤Ÿà¥à¤°à¥€"
             )}
             value={formatMoney(
               analysis.entry
@@ -364,7 +406,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Target 1",
-              "लक्ष्य 1"
+              "à¤²à¤•à¥à¤·à¥à¤¯ 1"
             )}
             value={formatMoney(
               analysis.target1
@@ -374,7 +416,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Target 2",
-              "लक्ष्य 2"
+              "à¤²à¤•à¥à¤·à¥à¤¯ 2"
             )}
             value={formatMoney(
               analysis.target2
@@ -384,7 +426,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Stop Loss",
-              "स्टॉप लॉस"
+              "à¤¸à¥à¤Ÿà¥‰à¤ª à¤²à¥‰à¤¸"
             )}
             value={formatMoney(
               analysis.stopLoss
@@ -397,18 +439,18 @@ export default function FullAnalysisPage({
       <Section
         title={label(
           "Risk & Position",
-          "जोखीम आणि पोझिशन"
+          "à¤œà¥‹à¤–à¥€à¤® à¤†à¤£à¤¿ à¤ªà¥‹à¤à¤¿à¤¶à¤¨"
         )}
         subtitle={label(
           "Capital exposure and position sizing from the risk engine.",
-          "रिस्क इंजिननुसार भांडवल आणि पोझिशन साइज."
+          "à¤°à¤¿à¤¸à¥à¤• à¤‡à¤‚à¤œà¤¿à¤¨à¤¨à¥à¤¸à¤¾à¤° à¤­à¤¾à¤‚à¤¡à¤µà¤² à¤†à¤£à¤¿ à¤ªà¥‹à¤à¤¿à¤¶à¤¨ à¤¸à¤¾à¤‡à¤œ."
         )}
       >
         <div className="itdp-full-grid itdp-full-grid-5">
           <MetricCard
             label={label(
               "Risk : Reward",
-              "जोखीम : परतावा"
+              "à¤œà¥‹à¤–à¥€à¤® : à¤ªà¤°à¤¤à¤¾à¤µà¤¾"
             )}
             value={
               analysis.riskReward || "-"
@@ -418,7 +460,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Capital",
-              "भांडवल"
+              "à¤­à¤¾à¤‚à¤¡à¤µà¤²"
             )}
             value={formatMoney(
               analysis.capital
@@ -428,7 +470,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Risk %",
-              "जोखीम %"
+              "à¤œà¥‹à¤–à¥€à¤® %"
             )}
             value={`${analysis.riskPercent}%`}
           />
@@ -436,7 +478,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Maximum Risk",
-              "कमाल जोखीम"
+              "à¤•à¤®à¤¾à¤² à¤œà¥‹à¤–à¥€à¤®"
             )}
             value={formatMoney(
               analysis.maxRisk
@@ -446,7 +488,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Quantity",
-              "शेअर्सची संख्या"
+              "à¤¶à¥‡à¤…à¤°à¥à¤¸à¤šà¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾"
             )}
             value={
               analysis.quantity > 0
@@ -461,18 +503,18 @@ export default function FullAnalysisPage({
       <Section
         title={label(
           "Market Structure",
-          "मार्केट स्ट्रक्चर"
+          "à¤®à¤¾à¤°à¥à¤•à¥‡à¤Ÿ à¤¸à¥à¤Ÿà¥à¤°à¤•à¥à¤šà¤°"
         )}
         subtitle={label(
           "Important support and resistance levels.",
-          "महत्त्वाच्या सपोर्ट आणि रेझिस्टन्स पातळ्या."
+          "à¤®à¤¹à¤¤à¥à¤¤à¥à¤µà¤¾à¤šà¥à¤¯à¤¾ à¤¸à¤ªà¥‹à¤°à¥à¤Ÿ à¤†à¤£à¤¿ à¤°à¥‡à¤à¤¿à¤¸à¥à¤Ÿà¤¨à¥à¤¸ à¤ªà¤¾à¤¤à¤³à¥à¤¯à¤¾."
         )}
       >
         <div className="itdp-full-grid itdp-full-grid-4">
           <MetricCard
             label={label(
               "Support 1",
-              "सपोर्ट 1"
+              "à¤¸à¤ªà¥‹à¤°à¥à¤Ÿ 1"
             )}
             value={formatMoney(
               analysis.support1
@@ -482,7 +524,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Support 2",
-              "सपोर्ट 2"
+              "à¤¸à¤ªà¥‹à¤°à¥à¤Ÿ 2"
             )}
             value={formatMoney(
               analysis.support2
@@ -492,7 +534,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Resistance 1",
-              "रेझिस्टन्स 1"
+              "à¤°à¥‡à¤à¤¿à¤¸à¥à¤Ÿà¤¨à¥à¤¸ 1"
             )}
             value={formatMoney(
               analysis.resistance1
@@ -502,7 +544,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Resistance 2",
-              "रेझिस्टन्स 2"
+              "à¤°à¥‡à¤à¤¿à¤¸à¥à¤Ÿà¤¨à¥à¤¸ 2"
             )}
             value={formatMoney(
               analysis.resistance2
@@ -515,11 +557,11 @@ export default function FullAnalysisPage({
       <Section
         title={label(
           "Why this decision?",
-          "हा निर्णय का?"
+          "à¤¹à¤¾ à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤•à¤¾?"
         )}
         subtitle={label(
           "Evidence used by the decision engine.",
-          "निर्णय इंजिनने वापरलेले पुरावे."
+          "à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤‡à¤‚à¤œà¤¿à¤¨à¤¨à¥‡ à¤µà¤¾à¤ªà¤°à¤²à¥‡à¤²à¥‡ à¤ªà¥à¤°à¤¾à¤µà¥‡."
         )}
       >
         {analysis.reasons.length > 0 ? (
@@ -550,11 +592,11 @@ export default function FullAnalysisPage({
       <Section
         title={label(
           "When does this decision become invalid?",
-          "हा निर्णय कधी अमान्य होईल?"
+          "à¤¹à¤¾ à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤•à¤§à¥€ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥‹à¤ˆà¤²?"
         )}
         subtitle={label(
           "Conditions that invalidate the current decision.",
-          "सध्याचा निर्णय अमान्य करणाऱ्या अटी."
+          "à¤¸à¤§à¥à¤¯à¤¾à¤šà¤¾ à¤¨à¤¿à¤°à¥à¤£à¤¯ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤•à¤°à¤£à¤¾à¤±à¥à¤¯à¤¾ à¤…à¤Ÿà¥€."
         )}
       >
         <div className="itdp-full-invalidation">
@@ -566,11 +608,11 @@ export default function FullAnalysisPage({
       <Section
         title={label(
           "Risk Gate",
-          "रिस्क गेट"
+          "à¤°à¤¿à¤¸à¥à¤• à¤—à¥‡à¤Ÿ"
         )}
         subtitle={label(
           "Final execution safety check.",
-          "ट्रेड करण्यापूर्वीची अंतिम सुरक्षा तपासणी."
+          "à¤Ÿà¥à¤°à¥‡à¤¡ à¤•à¤°à¤£à¥à¤¯à¤¾à¤ªà¥‚à¤°à¥à¤µà¥€à¤šà¥€ à¤…à¤‚à¤¤à¤¿à¤® à¤¸à¥à¤°à¤•à¥à¤·à¤¾ à¤¤à¤ªà¤¾à¤¸à¤£à¥€."
         )}
       >
         <div className="itdp-full-risk-gate">
@@ -578,7 +620,7 @@ export default function FullAnalysisPage({
             <span>
               {label(
                 "Status",
-                "स्थिती"
+                "à¤¸à¥à¤¥à¤¿à¤¤à¥€"
               )}
             </span>
 
@@ -599,7 +641,7 @@ export default function FullAnalysisPage({
             <GateList
               title={label(
                 "Why execution is blocked",
-                "ट्रेड का थांबवला आहे?"
+                "à¤Ÿà¥à¤°à¥‡à¤¡ à¤•à¤¾ à¤¥à¤¾à¤‚à¤¬à¤µà¤²à¤¾ à¤†à¤¹à¥‡?"
               )}
               items={primaryFailures}
             />
@@ -610,7 +652,7 @@ export default function FullAnalysisPage({
             <GateList
               title={label(
                 "Execution consequences",
-                "त्यामुळे उपलब्ध नसलेल्या ट्रेड अटी"
+                "à¤¤à¥à¤¯à¤¾à¤®à¥à¤³à¥‡ à¤‰à¤ªà¤²à¤¬à¥à¤§ à¤¨à¤¸à¤²à¥‡à¤²à¥à¤¯à¤¾ à¤Ÿà¥à¤°à¥‡à¤¡ à¤…à¤Ÿà¥€"
               )}
               items={executionConsequences}
             />
@@ -621,7 +663,7 @@ export default function FullAnalysisPage({
             <GateList
               title={label(
                 "Warnings",
-                "सावधगिरीच्या सूचना"
+                "à¤¸à¤¾à¤µà¤§à¤—à¤¿à¤°à¥€à¤šà¥à¤¯à¤¾ à¤¸à¥‚à¤šà¤¨à¤¾"
               )}
               items={
                 analysis.riskGate.warnings
@@ -636,7 +678,7 @@ export default function FullAnalysisPage({
               <div className="itdp-full-pass-message">
                 {label(
                   "No critical failures or material warnings were reported.",
-                  "कोणतेही गंभीर अडथळे किंवा महत्त्वाच्या सावधगिरीच्या सूचना आढळल्या नाहीत."
+                  "à¤•à¥‹à¤£à¤¤à¥‡à¤¹à¥€ à¤—à¤‚à¤­à¥€à¤° à¤…à¤¡à¤¥à¤³à¥‡ à¤•à¤¿à¤‚à¤µà¤¾ à¤®à¤¹à¤¤à¥à¤¤à¥à¤µà¤¾à¤šà¥à¤¯à¤¾ à¤¸à¤¾à¤µà¤§à¤—à¤¿à¤°à¥€à¤šà¥à¤¯à¤¾ à¤¸à¥‚à¤šà¤¨à¤¾ à¤†à¤¢à¤³à¤²à¥à¤¯à¤¾ à¤¨à¤¾à¤¹à¥€à¤¤."
                 )}
               </div>
             )}
@@ -647,18 +689,18 @@ export default function FullAnalysisPage({
       <Section
         title={label(
           "Trade Outlook",
-          "ट्रेड आउटलुक"
+          "à¤Ÿà¥à¤°à¥‡à¤¡ à¤†à¤‰à¤Ÿà¤²à¥à¤•"
         )}
         subtitle={label(
           "Planning context generated from the current decision.",
-          "सध्याच्या निर्णयावर आधारित ट्रेड नियोजन."
+          "à¤¸à¤§à¥à¤¯à¤¾à¤šà¥à¤¯à¤¾ à¤¨à¤¿à¤°à¥à¤£à¤¯à¤¾à¤µà¤° à¤†à¤§à¤¾à¤°à¤¿à¤¤ à¤Ÿà¥à¤°à¥‡à¤¡ à¤¨à¤¿à¤¯à¥‹à¤œà¤¨."
         )}
       >
         <div className="itdp-full-grid itdp-full-grid-2">
           <MetricCard
             label={label(
               "Trade Quality",
-              "ट्रेड गुणवत्ता"
+              "à¤Ÿà¥à¤°à¥‡à¤¡ à¤—à¥à¤£à¤µà¤¤à¥à¤¤à¤¾"
             )}
             value={
               analysis.tradeQuality || "-"
@@ -668,7 +710,7 @@ export default function FullAnalysisPage({
           <MetricCard
             label={label(
               "Holding Period",
-              "होल्डिंग कालावधी"
+              "à¤¹à¥‹à¤²à¥à¤¡à¤¿à¤‚à¤— à¤•à¤¾à¤²à¤¾à¤µà¤§à¥€"
             )}
             value={
               analysis.holdingPeriod || "-"
@@ -680,7 +722,7 @@ export default function FullAnalysisPage({
           <span className="itdp-full-section-label">
             {label(
               "AI Summary",
-              "AI सारांश"
+              "AI à¤¸à¤¾à¤°à¤¾à¤‚à¤¶"
             )}
           </span>
 
@@ -698,7 +740,7 @@ export default function FullAnalysisPage({
         {"\u2190"}{" "}
         {label(
           "Back to Dashboard",
-          "डॅशबोर्डवर परत जा"
+          "à¤¡à¥…à¤¶à¤¬à¥‹à¤°à¥à¤¡à¤µà¤° à¤ªà¤°à¤¤ à¤œà¤¾"
         )}
       </button>
     </section>

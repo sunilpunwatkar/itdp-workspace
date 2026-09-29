@@ -2359,3 +2359,159 @@ overflow-x: hidden;
     gap: 5px;
   }
 }
+/* =====================================================
+   ITDP MOBILE VIEW — HEADER REFINEMENT
+   Desktop layout remains unchanged
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .itdp-header {
+    height: 70px !important;
+    padding: 0 10px 0 60px !important;
+    gap: 8px;
+  }
+
+  .itdp-mobile-menu-button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    position: fixed !important;
+    top: 14px !important;
+    left: 10px !important;
+
+    width: 42px !important;
+    height: 42px !important;
+    z-index: 3100;
+  }
+
+  .itdp-header-brand {
+    flex: 1 1 auto;
+    min-width: 0 !important;
+    gap: 7px !important;
+    overflow: hidden;
+  }
+
+  .itdp-header-logo {
+    font-size: 22px !important;
+  }
+
+  .itdp-header-title {
+    font-size: 15px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .itdp-header-subtitle {
+    font-size: 9px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .itdp-header-actions {
+    flex: 0 0 auto;
+    min-width: 0;
+    gap: 5px !important;
+  }
+
+  .itdp-founder {
+    display: none !important;
+  }
+
+}
+
+/* ==========================================
+   ITDP FINAL DECISION SUMMARY ALIGNMENT
+   Desktop only
+========================================== */
+
+@media (min-width: 1001px) {
+
+  .itdp-decision-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: 12px !important;
+    padding: 0 12px 20px !important;
+    box-sizing: border-box;
+  }
+
+  .itdp-summary-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .itdp-summary-grid {
+    display: grid;
+
+    grid-template-columns:
+      1.05fr
+      1.45fr
+      1.15fr
+      0.9fr
+      1fr
+      1fr !important;
+
+    gap: 12px !important;
+  }
+
+  .itdp-summary-item {
+    min-width: 0;
+    min-height: 68px;
+    box-sizing: border-box;
+  }
+
+  .itdp-summary-item:nth-child(1) {
+    order: 1;
+  }
+
+  .itdp-summary-item:nth-child(2) {
+    order: 3;
+  }
+
+  .itdp-summary-item:nth-child(3) {
+    order: 4;
+  }
+
+  .itdp-summary-item:nth-child(4) {
+    order: 2;
+  }
+
+  .itdp-summary-item:nth-child(5) {
+    order: 5;
+  }
+
+  .itdp-summary-item:nth-child(6) {
+    order: 6;
+  }
+
+  .itdp-summary-item:nth-child(7) {
+    order: 7;
+  }
+
+  .itdp-summary-item:nth-child(8) {
+    order: 8;
+  }
+
+  .itdp-summary-item:nth-child(9) {
+    order: 9;
+  }
+
+  .itdp-summary-item:nth-child(10) {
+    order: 10;
+  }
+
+  .itdp-summary-item:nth-child(11) {
+    order: 11;
+  }
+
+  .itdp-summary-action {
+    order: 12;
+    min-height: 68px;
+  }
+
+}
