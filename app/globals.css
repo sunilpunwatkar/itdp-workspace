@@ -3048,3 +3048,71 @@ overflow-x: hidden;
   }
 
 }
+
+/* =====================================================
+   ITDP FULL ANALYSIS — READABILITY REFINEMENT
+   UI only. Decision Engine and Risk Gate unchanged.
+===================================================== */
+
+@media (min-width: 761px) {
+  .itdp-full-analysis-page {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .itdp-full-section-header h2 {
+    font-size: 20px;
+  }
+
+  .itdp-full-section-header p,
+  .itdp-full-subtitle {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .itdp-full-section-label,
+  .itdp-full-hero-metric span,
+  .itdp-full-metric-card span,
+  .itdp-full-risk-gate-header span {
+    font-size: 14px;
+  }
+
+  .itdp-full-metric-card strong {
+    font-size: 17px;
+  }
+
+  .itdp-full-list-item {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .itdp-full-list-dot {
+    font-size: 12px;
+  }
+
+  .itdp-full-invalidation,
+  .itdp-full-risk-gate-reason,
+  .itdp-full-gate-list li,
+  .itdp-full-pass-message,
+  .itdp-full-ai-summary p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .itdp-full-gate-list > strong {
+    font-size: 15px;
+  }
+
+  .itdp-full-action-title,
+  .itdp-full-action-reason,
+  .itdp-full-action-explanation > strong,
+  .itdp-full-action-explanation p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .itdp-full-action-explanation span {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
