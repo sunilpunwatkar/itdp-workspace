@@ -260,7 +260,7 @@ export default function DecisionCard({
           </strong>
         </div>
 
-        {/* TARGET */}
+          {/* TARGET */}
 
         <div className="itdp-analysis-item">
           <span className="itdp-analysis-label">
@@ -720,6 +720,39 @@ export default function DecisionCard({
 
           font-weight: 700;
         }
+
+/* DASHBOARD DECISION CARD — DESKTOP READABILITY */
+@media (min-width: 769px) {
+  .itdp-decision-subtitle,
+  .itdp-symbol-badge {
+    font-size: 15px;
+  }
+
+  .itdp-analysis-label {
+    font-size: 14px;
+  }
+
+  .itdp-analysis-value,
+  .itdp-target,
+  .itdp-stoploss,
+  .itdp-confidence-wrapper strong {
+    font-size: 17px;
+  }
+
+  .itdp-decision-badge {
+    font-size: 14px;
+  }
+
+  .itdp-section-title {
+    font-size: 18px;
+  }
+
+  .itdp-reason,
+  .itdp-invalid-box {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
 
         /* ======================================
            TABLET
