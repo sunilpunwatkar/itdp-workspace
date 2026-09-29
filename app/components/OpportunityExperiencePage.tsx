@@ -281,11 +281,13 @@ export default function OpportunityExperiencePage({
         opportunity.action === "AVOID"
     ) ?? [];
   return (
-    <div
-  style={{
-    padding: "28px 20px 40px",
-  }}
->
+  <div
+    className="itdp-opportunities-page"
+    style={{
+      padding: "28px 20px 40px",
+    }}
+  >
+
             <div
         style={{
           position: "relative",
@@ -455,22 +457,23 @@ export default function OpportunityExperiencePage({
         }}
       >
         <div
-          style={{
-            marginBottom: "16px",
-          }}
-        >
-          <div
-            style={{
-              color: "#38bdf8",
-              fontSize: "12px",
-              fontWeight: 800,
-              letterSpacing: "0.08em",
-              marginBottom: "5px",
-            }}
-          >
-            YOUR OPPORTUNITY PREFERENCES
-          </div>
-
+  style={{
+    marginBottom: "16px",
+  }}
+>
+  <div
+    className="itdp-opportunities-section-label"
+    style={{
+      color: "#38bdf8",
+      fontSize: "15px",
+      fontWeight: 800,
+      letterSpacing: "0.08em",
+      marginBottom: "5px",
+    }}
+  >
+    YOUR OPPORTUNITY PREFERENCES
+  </div>
+</div>
           <div
             style={{
               color: "#f8fafc",
@@ -493,11 +496,12 @@ export default function OpportunityExperiencePage({
         >
           <div>
             <label
+            className="itdp-opportunities-field-label"
               style={{
                 display: "block",
                 marginBottom: "7px",
                 color: "#94a3b8",
-                fontSize: "12px",
+                fontSize: "14px",
                 fontWeight: 700,
               }}
             >
@@ -552,11 +556,12 @@ export default function OpportunityExperiencePage({
 
           <div>
             <label
+            className="itdp-opportunities-field-label"
               style={{
                 display: "block",
                 marginBottom: "7px",
                 color: "#94a3b8",
-                fontSize: "12px",
+                fontSize: "14px",
                 fontWeight: 700,
               }}
             >
@@ -597,11 +602,12 @@ export default function OpportunityExperiencePage({
 
           <div>
             <label
+            className="itdp-opportunities-field-label"
               style={{
                 display: "block",
                 marginBottom: "7px",
                 color: "#94a3b8",
-                fontSize: "12px",
+                fontSize: "14px",
                 fontWeight: 700,
               }}
             >
