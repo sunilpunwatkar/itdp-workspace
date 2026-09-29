@@ -2515,3 +2515,536 @@ overflow-x: hidden;
   }
 
 }
+
+/* ==========================================
+   ITDP MOBILE DECISION SUMMARY
+   Desktop checkpoint remains unchanged
+========================================== */
+
+@media (max-width: 600px) {
+
+  .itdp-decision-container {
+    width: 100%;
+    min-width: 0;
+    padding: 0 10px 20px !important;
+    box-sizing: border-box;
+  }
+
+  .itdp-summary-card {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .itdp-summary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .itdp-summary-item {
+    min-width: 0;
+    width: auto !important;
+    min-height: 72px;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+  }
+
+  .itdp-summary-action {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+}
+
+/* ==========================================
+   ITDP MOBILE TOP AREA — PROFESSIONAL UI
+   Mobile only; desktop remains unchanged
+========================================== */
+
+@media (max-width: 600px) {
+
+  /* HEADER */
+
+  .itdp-header {
+    height: 64px !important;
+    padding: 0 10px 0 58px !important;
+    gap: 6px !important;
+    background: #0f172a !important;
+    border-bottom: 1px solid #263449;
+  }
+
+  .itdp-mobile-menu-button {
+    top: 11px !important;
+    left: 10px !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 10px !important;
+  }
+
+  .itdp-header-brand {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    gap: 5px !important;
+  }
+
+  .itdp-header-logo {
+    font-size: 20px !important;
+  }
+
+  .itdp-header-title {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+  }
+
+  .itdp-header-subtitle {
+    font-size: 8px !important;
+    line-height: 1.3 !important;
+  }
+
+  .itdp-header-actions {
+    gap: 4px !important;
+  }
+
+  .itdp-language-button {
+    padding: 7px 8px !important;
+    font-size: 10px !important;
+  }
+
+  .itdp-login-button {
+    padding: 8px !important;
+    font-size: 10px !important;
+  }
+
+  /* SEARCH */
+
+  .itdp-search-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 12px 12px 10px !important;
+    background: #0b1220 !important;
+    box-sizing: border-box !important;
+  }
+
+  .itdp-search-bar {
+    display: flex !important;
+    width: 100% !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    background: transparent !important;
+  }
+
+  .itdp-search-bar input {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    min-height: 44px;
+    padding: 10px 12px !important;
+    border: 1px solid #334155 !important;
+    border-radius: 10px !important;
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    font-size: 16px !important;
+  }
+
+  .itdp-search-bar button {
+    flex: 0 0 auto !important;
+    min-height: 44px;
+    padding: 10px 14px !important;
+    border-radius: 10px !important;
+    background: #2563eb !important;
+    color: white !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+  }
+
+  /* STOCK INFORMATION */
+
+  .itdp-chart-card {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    margin: 0 12px !important;
+    overflow: hidden;
+    border: 1px solid #263449 !important;
+    border-radius: 12px !important;
+    background: #0f172a !important;
+    box-sizing: border-box !important;
+  }
+
+  .itdp-chart-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    padding: 14px !important;
+    background: #172235 !important;
+    border-bottom: 1px solid #334155;
+  }
+
+  .itdp-chart-symbol {
+    color: #f8fafc !important;
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
+
+  .itdp-chart-market {
+    margin-top: 4px;
+    color: #94a3b8 !important;
+    font-size: 11px !important;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .itdp-chart-legend {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 10px !important;
+  }
+
+  .itdp-chart-legend-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 6px 8px !important;
+    border: 1px solid #334155;
+    border-radius: 7px;
+    background: #1e293b;
+    color: #cbd5e1 !important;
+    white-space: nowrap;
+  }
+
+  .itdp-chart-container {
+    width: 100%;
+    min-width: 0;
+    margin-top: 0 !important;
+  }
+
+}
+
+/* ITDP MOBILE — CHART EDGE ALIGNMENT */
+
+@media (max-width: 600px) {
+
+  .itdp-main-content {
+    min-width: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .itdp-chart-card {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .itdp-chart-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden;
+  }
+
+}
+
+/* ITDP MOBILE — UNIFIED CARD ALIGNMENT */
+
+@media (max-width: 600px) {
+
+  .itdp-chart-card,
+  .itdp-decision-container {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    min-width: 0 !important;
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .itdp-decision-container {
+    padding: 0 0 20px !important;
+  }
+
+  .itdp-summary-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+}
+
+/* ITDP MOBILE — FULL WIDTH WORKSPACE */
+
+@media (max-width: 600px) {
+
+  .itdp-main-content {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    background: #0f172a !important;
+  }
+
+  .itdp-search-wrapper {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 12px !important;
+  }
+
+  .itdp-chart-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .itdp-decision-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 12px 20px !important;
+    box-sizing: border-box !important;
+    background: #0f172a !important;
+  }
+
+  .itdp-summary-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+}
+
+/* ==========================================
+   ITDP MOBILE FULL ANALYSIS REFINEMENT
+   Desktop and decision logic unchanged
+========================================== */
+
+@media (max-width: 600px) {
+
+  .itdp-full-analysis-page {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 16px 12px 28px !important;
+    box-sizing: border-box !important;
+    background: #0f172a;
+  }
+
+  .itdp-full-page-header {
+    margin-bottom: 16px !important;
+  }
+
+  .itdp-full-title {
+    font-size: 21px !important;
+    line-height: 1.3 !important;
+  }
+
+  .itdp-full-subtitle {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* FINAL DECISION */
+
+  .itdp-full-hero {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .itdp-full-hero-main,
+  .itdp-full-hero-metric {
+    min-width: 0 !important;
+    min-height: 88px !important;
+    padding: 13px !important;
+    box-sizing: border-box !important;
+  }
+
+  .itdp-full-decision {
+    font-size: 25px !important;
+    line-height: 1.2 !important;
+  }
+
+  .itdp-full-hero-metric span,
+  .itdp-full-section-label {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  .itdp-full-hero-metric strong {
+    font-size: 17px !important;
+    line-height: 1.3 !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* ACTIONABILITY */
+
+  .itdp-full-action-card {
+    padding: 14px !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .itdp-full-gate-status {
+    font-size: 21px !important;
+  }
+
+  .itdp-full-action-title {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+
+  .itdp-full-action-explanation {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .itdp-full-action-explanation p {
+    font-size: 12px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* SECTION CARDS */
+
+  .itdp-full-section {
+    padding: 13px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .itdp-full-section-header {
+    margin-bottom: 12px !important;
+  }
+
+  .itdp-full-section-header h2 {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+
+  .itdp-full-section-header p {
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+  }
+
+  .itdp-full-grid,
+  .itdp-full-grid-2,
+  .itdp-full-grid-4,
+  .itdp-full-grid-5 {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+
+  .itdp-full-metric-card {
+    min-width: 0 !important;
+    min-height: 78px !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .itdp-full-metric-card span {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  .itdp-full-metric-card strong {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* RISK GATE AND LONG TEXT */
+
+  .itdp-full-risk-gate,
+  .itdp-full-gate-list,
+  .itdp-full-invalidation,
+  .itdp-full-ai-summary {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .itdp-full-list-item,
+  .itdp-full-gate-list li {
+    font-size: 12px !important;
+    line-height: 1.6 !important;
+  }
+
+}
+
+/* ITDP MOBILE — KEEP MENU BUTTON INSIDE HEADER */
+
+@media (max-width: 600px) {
+
+  .itdp-header {
+    position: relative !important;
+  }
+
+  .itdp-mobile-menu-button {
+    position: absolute !important;
+    top: 11px !important;
+    left: 10px !important;
+    z-index: 10 !important;
+  }
+
+}
+
+/* ITDP OPPORTUNITIES — MOBILE FEATURE CARDS */
+
+@media (max-width: 600px) {
+  .itdp-opportunity-feature-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .itdp-opportunity-feature-grid > div {
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
+
+/* ITDP MOBILE — DECISION METRIC READABILITY */
+
+@media (max-width: 600px) {
+
+  .itdp-summary-grid .itdp-summary-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    padding: 12px !important;
+    min-width: 0 !important;
+  }
+
+  .itdp-summary-grid .itdp-summary-label {
+    display: block !important;
+    width: 100%;
+    margin: 0 !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  .itdp-summary-grid .itdp-summary-value {
+    display: block !important;
+    width: 100%;
+    margin: 0 !important;
+    font-size: 15px !important;
+    line-height: 1.35 !important;
+    overflow-wrap: anywhere;
+  }
+
+}

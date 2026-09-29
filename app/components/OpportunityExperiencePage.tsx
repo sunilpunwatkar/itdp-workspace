@@ -760,14 +760,16 @@ export default function OpportunityExperiencePage({
               </p>
             </div>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns:
-                  "repeat(3, minmax(0, 1fr))",
-                gap: "14px",
-              }}
-            >
+<div
+  className="itdp-opportunity-feature-grid"
+  style={{
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(3, minmax(0, 1fr))",
+    gap: "14px",
+  }}
+>
+
               <div
                 style={{
                   padding: "16px",
