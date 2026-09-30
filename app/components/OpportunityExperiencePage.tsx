@@ -457,23 +457,23 @@ export default function OpportunityExperiencePage({
         }}
       >
         <div
-  style={{
-    marginBottom: "16px",
-  }}
->
-  <div
-    className="itdp-opportunities-section-label"
-    style={{
-      color: "#38bdf8",
-      fontSize: "15px",
-      fontWeight: 800,
-      letterSpacing: "0.08em",
-      marginBottom: "5px",
-    }}
-  >
-    YOUR OPPORTUNITY PREFERENCES
-  </div>
-</div>
+          style={{
+            marginBottom: "16px",
+          }}
+        >
+          <div
+            className="itdp-opportunities-section-label"
+            style={{
+              color: "#38bdf8",
+              fontSize: "15px",
+              fontWeight: 800,
+              letterSpacing: "0.08em",
+              marginBottom: "5px",
+            }}
+          >
+            YOUR OPPORTUNITY PREFERENCES
+          </div>
+
           <div
             style={{
               color: "#f8fafc",
@@ -484,6 +484,7 @@ export default function OpportunityExperiencePage({
             Set your trading preferences
           </div>
         </div>
+
 
         <div
           style={{
