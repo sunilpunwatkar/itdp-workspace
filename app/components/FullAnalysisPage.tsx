@@ -209,16 +209,16 @@ export default function FullAnalysisPage({
 
         <Metric
           label={label(
-            "Confidence",
-            "à¤µà¤¿à¤¶à¥à¤µà¤¾à¤¸"
+            "Signal Confidence",
+            "सिग्नल विश्वास"
           )}
           value={`${analysis.confidence}%`}
         />
 
         <Metric
           label={label(
-            "Risk",
-            "à¤œà¥‹à¤–à¥€à¤®"
+            "Signal Risk",
+            "सिग्नल जोखीम"
           )}
           value={analysis.risk}
           color={riskColor}

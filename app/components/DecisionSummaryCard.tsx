@@ -154,8 +154,8 @@ export default function DecisionSummaryCard({
         <div className="itdp-summary-item">
           <span className="itdp-summary-label">
             {label(
-              "Confidence",
-              "विश्वास"
+              "Signal Confidence",
+              "सिग्नल विश्वास"
             )}
           </span>
 
@@ -179,8 +179,8 @@ export default function DecisionSummaryCard({
         <div className="itdp-summary-item">
           <span className="itdp-summary-label">
             {label(
-              "Risk",
-              "जोखीम"
+              "Signal Risk",
+              "सिग्नल जोखीम"
             )}
           </span>
 

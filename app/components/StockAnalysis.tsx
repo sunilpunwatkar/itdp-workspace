@@ -63,11 +63,11 @@ export default function StockAnalysis() {
           </p>
 
           <p>
-            <strong>Confidence:</strong> {result.confidence}%
+            <strong>Signal Confidence:</strong> {result.confidence}%
           </p>
 
           <p>
-            <strong>Risk:</strong> {result.risk}
+            <strong>Signal Risk:</strong> {result.risk}
           </p>
 
           <p>
