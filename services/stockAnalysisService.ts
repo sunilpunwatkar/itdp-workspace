@@ -521,7 +521,9 @@ riskGate:
     riskPlan.stopLoss ?? 0,
 
     tradeQuality:
-      tradePlan.tradeQuality,
+      riskGate.status === "BLOCK"
+        ? "NO TRADE"
+        : tradePlan.tradeQuality,
 
     holdingPeriod:
       tradePlan.holdingPeriod,
