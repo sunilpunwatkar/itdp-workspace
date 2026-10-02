@@ -52,6 +52,8 @@ const [analysis, setAnalysis] =
     );
 
   const [loading, setLoading] = useState(false);
+  const [analysisError, setAnalysisError] =
+    useState<string | null>(null);
 
       const handleAnalyze = useCallback(
   async (inputSymbol: string) => {
@@ -64,6 +66,8 @@ const [analysis, setAnalysis] =
 
     try {
       setLoading(true);
+      setAnalysisError(null);
+      setAnalysis(null);
 
       console.log("Analyzing :", finalSymbol);
 
@@ -77,6 +81,23 @@ const [analysis, setAnalysis] =
             );
 
             if (!response.ok) {
+              const errorBody =
+                await response.json().catch(
+                  () => null
+                ) as {
+                  error?: string;
+                } | null;
+
+              if (
+                response.status === 503 &&
+                errorBody?.error ===
+                  "ANALYSIS_TEMPORARILY_UNAVAILABLE"
+              ) {
+                throw new Error(
+                  "ANALYSIS_TEMPORARILY_UNAVAILABLE"
+                );
+              }
+
               throw new Error(
                 `Analysis API failed: ${response.status}`
               );
@@ -94,6 +115,14 @@ const [analysis, setAnalysis] =
       );
     } catch (error) {
       console.error("Analysis Error :", error);
+
+      setAnalysisError(
+        error instanceof Error &&
+        error.message ===
+          "ANALYSIS_TEMPORARILY_UNAVAILABLE"
+          ? "Market data is taking longer than expected. Please try again."
+          : "Analysis is temporarily unavailable. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -115,6 +144,8 @@ const [analysis, setAnalysis] =
           }
 
           setLoading(true);
+          setAnalysisError(null);
+          setAnalysis(null);
 
           const response = await fetch(
             `/api/analysis?symbol=${finalSymbol}&ts=${Date.now()}`,
@@ -124,6 +155,23 @@ const [analysis, setAnalysis] =
           );
 
           if (!response.ok) {
+            const errorBody =
+              await response.json().catch(
+                () => null
+              ) as {
+                error?: string;
+              } | null;
+
+            if (
+              response.status === 503 &&
+              errorBody?.error ===
+                "ANALYSIS_TEMPORARILY_UNAVAILABLE"
+            ) {
+              throw new Error(
+                "ANALYSIS_TEMPORARILY_UNAVAILABLE"
+              );
+            }
+
             throw new Error(
               "Failed to fetch opportunity analysis"
             );
@@ -143,6 +191,14 @@ setActivePage(
           console.error(
             "Opportunity Analysis Error :",
             error
+          );
+
+          setAnalysisError(
+            error instanceof Error &&
+            error.message ===
+              "ANALYSIS_TEMPORARILY_UNAVAILABLE"
+              ? "Market data is taking longer than expected. Please try again."
+              : "Analysis is temporarily unavailable. Please try again."
           );
         } finally {
           setLoading(false);
@@ -201,6 +257,19 @@ setActivePage(
                   Analyzing...
                 </p>
               )}
+
+              {!loading && analysisError && (
+                <p
+                  role="alert"
+                  style={{
+                    margin: "0 0 16px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {analysisError}
+                </p>
+              )}
+
               <ChartSection
                 symbol={symbol}
                 resolvedSymbol={
