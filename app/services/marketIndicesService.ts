@@ -96,8 +96,16 @@ type YahooIndexMeta = {
 // FETCH SINGLE MARKET INDEX
 // =====================================================
 
+type MarketIndexFetchOptions = {
+  fetchImpl?: typeof fetch;
+  timeoutMs?: number;
+};
+
+const MARKET_INDEX_TIMEOUT_MS = 12_000;
+
 export async function fetchMarketIndex(
-  definition: MarketIndexDefinition
+  definition: MarketIndexDefinition,
+  options: MarketIndexFetchOptions = {}
 ): Promise<MarketIndex> {
   const encodedSymbol =
     encodeURIComponent(definition.symbol);
@@ -105,12 +113,49 @@ export async function fetchMarketIndex(
   const url =
   `https://query1.finance.yahoo.com/v8/finance/chart/${encodedSymbol}?range=1d&interval=5m`;
 
-  const response = await fetch(
-    url,
-    {
-      cache: "no-store",
+  const fetchImpl =
+    options.fetchImpl ?? fetch;
+
+  const timeoutMs =
+    options.timeoutMs ??
+    MARKET_INDEX_TIMEOUT_MS;
+
+  const controller =
+    new AbortController();
+
+  const timeout =
+    setTimeout(
+      () => controller.abort(),
+      timeoutMs
+    );
+
+  let response: Response;
+
+  try {
+    response = await fetchImpl(
+      url,
+      {
+        cache: "no-store",
+        signal: controller.signal,
+      }
+    );
+  } catch (error) {
+    if (
+      controller.signal.aborted ||
+      (
+        error instanceof Error &&
+        error.name === "AbortError"
+      )
+    ) {
+      throw new Error(
+        `Yahoo index request timed out after ${timeoutMs}ms for ${definition.symbol}`
+      );
     }
-  );
+
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!response.ok) {
     throw new Error(
@@ -148,19 +193,19 @@ export async function fetchMarketIndex(
       `Yahoo returned invalid index data for ${definition.symbol}`
     );
   }
+
   const sparkline =
-  extractSparkline(
-    result?.indicators?.quote?.[0]?.close
-  );
+    extractSparkline(
+      result?.indicators?.quote?.[0]?.close
+    );
 
   return buildMarketIndex(
-  definition,
-  price,
-  previousClose,
-  sparkline
-);
+    definition,
+    price,
+    previousClose,
+    sparkline
+  );
 }
-
 // =====================================================
 // FETCH ALL MARKET INDICES
 // =====================================================
