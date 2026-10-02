@@ -45,6 +45,36 @@ export interface ChartHistoricalRuntimeDependencies {
 
   maxFallbackAgeMs?:
     number;
+
+  primaryTimeoutMs?:
+    number;
+}
+
+async function withChartPrimaryDeadline<T>(
+  operation: Promise<T>,
+  timeoutMs: number
+): Promise<T> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  const timeoutPromise = new Promise<never>(
+    (_resolve, reject) => {
+      timeout = setTimeout(
+        () => reject(new Error("CHART_PRIMARY_TIMEOUT")),
+        timeoutMs
+      );
+    }
+  );
+
+  try {
+    return await Promise.race([
+      operation,
+      timeoutPromise,
+    ]);
+  } finally {
+    if (timeout !== undefined) {
+      clearTimeout(timeout);
+    }
+  }
 }
 
 // ==========================================
@@ -144,10 +174,19 @@ export async function getChartHistoricalRuntime(
     dependencies.maxFallbackAgeMs ??
     DEFAULT_CHART_FALLBACK_MAX_AGE_MS;
 
+  const boundedFetchPrimary =
+    dependencies.primaryTimeoutMs === undefined
+      ? fetchPrimary
+      : () =>
+          withChartPrimaryDeadline(
+            fetchPrimary(),
+            dependencies.primaryTimeoutMs!
+          );
+
   return getChartHistoricalWithResilience(
     symbol,
     {
-      fetchPrimary,
+      fetchPrimary: boundedFetchPrimary,
 
       loadPersisted,
 
