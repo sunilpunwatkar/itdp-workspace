@@ -535,6 +535,9 @@ async function run() {
               async () =>
                 null,
 
+            savePersisted:
+              async () => {},
+
             now:
               () =>
                 50_000,
