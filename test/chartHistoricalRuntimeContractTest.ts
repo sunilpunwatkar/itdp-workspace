@@ -515,6 +515,41 @@ async function run() {
     "PRIMARY"
   );
 
+  // ==========================================
+  // CASE 9
+  // INVALID PRIMARY TIMEOUT
+  // ==========================================
+
+  assertEqual(
+    "Invalid Primary Timeout Error",
+    await captureAsyncError(
+      () =>
+        getChartHistoricalRuntime(
+          "RELIANCE.NS",
+          {
+            fetchPrimary:
+              async () =>
+                baseData,
+
+            loadPersisted:
+              async () =>
+                null,
+
+            now:
+              () =>
+                50_000,
+
+            maxFallbackAgeMs:
+              60_000,
+
+            primaryTimeoutMs:
+              0,
+          }
+        )
+    ),
+    "INVALID_CHART_PRIMARY_TIMEOUT"
+  );
+
   console.log("");
 
   console.log(

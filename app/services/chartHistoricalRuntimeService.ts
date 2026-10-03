@@ -25,6 +25,9 @@ import {
 export const DEFAULT_CHART_FALLBACK_MAX_AGE_MS =
   7 * 24 * 60 * 60 * 1000;
 
+export const DEFAULT_CHART_PRIMARY_TIMEOUT_MS =
+  8_000;
+
 export interface ChartHistoricalRuntimeDependencies {
   fetchPrimary?:
     () => Promise<HistoricalOHLC>;
@@ -174,14 +177,25 @@ export async function getChartHistoricalRuntime(
     dependencies.maxFallbackAgeMs ??
     DEFAULT_CHART_FALLBACK_MAX_AGE_MS;
 
+  const primaryTimeoutMs =
+    dependencies.primaryTimeoutMs ??
+    DEFAULT_CHART_PRIMARY_TIMEOUT_MS;
+
+  if (
+    !Number.isFinite(primaryTimeoutMs) ||
+    primaryTimeoutMs <= 0
+  ) {
+    throw new Error(
+      "INVALID_CHART_PRIMARY_TIMEOUT"
+    );
+  }
+
   const boundedFetchPrimary =
-    dependencies.primaryTimeoutMs === undefined
-      ? fetchPrimary
-      : () =>
-          withChartPrimaryDeadline(
-            fetchPrimary(),
-            dependencies.primaryTimeoutMs!
-          );
+    () =>
+      withChartPrimaryDeadline(
+        fetchPrimary(),
+        primaryTimeoutMs
+      );
 
   return getChartHistoricalWithResilience(
     symbol,
